@@ -6,6 +6,7 @@ from scrapy.contrib.spiders import CrawlSpider, Rule
 from submarino_scrapy.items import SubmarinoScrapyItem
 from scrapy.http import FormRequest, Request
 import json
+import re
 
 class SubmarinoSpiderSpider(CrawlSpider):
     name = 'submarino_spider'
@@ -42,7 +43,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         # each of them, with another callback
         #jsonResponse = json.loads()
         #print response.headers
-        print response.body
+        print re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         return response
         #pass    
     
