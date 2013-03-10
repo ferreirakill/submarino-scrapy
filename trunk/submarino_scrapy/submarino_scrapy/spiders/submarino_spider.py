@@ -19,7 +19,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
     #)
 
     # Initialization
-    def init_request(self):
+    def start_requests(self,origem,destino,data_saida,data_chegada):
         import MySQLdb
         import sys
         from datetime import datetime, timedelta
@@ -114,7 +114,6 @@ class SubmarinoSpiderSpider(CrawlSpider):
         
         
         viagens,dict_origens,dict_destinos = getViagem()
-        start = time.time()
         for viagem in viagens:
             #(1L, datetime.date(2013, 3, 8), datetime.date(2013, 3, 8), 10L, 3L, 'weeks')
             origens_array=dict_origens[str(viagem[0])+'_id_viagem']
@@ -132,15 +131,22 @@ class SubmarinoSpiderSpider(CrawlSpider):
             for origem in origens_array:
                 for destino in destinos_array:
                     for i in range_saida:
-                        dt=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
+                        data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
                         data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
-                        start_requests(self,origem=origem,destino=destino,data_saida=dt,data_chegada=data_chegada)
+                        
+                        ano_saida = data_saida.split("-")[0]
+                        mes_saida = data_saida.split("-")[1]
+                        dia_saida = data_saida.split("-")[2]
+                    
+                        ano_chegada = data_chegada.split("-")[0]
+                        mes_chegada = data_chegada.split("-")[1]
+                        dia_chegada = data_chegada.split("-")[2]                        
                         '''
                         #destino
                         "CiaCodeList":[]
                         "NonStop":"false"
-                        "Origin":"GRU"
-                        "Destination":"IBZ"
+                        "Origin":"GRU"origem
+                        "Destination":"IBZ"destino
                         "DepartureYear":"2013"
                         "DepartureMonth":"04"
                         "DepartureDay":"08"}
@@ -154,28 +160,20 @@ class SubmarinoSpiderSpider(CrawlSpider):
                         "DepartureMonth":"04"
                         "DepartureDay":"18"
                          '''
-    
-    def start_requests(self,origem,destino,data_saida,data_chegada):
-        '''
-        return [FormRequest("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum",
-                        formdata={"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":"GRU","Destination":"IBZ","DepartureYear":"2013","DepartureMonth":"04","DepartureDay":"08"},{"CiaCodeList":[],"NonStop":"false","Origin":"IBZ","Destination":"GRU","DepartureYear":"2013","DepartureMonth":"04","DepartureDay":"18"}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"}},
-                        callback=self.search_id_post)]
-        '''
-               
-        return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum" , method='POST', 
-                   body=json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":"GRU","Destination":"IBZ","DepartureYear":"2013","DepartureMonth":"04","DepartureDay":"08"},{"CiaCodeList":[],"NonStop":"false","Origin":"IBZ","Destination":"GRU","DepartureYear":"2013","DepartureMonth":"04","DepartureDay":"18"}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"}}), 
-                   headers={'Content-Type':'application/json',
-                            "Accept-Encoding": "gzip: deflate",
-                            "Content-Type": "application/json",
-                            "x-requested-with": "XMLHttpRequest",
-                            "Accept-Language": "pt-br",
-                            "Accept": "text/plain: */*",
-                            "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0",
-                            "Host": "www.submarinoviagens.com.br",
-                            "Cache-Control": "no-cache",
-                            "Connection": "Keep-Alive",
-                            },
-                   callback=self.search_id_post, )]
+                        return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum" , method='POST', 
+                                   body=json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":origem,"Destination":destino,"DepartureYear":ano_saida,"DepartureMonth":mes_saida,"DepartureDay":dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":destino,"Destination":origem,"DepartureYear":ano_chegada,"DepartureMonth":mes_chegada,"DepartureDay":dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"}}), 
+                                   headers={'Content-Type':'application/json',
+                                            "Accept-Encoding": "gzip: deflate",
+                                            "Content-Type": "application/json",
+                                            "x-requested-with": "XMLHttpRequest",
+                                            "Accept-Language": "pt-br",
+                                            "Accept": "text/plain: */*",
+                                            "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0",
+                                            "Host": "www.submarinoviagens.com.br",
+                                            "Cache-Control": "no-cache",
+                                            "Connection": "Keep-Alive",
+                                            },
+                                   callback=self.search_id_post, )]
     
     def search_id_post(self, response):
         # here you would extract links to follow and return Requests for
