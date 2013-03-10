@@ -48,7 +48,23 @@ class SubmarinoSpiderSpider(CrawlSpider):
             SubmarinoSpiderSpider(self)
         else:
             print uuids
-        return response
+        
+        urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', response.body)
+        print urls
+        return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
+                   body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"},"pullStatusFrom":"http://" + urls[0]}), 
+                   headers={'Content-Type':'application/json',
+                            "Accept-Encoding": "gzip: deflate",
+                            "Content-Type": "application/json",
+                            "x-requested-with": "XMLHttpRequest",
+                            "Accept-Language": "pt-br",
+                            "Accept": "text/plain: */*",
+                            "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0",
+                            "Host": "www.submarinoviagens.com.br",
+                            "Cache-Control": "no-cache",
+                            "Connection": "Keep-Alive",
+                            },
+                   callback=self.search_id_post, )]
         #pass    
     
     def parse_item(self, response):
