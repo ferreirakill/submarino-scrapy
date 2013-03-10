@@ -43,7 +43,9 @@ class SubmarinoSpiderSpider(CrawlSpider):
         # each of them, with another callback
         #jsonResponse = json.loads()
         #print response.headers
-        print re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
+        uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
+        if len(uuids)<2:
+            SubmarinoSpiderSpider(self)
         return response
         #pass    
     
