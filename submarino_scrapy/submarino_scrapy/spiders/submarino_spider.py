@@ -50,9 +50,10 @@ class SubmarinoSpiderSpider(CrawlSpider):
             print uuids
         
         urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', response.body)
+        #"http:\/\/travelengine143.b2w\/TravelEngineWS.svc\"
         print urls
         return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
-                   body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"},"pullStatusFrom":"http://" + urls[0]}), 
+                   body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"},"pullStatusFrom":"http://" + "travelengine143.b2w/TravelEngineWS.svc"}), 
                    headers={'Content-Type':'application/json',
                             "Accept-Encoding": "gzip: deflate",
                             "Content-Type": "application/json",
