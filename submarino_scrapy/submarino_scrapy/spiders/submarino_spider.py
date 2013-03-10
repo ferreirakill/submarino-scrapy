@@ -64,8 +64,10 @@ class SubmarinoSpiderSpider(CrawlSpider):
                             "Cache-Control": "no-cache",
                             "Connection": "Keep-Alive",
                             },
-                   callback=self.search_id_post, )]
+                   callback=self.precos_json, )]
         #pass    
+    def precos_json(self, response):
+        print response.body
     
     def parse_item(self, response):
         hxs = HtmlXPathSelector(response)
