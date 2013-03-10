@@ -19,7 +19,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
     #)
 
     # Initialization
-    def start_requests(self,origem,destino,data_saida,data_chegada):
+    def start_requests(self):
         import MySQLdb
         import sys
         from datetime import datetime, timedelta
