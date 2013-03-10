@@ -8,6 +8,7 @@ from scrapy.http import FormRequest, Request
 import json
 import re
 
+
 class SubmarinoSpiderSpider(CrawlSpider):
     name = 'submarino_spider'
     allowed_domains = ['submarinoviagens.com.br']
@@ -23,6 +24,25 @@ class SubmarinoSpiderSpider(CrawlSpider):
                         formdata={"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":"GRU","Destination":"IBZ","DepartureYear":"2013","DepartureMonth":"04","DepartureDay":"08"},{"CiaCodeList":[],"NonStop":"false","Origin":"IBZ","Destination":"GRU","DepartureYear":"2013","DepartureMonth":"04","DepartureDay":"18"}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"}},
                         callback=self.search_id_post)]
         '''
+        
+        #destino
+        "CiaCodeList":[]
+        "NonStop":"false"
+        "Origin":"GRU"
+        "Destination":"IBZ"
+        "DepartureYear":"2013"
+        "DepartureMonth":"04"
+        "DepartureDay":"08"}
+        
+        #origem
+        "CiaCodeList":[]
+        "NonStop":"false"
+        "Origin":"IBZ"
+        "Destination":"GRU"
+        "DepartureYear":"2013"
+        "DepartureMonth":"04"
+        "DepartureDay":"18"
+        
         return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum" , method='POST', 
                    body=json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":"GRU","Destination":"IBZ","DepartureYear":"2013","DepartureMonth":"04","DepartureDay":"08"},{"CiaCodeList":[],"NonStop":"false","Origin":"IBZ","Destination":"GRU","DepartureYear":"2013","DepartureMonth":"04","DepartureDay":"18"}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"}}), 
                    headers={'Content-Type':'application/json',
@@ -49,9 +69,10 @@ class SubmarinoSpiderSpider(CrawlSpider):
         else:
             print uuids
         
-        urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', response.body)
+        #urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', response.body)        
+        #print urls
         #"http:\/\/travelengine143.b2w\/TravelEngineWS.svc\"
-        print urls
+        
         return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
                    body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"},"pullStatusFrom":"http://" + "travelengine143.b2w/TravelEngineWS.svc"}), 
                    headers={'Content-Type':'application/json',
