@@ -31,7 +31,9 @@ class SubmarinoSpiderSpider(CrawlSpider):
     def search_id_post(self, response):
         # here you would extract links to follow and return Requests for
         # each of them, with another callback
-        print response
+        jsonResponse = json.loads(response.read())
+        print jsonResponse
+        return jsonResponse
         #pass    
     
     def parse_item(self, response):
