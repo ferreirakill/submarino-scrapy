@@ -8,5 +8,5 @@ from scrapy.item import Item, Field
 class SubmarinoScrapyItem(Item):
     # define the fields for your item here like:
     # name = Field()
-    search_id = FieldO()
+    search_id = Field()
     #pass
