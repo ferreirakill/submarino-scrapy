@@ -46,6 +46,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         if len(uuids)<2:
             SubmarinoSpiderSpider(self)
+        else:
+            print uuids
         return response
         #pass    
     
