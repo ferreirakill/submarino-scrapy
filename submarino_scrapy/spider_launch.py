@@ -21,8 +21,8 @@ def setup_crawler(origem,destino,ano_saida,mes_saida,dia_saida,ano_chegada,mes_c
     crawlerProcess = CrawlerProcess(Settings())
     crawlerProcess.install()
     crawlerProcess.configure()
-    #crawlerProcess.crawl(spider)
-    crawlerProcess.start()
+    crawlerProcess.crawl(spider)
+    #crawlerProcess.start()
 
 
 def db_connect():

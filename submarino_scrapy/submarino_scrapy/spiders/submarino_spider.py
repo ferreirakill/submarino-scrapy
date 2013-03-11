@@ -9,6 +9,7 @@ import json
 import re
 
 
+
 class SubmarinoSpiderSpider(CrawlSpider):
     name = 'submarino_spider'
     allowed_domains = ['submarinoviagens.com.br']
