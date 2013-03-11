@@ -4,8 +4,9 @@ from scrapy.settings import Settings
 from scrapy import log
 from submarino_scrapy.spiders.submarino_spider import SubmarinoSpiderSpider
 
-def setup_crawler(domain):
-    spider = SubmarinoSpiderSpider(domain=domain)
+def setup_crawler(origem,destino,ano_saida,mes_saida,dia_saida,ano_chegada,mes_chegada,dia_chegada):
+    spider = SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida,
+                                   ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada)
     crawler = Crawler(Settings())
     crawler.configure()
     crawler.crawl(spider)
