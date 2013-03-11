@@ -1,6 +1,6 @@
 from twisted.internet import reactor
-from scrapy.crawler import Crawler
-#from scrapy.crawler import CrawlerProcess
+#from scrapy.crawler import Crawler
+from scrapy.crawler import CrawlerProcess
 from scrapy.settings import Settings
 from scrapy import log
 from submarino_scrapy.spiders.submarino_spider import SubmarinoSpiderSpider
@@ -19,12 +19,12 @@ def setup_crawler(origem,destino,ano_saida,mes_saida,dia_saida,ano_chegada,mes_c
     crawler.start()
     '''
     
-    crawlerProcess = Crawler(Settings())
-    #crawlerProcess = CrawlerProcess(Settings())
-    crawlerProcess.install()
-    crawlerProcess.configure()
+    #crawlerProcess = Crawler(Settings())
+    cp = CrawlerProcess(Settings())
+    cp.install()
+    cp.configure()
     #crawlerProcess.crawl(spider)
-    crawlerProcess.crawl(spider)
+    cp.crawl(spider)
     #crawlerProcess.start()
 
 
