@@ -13,6 +13,7 @@ def setup_crawler(origem,destino,ano_saida,mes_saida,dia_saida,ano_chegada,mes_c
                                    ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada)
 
     crawler = Crawler(Settings())
+    crawler.install()
     crawler.configure()
     crawler.crawl(spider)
     crawler.start()
