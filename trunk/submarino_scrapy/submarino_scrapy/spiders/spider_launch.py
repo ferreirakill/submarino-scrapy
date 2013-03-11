@@ -1,21 +1,29 @@
 from twisted.internet import reactor
-from scrapy.crawler import Crawler
+#from scrapy.crawler import Crawler
+from scrapy.crawler import CrawlerProcess
 from scrapy.settings import Settings
 from scrapy import log
 from submarino_scrapy.spiders.submarino_spider import SubmarinoSpiderSpider
-
-def setup_crawler(origem,destino,ano_saida,mes_saida,dia_saida,ano_chegada,mes_chegada,dia_chegada):
-    spider = SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida,
-                                   ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada)
-    crawler = Crawler(Settings())
-    crawler.configure()
-    crawler.crawl(spider)
-    crawler.start()
-
 import MySQLdb
 import sys
 from datetime import datetime, timedelta
 from time import localtime, strptime, strftime, mktime
+
+def setup_crawler(origem,destino,ano_saida,mes_saida,dia_saida,ano_chegada,mes_chegada,dia_chegada):
+    spider = SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida,
+                                   ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada)
+    '''
+    crawler = Crawler(Settings())
+    crawler.configure()
+    crawler.crawl(spider)
+    crawler.start()
+    '''
+    crawlerProcess = CrawlerProcess(Settings())
+    crawlerProcess.install()
+    crawlerProcess.configure()
+    crawlerProcess.crawl(spider)
+    crawlerProcess.start()
+
 
 def db_connect():
     try:
