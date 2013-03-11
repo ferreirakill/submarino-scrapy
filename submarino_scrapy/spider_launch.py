@@ -18,8 +18,8 @@ def setup_crawler(origem,destino,ano_saida,mes_saida,dia_saida,ano_chegada,mes_c
     crawler.start()
     '''
     
-    cp = Crawler(Settings())
-    #cp = CrawlerProcess(Settings())
+    #cp = Crawler(Settings())
+    cp = CrawlerProcess(Settings())
     cp.install()
     cp.configure()
     #crawlerProcess.crawl(spider)
