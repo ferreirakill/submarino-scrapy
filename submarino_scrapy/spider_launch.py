@@ -11,20 +11,11 @@ from time import localtime, strptime, strftime, mktime
 def setup_crawler(origem,destino,ano_saida,mes_saida,dia_saida,ano_chegada,mes_chegada,dia_chegada):
     spider = SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida,
                                    ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada)
-    '''
+
     crawler = Crawler(Settings())
     crawler.configure()
     crawler.crawl(spider)
     crawler.start()
-    '''
-    
-    #cp = Crawler(Settings())
-    cp = CrawlerProcess(Settings())
-    cp.install()
-    cp.configure()
-    #crawlerProcess.crawl(spider)
-    cp.crawl(spider)
-    #crawlerProcess.start()
 
 
 def db_connect():
