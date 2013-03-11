@@ -14,7 +14,7 @@ class CrawlerWorker(multiprocessing.Process):
  
     def __init__(self, spider, result_queue):
         multiprocessing.Process.__init__(self)
-        self.result_queue = result_queue
+        #self.result_queue = result_queue
  
         self.crawler = CrawlerProcess(settings)
         if not hasattr(project, 'crawler'):
@@ -152,9 +152,11 @@ for viagem in viagens:
                         
                         
                 #setup_crawler(origem,destino,ano_saida,mes_saida,dia_saida,ano_chegada,mes_chegada,dia_chegada)        
-                result_queue = Queue()
+                #result_queue = Queue()
+                #crawler = CrawlerWorker(SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida,
+                #                                 ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada), result_queue)
                 crawler = CrawlerWorker(SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida,
-                                                   ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada), result_queue)
+                                                   ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada))                                                
                 crawler.start()
                 #for item in result_queue.get():
                 #    print item        
