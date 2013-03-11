@@ -157,4 +157,4 @@ for viagem in viagens:
                                                    ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada), result_queue)
                 crawler.start()
                 for item in result_queue.get():
-                    yield item        
+                    print item        
