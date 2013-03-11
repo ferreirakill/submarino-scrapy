@@ -12,7 +12,8 @@ from time import localtime, strptime, strftime, mktime
  
 class CrawlerWorker(multiprocessing.Process):
  
-    def __init__(self, spider, result_queue):
+    #def __init__(self, spider, result_queue):
+    def __init__(self, spider):
         multiprocessing.Process.__init__(self)
         #self.result_queue = result_queue
  
