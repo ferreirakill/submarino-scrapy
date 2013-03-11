@@ -1,6 +1,5 @@
 from twisted.internet import reactor
-from scrapy.crawler import Crawler
-from scrapy.crawler import CrawlerProcess
+from scrapy.crawler import *
 from scrapy.settings import Settings
 from scrapy import log
 from submarino_scrapy.spiders.submarino_spider import SubmarinoSpiderSpider
