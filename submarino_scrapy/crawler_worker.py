@@ -156,5 +156,5 @@ for viagem in viagens:
                 crawler = CrawlerWorker(SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida,
                                                    ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada), result_queue)
                 crawler.start()
-                for item in result_queue.get():
-                    print item        
+                #for item in result_queue.get():
+                #    print item        
