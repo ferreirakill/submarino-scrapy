@@ -141,7 +141,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                         ano_chegada = data_chegada.split("-")[0]
                         mes_chegada = data_chegada.split("-")[1]
                         dia_chegada = data_chegada.split("-")[2]                        
-                        print '''
+                        '''
                         #destino
                         "CiaCodeList":[]
                         "NonStop":"false"
@@ -160,8 +160,9 @@ class SubmarinoSpiderSpider(CrawlSpider):
                         "DepartureMonth":"%s"
                         "DepartureDay":"%s"
                          ''' % (origem,destino,ano_saida,mes_saida,dia_saida,destino,origem,ano_chegada,mes_chegada,dia_chegada)
-                        return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum" , method='POST', 
-                                   body=json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":origem,"Destination":destino,"DepartureYear":ano_saida,"DepartureMonth":mes_saida,"DepartureDay":dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":destino,"Destination":origem,"DepartureYear":ano_chegada,"DepartureMonth":mes_chegada,"DepartureDay":dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"}}), 
+                        print json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":origem,"Destination":destino,"DepartureYear":ano_saida,"DepartureMonth":mes_saida,"DepartureDay":dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":destino,"Destination":origem,"DepartureYear":ano_chegada,"DepartureMonth":mes_chegada,"DepartureDay":dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"}})
+                        return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum" , method='POST',                                         
+                                   body=json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":origem,"Destination":destino,"DepartureYear":ano_saida,"DepartureMonth":mes_saida,"DepartureDay":dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":destino,"Destination":origem,"DepartureYear":ano_chegada,"DepartureMonth":mes_chegada,"DepartureDay":dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"}}),                                    
                                    headers={'Content-Type':'application/json',
                                             "Accept-Encoding": "gzip: deflate",
                                             "Content-Type": "application/json",
