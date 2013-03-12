@@ -7,6 +7,7 @@ import sys
 from datetime import datetime, timedelta
 from time import localtime, strptime, strftime, mktime
 import random
+from random import choice
 
 from scrapy import project, signals
 from scrapy.xlib.pydispatch import dispatcher
