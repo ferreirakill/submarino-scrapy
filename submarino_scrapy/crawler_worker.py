@@ -134,8 +134,9 @@ class CrawlerWorker(threading.Thread):
         dia_chegada = item[7]      
         spider = SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida,
                               ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada,user_browser=random_header())
-              
-        self.crawler.crawl(spider)
+        
+        self.crawler.queue.append_spider(spider)
+        #self.crawler.crawl(spider)
         self.crawler.start()
         self.crawler.stop()
 
