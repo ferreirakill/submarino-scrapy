@@ -265,7 +265,6 @@ class CrawlerWorker(multiprocessing.Process):
             print("Starting " + str(job) + " ...")
             delay = random.randrange(1,3)
             time.sleep(delay)
-            
             self.crawler.crawl(self.spider)
             self.crawler.start()
             self.crawler.stop()
@@ -287,8 +286,8 @@ if __name__ == "__main__":
         range_saida = range(int(viagem[4]))
                 
     #num_jobs = len(origens_array)*len(destinos_array)*len(range_saida)
-    num_jobs = 4
-    num_processes=2
+    num_jobs = 1
+    num_processes=1
  
     # run
     # load up work queue
