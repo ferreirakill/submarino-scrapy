@@ -12,8 +12,8 @@ import re
 
 class SubmarinoSpiderSpider(CrawlSpider):
     name = 'submarino_spider'
-    #allowed_domains = ['submarinoviagens.com.br']
-    #start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
+    allowed_domains = ['submarinoviagens.com.br']
+    start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
 
     #rules = (
     #    Rule(SgmlLinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
@@ -40,8 +40,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
         self.dia_chegada = dia_chegada
         self.user_browser = user_browser
         
-        self.start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
-        self.allowed_domains = ['submarinoviagens.com.br']
+        #self.start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
+        #self.allowed_domains = ['submarinoviagens.com.br']
         
         #self.url = url
         #self.allowed_domains = [urlparse(url).hostname.lstrip('www.')]
@@ -131,3 +131,5 @@ class SubmarinoSpiderSpider(CrawlSpider):
         #i['name'] = hxs.select('//div[@id="name"]').extract()
         #i['description'] = hxs.select('//div[@id="description"]').extract()
         return i
+    
+SubmarinoSpiderSpider(origem='GRU',destino='LHR',ano_saida='2013',mes_saida='04',dia_saida='17',ano_chegada='2013',mes_chegada='04',dia_chegada='22',user_browser='Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0b8pre) Gecko/20101114 Firefox/4.0b8pre')
