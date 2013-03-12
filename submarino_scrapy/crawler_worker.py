@@ -8,13 +8,11 @@ import MySQLdb
 import sys
 from datetime import datetime, timedelta
 from time import localtime, strptime, strftime, mktime
-#import threading
-#import Queue
 import time, random
 from random import choice
 
-from multiprocessing.queues import Queue
-from multiprocessing import Process
+import multiprocessing
+import Queue
 
 #WORKERS = 30
 
@@ -108,32 +106,6 @@ def random_header():
 
     return choice(browser_headers)
 
-      
-class CrawlerWorker(Process):
- 
-    def __init__(self, spider, results, size):
-        Process.__init__(self)
-        self.results = results    
-        self.size = size
-        self.crawler = CrawlerProcess(settings)
-        if not hasattr(project, 'crawler'):
-            self.crawler.install()
-        self.crawler.configure()
-        self.spider = spider
-        
-        dispatcher.connect(self._item_passed, signals.item_passed)
-        
-    def _item_passed(self, item):
-        self.items.append(item)   
-        
-    def run(self):
-        #self.crawler.engine.open_spider(spider)
-        self.crawler.crawl(self.spider)
-        self.crawler.start()
-        self.crawler.stop()
-        #self.results.put(self.items)
-        self.results.put(range(self.size))
-        
 def db_connect():
     try:
         conn = MySQLdb.connect (host = "localhost",
@@ -222,46 +194,6 @@ def setResultado(origem_iata,destino_iata,cia_aerea,sigla_aerea,preco,data_parti
     db_disconnect(cursor,conn)
 
 
-viagens,dict_origens,dict_destinos = getViagem()
-for viagem in viagens:
-    #(1L, datetime.date(2013, 3, 8), datetime.date(2013, 3, 8), 10L, 3L, 'weeks')
-    origens_array=dict_origens[str(viagem[0])+'_id_viagem']
-    destinos_array=dict_destinos[str(viagem[0])+'_id_viagem']
-
-    #print origens_array
-    #print destinos_array
-    if viagem[5].lower().strip().find("weeks")>-1:
-        range_saida = range(0,int(viagem[4])*7,7)
-    elif viagem[5].lower().strip().find("days")>-1:
-        range_saida = range(0,int(viagem[4]))
-    else:
-        range_saida = range(int(viagem[4]))
-    print range_saida
-    
-    #'''
-    results = Queue()
-    for origem in origens_array:
-        for destino in destinos_array:
-            for i in range_saida:
-                data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
-                data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
-                
-                ano_saida = data_saida.split("-")[0]
-                mes_saida = data_saida.split("-")[1]
-                dia_saida = data_saida.split("-")[2]
-            
-                ano_chegada = data_chegada.split("-")[0]
-                mes_chegada = data_chegada.split("-")[1]
-                dia_chegada = data_chegada.split("-")[2]  
-                        
-    #'''                 
-                
-                crawler = CrawlerWorker(SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida,
-                                              ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada,user_browser=random_header()), results,5)
-                crawler.start()
-    crawler.join()
-                
-    
     '''   
     for row in range(len(origens_array)):
 
@@ -293,13 +225,101 @@ for viagem in viagens:
     '''
             
     
+
         
-                    
-                #crawler = CrawlerWorker(SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida,
-                #                                   ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada,user_browser=random_header()), queue)
+class CrawlerWorker(multiprocessing.Process):
+ 
+    def __init__(self, spider, work_queue, result_queue):
+ 
+        # base class initialization
+        multiprocessing.Process.__init__(self)
+ 
+        # job management stuff
+        self.work_queue = work_queue
+        self.result_queue = result_queue
+        self.kill_received = False
+        
+        # crawler settings
+        self.crawler = CrawlerProcess(settings)
+        if not hasattr(project, 'crawler'):
+            self.crawler.install()
+        self.crawler.configure()
+        self.spider = spider
+        self.items = []
+        dispatcher.connect(self._item_passed, signals.item_passed)        
+ 
+    def _item_passed(self, item):
+        self.items.append(item)   
+        
+    def run(self):
+        while not self.kill_received:
+ 
+            # get a task
+            #job = self.work_queue.get_nowait()
+            try:
+                job = self.work_queue.get_nowait()
+            except Queue.Empty:
+                break
+ 
+            # the actual processing
+            print("Starting " + str(job) + " ...")
+            delay = random.randrange(1,3)
+            time.sleep(delay)
+            
+            self.crawler.crawl(self.spider)
+            self.crawler.start()
+            self.crawler.stop()
+            # store the result
+            self.result_queue.put(self.items)
+
+if __name__ == "__main__":
+    
+    viagens,dict_origens,dict_destinos = getViagem()
+    viagem = viagens[0]
+    origens_array=dict_origens[str(viagem[0])+'_id_viagem']
+    destinos_array=dict_destinos[str(viagem[0])+'_id_viagem']
+    
+    if viagem[5].lower().strip().find("weeks")>-1:
+        range_saida = range(0,int(viagem[4])*7,7)
+    elif viagem[5].lower().strip().find("days")>-1:
+        range_saida = range(0,int(viagem[4]))
+    else:
+        range_saida = range(int(viagem[4]))
                 
-                #crawler = CrawlerWorker(SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida,
-                #                                   ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada,user_browser=random_header()))                                                
-                #crawler.start()
-                #for item in result_queue.get():
-                #    print item        
+    num_jobs = len(origens_array)*len(destinos_array)*len(range_saida)
+    num_processes=8
+ 
+    # run
+    # load up work queue
+    work_queue = multiprocessing.Queue()
+    #for job in range(num_jobs):
+    #    work_queue.put(job)
+    
+    for origem in origens_array:
+        for destino in destinos_array:
+            for i in range_saida:
+                data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
+                data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
+                
+                ano_saida = data_saida.split("-")[0]
+                mes_saida = data_saida.split("-")[1]
+                dia_saida = data_saida.split("-")[2]
+            
+                ano_chegada = data_chegada.split("-")[0]
+                mes_chegada = data_chegada.split("-")[1]
+                dia_chegada = data_chegada.split("-")[2] 
+            
+                work_queue.put(origem+"_"+destino+"_"+data_saida+"_"+data_chegada)
+ 
+    # create a queue to pass to workers to store the results
+    result_queue = multiprocessing.Queue()
+ 
+    # spawn workers
+    for i in range(num_processes):
+        worker = CrawlerWorker(SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida, ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada,user_browser=random_header()), work_queue, result_queue)
+        worker.start()
+ 
+    # collect the results off the queue
+    results = []
+    for i in range(num_jobs):
+        print(result_queue.get())                
