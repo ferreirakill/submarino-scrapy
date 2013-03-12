@@ -102,7 +102,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         # each of them, with another callback
         #jsonResponse = json.loads()
         print response.headers
-        print json.JSONDecoder().decode(json.loads(response.body))
+        #print json.JSONDecoder().decode(json.loads(response.body))
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         if len(uuids)<2:
             SubmarinoSpiderSpider(origem=self.origem,destino=self.destino,ano_saida=self.ano_saida,mes_saida=self.mes_saida,dia_saida=self.dia_saida,
@@ -133,7 +133,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         #exec("resposta_parse = " + response.body)
         preco_list = json.JSONDecoder().decode(json.loads(response.body))
         print "preco_list: %s" % (preco_list)
-        print response.body
+        #print response.body
     
     def parse_item(self, response):
         hxs = HtmlXPathSelector(response)
