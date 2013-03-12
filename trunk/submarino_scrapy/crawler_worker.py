@@ -1,16 +1,15 @@
-from scrapy import project, signals
 from scrapy.conf import settings
 from scrapy.crawler import CrawlerProcess
-from scrapy.xlib.pydispatch import dispatcher
 
 from submarino_scrapy.spiders.submarino_spider import SubmarinoSpiderSpider
 import MySQLdb
 import sys
 from datetime import datetime, timedelta
 from time import localtime, strptime, strftime, mktime
-import time, random
 from random import choice
 
+from scrapy import project, signals
+from scrapy.xlib.pydispatch import dispatcher
 import multiprocessing
 import Queue
 
@@ -287,7 +286,7 @@ if __name__ == "__main__":
         range_saida = range(int(viagem[4]))
                 
     #num_jobs = len(origens_array)*len(destinos_array)*len(range_saida)
-    num_jobs = 5
+    num_jobs = 4
     num_processes=2
  
     # run
