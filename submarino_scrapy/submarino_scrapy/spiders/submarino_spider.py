@@ -49,7 +49,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         self.ano_chegada = '2013'
         self.mes_chegada = '04'
         self.dia_chegada = '22'
-        self.user_browser = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Win64; x64; Trident/6.0)'
+        self.user_browser = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"
                 
         #self.start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
         #self.allowed_domains = ['submarinoviagens.com.br']
@@ -106,7 +106,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         if len(uuids)<2:
             SubmarinoSpiderSpider(origem=self.origem,destino=self.destino,ano_saida=self.ano_saida,mes_saida=self.mes_saida,dia_saida=self.dia_saida,
-                                   ano_chegada=self.ano_chegada,mes_chegada=self.mes_chegada,dia_chegada=self.dia_chegada)
+                                   ano_chegada=self.ano_chegada,mes_chegada=self.mes_chegada,dia_chegada=self.dia_chegada,self.user_browser)
         else:
             print uuids
         
@@ -115,7 +115,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         #"http:\/\/travelengine143.b2w\/TravelEngineWS.svc\"
         
         return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
-                   body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"},"pullStatusFrom":"http://" + "travelengine143.b2w/TravelEngineWS.svc"}), 
+                   body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}), 
                    headers={'Content-Type':'application/json',
                             "Accept-Encoding": "gzip: deflate",
                             "Content-Type": "application/json",
