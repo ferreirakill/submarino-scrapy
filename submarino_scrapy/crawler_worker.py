@@ -8,12 +8,15 @@ import MySQLdb
 import sys
 from datetime import datetime, timedelta
 from time import localtime, strptime, strftime, mktime
-import threading
-import Queue
+#import threading
+#import Queue
 import time, random
 from random import choice
 
-WORKERS = 30
+from multiprocessing.queues import Queue
+from multiprocessing import Process
+
+#WORKERS = 30
 
 def random_header():
     browser_headers = ['Opera/9.51 (Macintosh; Intel Mac OS X; U; en)',
@@ -106,40 +109,31 @@ def random_header():
     return choice(browser_headers)
 
       
-class CrawlerWorker(threading.Thread):
+class CrawlerWorker(Process):
  
-    def __init__(self, queue):
-    #def __init__(self, spider):
-        #multiprocessing.Process.__init__(self)
-        self.__queue = queue
-        #self.result_queue = result_queue        
- 
+    def __init__(self, spider, results, size):
+        Process.__init__(self)
+        self.results = results    
+        self.size = size
         self.crawler = CrawlerProcess(settings)
         if not hasattr(project, 'crawler'):
             self.crawler.install()
         self.crawler.configure()
-        self.agentes = WORKERS
-        #dispatcher.connect(self._item_passed, signals.item_passed)
-        threading.Thread.__init__(self)
-   
-    def run(self):
-        item = self.__queue.get()
-        origem = item[0]
-        destino = item[1]
-        ano_saida = item[2]
-        mes_saida = item[3]
-        dia_saida = item[4]
-        ano_chegada = item[5]
-        mes_chegada = item[6]
-        dia_chegada = item[7]      
-        spider = SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida,
-                              ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada,user_browser=random_header())
+        self.spider = spider
         
-        self.crawler.engine.open_spider(spider)
-        #self.crawler.crawl(spider)
+        dispatcher.connect(self._item_passed, signals.item_passed)
+        
+    def _item_passed(self, item):
+        self.items.append(item)   
+        
+    def run(self):
+        #self.crawler.engine.open_spider(spider)
+        self.crawler.crawl(self.spider)
         self.crawler.start()
         self.crawler.stop()
-
+        #self.results.put(self.items)
+        self.results.put(range(self.size))
+        
 def db_connect():
     try:
         conn = MySQLdb.connect (host = "localhost",
@@ -244,7 +238,8 @@ for viagem in viagens:
         range_saida = range(int(viagem[4]))
     print range_saida
     
-    '''
+    #'''
+    results = Queue()
     for origem in origens_array:
         for destino in destinos_array:
             for i in range_saida:
@@ -259,19 +254,15 @@ for viagem in viagens:
                 mes_chegada = data_chegada.split("-")[1]
                 dia_chegada = data_chegada.split("-")[2]  
                         
-    '''                  
-                #setup_crawler(origem,destino,ano_saida,mes_saida,dia_saida,ano_chegada,mes_chegada,dia_chegada)        
-                #result_queue = Queue()
+    #'''                 
+                
+                crawler = CrawlerWorker(SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida,
+                                              ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada,user_browser=random_header()), results,30)
+    crawler.start()
+    crawler.join()
                 
     
-    # try it
-    queue = Queue.Queue(0)
-    
-    #print proxy_list
-    
-    for i in range(WORKERS):
-        CrawlerWorker(queue).start() # start a worker
-        
+    '''   
     for row in range(len(origens_array)):
 
         for j in range(len(destinos_array)):
@@ -288,7 +279,7 @@ for viagem in viagens:
                 ano_chegada = data_chegada.split("-")[0]
                 mes_chegada = data_chegada.split("-")[1]
                 dia_chegada = data_chegada.split("-")[2]  
-                                
+                   
                 queue.put([
                             origens_array[row], #origem
                             destinos_array[j], #destino
@@ -299,12 +290,10 @@ for viagem in viagens:
                             mes_chegada,
                             dia_chegada,                            
                            ])
+    '''
             
     
-    for i in range(WORKERS):
-        queue.put([None,None,None,None,None,None,None,None]) # add end-of-queue markers          
-    
-    queue.join()          
+        
                     
                 #crawler = CrawlerWorker(SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida,
                 #                                   ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada,user_browser=random_header()), queue)
