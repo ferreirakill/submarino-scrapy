@@ -40,10 +40,13 @@ class SubmarinoSpiderSpider(CrawlSpider):
         self.dia_chegada = dia_chegada
         self.user_browser = user_browser
         
+        self.start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
+        self.allowed_domains = ['submarinoviagens.com.br']
+        
         #self.url = url
         #self.allowed_domains = [urlparse(url).hostname.lstrip('www.')]
-        self.link_extractor = SgmlLinkExtractor()
-        self.cookies_seen = set()
+        #self.link_extractor = SgmlLinkExtractor()
+        #self.cookies_seen = set()
         
     # Initialization
     def start_requests(self):
