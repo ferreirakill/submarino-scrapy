@@ -116,7 +116,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         #pass    
     def precos_json(self, response):
         #exec("resposta_parse = " + response.body)
-        print json.loads(response)
+        print json.decoder(json.loads(response))
         #print response.body
     
     def parse_item(self, response):
