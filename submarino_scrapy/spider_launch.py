@@ -195,6 +195,7 @@ def setup_crawler(origem,destino,ano_saida,mes_saida,dia_saida,ano_chegada,mes_c
     crawler.configure()
     crawler.crawl(spider)
     crawler.start()
+    crawler.stop()
     
 '''
 viagens,dict_origens,dict_destinos = getViagem()
