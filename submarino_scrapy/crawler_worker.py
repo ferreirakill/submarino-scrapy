@@ -6,7 +6,7 @@ import MySQLdb
 import sys
 from datetime import datetime, timedelta
 from time import localtime, strptime, strftime, mktime
-from random import choice
+import random
 
 from scrapy import project, signals
 from scrapy.xlib.pydispatch import dispatcher
