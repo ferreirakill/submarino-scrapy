@@ -1,12 +1,13 @@
-from twisted.internet import reactor
-from scrapy.crawler import *
-from scrapy.settings import Settings
-from scrapy import log
-from submarino_scrapy.spiders.submarino_spider import SubmarinoSpiderSpider
 import MySQLdb
 import sys
 from datetime import datetime, timedelta
 from time import localtime, strptime, strftime, mktime
+
+from twisted.internet import reactor
+from scrapy.crawler import Crawler
+from scrapy.settings import Settings
+from scrapy import log
+from submarino_scrapy.spiders.submarino_spider import SubmarinoSpiderSpider
 
 def db_connect():
     try:
