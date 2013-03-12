@@ -131,5 +131,5 @@ class SubmarinoSpiderSpider(CrawlSpider):
         #i['name'] = hxs.select('//div[@id="name"]').extract()
         #i['description'] = hxs.select('//div[@id="description"]').extract()
         return i
-    
-SubmarinoSpiderSpider(origem='GRU',destino='LHR',ano_saida='2013',mes_saida='04',dia_saida='17',ano_chegada='2013',mes_chegada='04',dia_chegada='22',user_browser='Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0b8pre) Gecko/20101114 Firefox/4.0b8pre')
+if __name__ == "__main__":
+    SubmarinoSpiderSpider(origem='GRU',destino='LHR',ano_saida='2013',mes_saida='04',dia_saida='17',ano_chegada='2013',mes_chegada='04',dia_chegada='22',user_browser='Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0b8pre) Gecko/20101114 Firefox/4.0b8pre')
