@@ -92,7 +92,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
         print json.JSONDecoder().decode(json.loads(response.body))
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         if len(uuids)<2:
-            SubmarinoSpiderSpider(self)
+            SubmarinoSpiderSpider(origem=self.origem,destino=self.destino,ano_saida=self.ano_saida,mes_saida=self.mes_saida,dia_saida=self.dia_saida,
+                                   ano_chegada=self.ano_chegada,mes_chegada=self.mes_chegada,dia_chegada=self.dia_chegada)
         else:
             print uuids
         
