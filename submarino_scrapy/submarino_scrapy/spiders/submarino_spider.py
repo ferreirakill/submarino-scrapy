@@ -106,7 +106,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         if len(uuids)<2:
             SubmarinoSpiderSpider(origem=self.origem,destino=self.destino,ano_saida=self.ano_saida,mes_saida=self.mes_saida,dia_saida=self.dia_saida,
-                                   ano_chegada=self.ano_chegada,mes_chegada=self.mes_chegada,dia_chegada=self.dia_chegada,self.user_browser)
+                                   ano_chegada=self.ano_chegada,mes_chegada=self.mes_chegada,dia_chegada=self.dia_chegada,user_browser=self.user_browser)
         else:
             print uuids
         
