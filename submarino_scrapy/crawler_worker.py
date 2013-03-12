@@ -5,8 +5,8 @@ from submarino_scrapy.spiders.submarino_spider import SubmarinoSpiderSpider
 import MySQLdb
 import sys
 from datetime import datetime, timedelta
+import random, time
 from time import localtime, strptime, strftime, mktime
-import random
 from random import choice
 
 from scrapy import project, signals
