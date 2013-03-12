@@ -132,7 +132,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
     def precos_json(self, response):
         #exec("resposta_parse = " + response.body)
         preco_list = json.JSONDecoder().decode(json.loads(response.body))
-        print re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', preco_list)
+        print type(preco_list)
         #print "preco_list: %s" % (preco_list)
         #print response.body
     
