@@ -8,17 +8,6 @@ import sys
 from datetime import datetime, timedelta
 from time import localtime, strptime, strftime, mktime
 
-def setup_crawler(origem,destino,ano_saida,mes_saida,dia_saida,ano_chegada,mes_chegada,dia_chegada):
-    spider = SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida,
-                                   ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada)
-
-    crawler = Crawler(Settings())
-    #crawler.install()
-    crawler.configure()
-    crawler.crawl(spider)
-    crawler.start()
-
-
 def db_connect():
     try:
         conn = MySQLdb.connect (host = "localhost",
@@ -106,7 +95,16 @@ def setResultado(origem_iata,destino_iata,cia_aerea,sigla_aerea,preco,data_parti
     cursor.execute(insert_resultado)
     db_disconnect(cursor,conn)
 
+def setup_crawler(origem,destino,ano_saida,mes_saida,dia_saida,ano_chegada,mes_chegada,dia_chegada):
+    spider = SubmarinoSpiderSpider(origem=origem,destino=destino,ano_saida=ano_saida,mes_saida=mes_saida,dia_saida=dia_saida,
+                                   ano_chegada=ano_chegada,mes_chegada=mes_chegada,dia_chegada=dia_chegada)
 
+    crawler = Crawler(Settings())
+    crawler.configure()
+    crawler.crawl(spider)
+    crawler.start()
+    
+'''
 viagens,dict_origens,dict_destinos = getViagem()
 for viagem in viagens:
     #(1L, datetime.date(2013, 3, 8), datetime.date(2013, 3, 8), 10L, 3L, 'weeks')
@@ -135,8 +133,8 @@ for viagem in viagens:
                 ano_chegada = data_chegada.split("-")[0]
                 mes_chegada = data_chegada.split("-")[1]
                 dia_chegada = data_chegada.split("-")[2]  
-                        
-                        
-setup_crawler(origem,destino,ano_saida,mes_saida,dia_saida,ano_chegada,mes_chegada,dia_chegada)
+'''                
+
+setup_crawler(origem='GRU',destino='LHR',ano_saida='2013',mes_saida='04',dia_saida='17',ano_chegada='2013',mes_chegada='04',dia_chegada='22')
 log.start()
 reactor.run()
