@@ -137,6 +137,6 @@ for viagem in viagens:
                 dia_chegada = data_chegada.split("-")[2]  
                         
                         
-                setup_crawler(origem,destino,ano_saida,mes_saida,dia_saida,ano_chegada,mes_chegada,dia_chegada)
+setup_crawler(origem,destino,ano_saida,mes_saida,dia_saida,ano_chegada,mes_chegada,dia_chegada)
 log.start()
 reactor.run()
