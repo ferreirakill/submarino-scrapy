@@ -116,7 +116,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         #pass    
     def precos_json(self, response):
         exec("resposta_parse = " + response.body)
-        print resposta_parse[1][0][0]
+        print response.body
     
     def parse_item(self, response):
         hxs = HtmlXPathSelector(response)
