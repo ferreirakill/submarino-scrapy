@@ -133,8 +133,9 @@ class SubmarinoSpiderSpider(CrawlSpider):
         #exec("resposta_parse = " + response.body)
         preco_list = json.JSONDecoder().decode(json.loads(response.body))
         print type(preco_list)
-        for p in preco_list:
-            print p
+        for list_preco in preco_list:
+            for in_list_preco in list_preco:
+                print in_list_preco
         #print "preco_list: %s" % (preco_list)
         #print response.body
     
