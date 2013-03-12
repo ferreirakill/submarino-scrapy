@@ -1,6 +1,6 @@
 from scrapy import project, signals
 from scrapy.conf import settings
-#from scrapy.crawler import CrawlerProcess
+from scrapy.crawler import CrawlerProcess
 from scrapy.xlib.pydispatch import dispatcher
 from multiprocessing.queues import Queue
 import multiprocessing
@@ -11,15 +11,6 @@ from datetime import datetime, timedelta
 from time import localtime, strptime, strftime, mktime
 import signal
 
-from twisted.internet import reactor, defer
-
-from scrapy.xlib.pydispatch import dispatcher
-from scrapy.core.engine import ExecutionEngine
-from scrapy.resolver import CachingThreadedResolver
-from scrapy.extension import ExtensionManager
-from scrapy.utils.ossignal import install_shutdown_handlers, signal_names
-from scrapy.utils.misc import load_object
-from scrapy import log, signals
 
 class Crawler(object):
 
