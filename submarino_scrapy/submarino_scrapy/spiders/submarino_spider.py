@@ -29,7 +29,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
         mes_chegada = kw.get('mes_chegada')
         dia_chegada = kw.get('dia_chegada')  
         user_browser = kw.get('user_browser')  
-
+        
+        '''
         self.origem = origem
         self.destino = destino
         self.ano_saida = ano_saida
@@ -39,7 +40,17 @@ class SubmarinoSpiderSpider(CrawlSpider):
         self.mes_chegada = mes_chegada
         self.dia_chegada = dia_chegada
         self.user_browser = user_browser
-        
+        '''
+        self.origem = 'GRU'
+        self.destino = 'LHR'
+        self.ano_saida = '2013'
+        self.mes_saida = '04'
+        self.dia_saida = '17'
+        self.ano_chegada = '2013'
+        self.mes_chegada = '04'
+        self.dia_chegada = '22'
+        self.user_browser = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Win64; x64; Trident/6.0)'
+                
         #self.start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
         #self.allowed_domains = ['submarinoviagens.com.br']
         
@@ -131,5 +142,4 @@ class SubmarinoSpiderSpider(CrawlSpider):
         #i['name'] = hxs.select('//div[@id="name"]').extract()
         #i['description'] = hxs.select('//div[@id="description"]').extract()
         return i
-if __name__ == "__main__":
-    SubmarinoSpiderSpider(origem='GRU',destino='LHR',ano_saida='2013',mes_saida='04',dia_saida='17',ano_chegada='2013',mes_chegada='04',dia_chegada='22',user_browser='Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0b8pre) Gecko/20101114 Firefox/4.0b8pre')
+    
