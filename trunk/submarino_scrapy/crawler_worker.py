@@ -286,8 +286,9 @@ if __name__ == "__main__":
     else:
         range_saida = range(int(viagem[4]))
                 
-    num_jobs = len(origens_array)*len(destinos_array)*len(range_saida)
-    num_processes=8
+    #num_jobs = len(origens_array)*len(destinos_array)*len(range_saida)
+    num_jobs = 5
+    num_processes=2
  
     # run
     # load up work queue
