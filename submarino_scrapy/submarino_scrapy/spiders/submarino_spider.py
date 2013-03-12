@@ -132,6 +132,10 @@ class SubmarinoSpiderSpider(CrawlSpider):
     def precos_json(self, response):
         #exec("resposta_parse = " + response.body)
         preco_list = json.JSONDecoder().decode(json.loads(response.body))
+        for uuid_arr in preco_list[0][-1]:
+            if re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', uuid_arr):
+                print uuid_arr
+
         print "preco_list: %s" % (preco_list)
         #print response.body
     
