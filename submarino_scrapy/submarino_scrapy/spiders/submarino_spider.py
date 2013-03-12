@@ -77,7 +77,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                             "x-requested-with": "XMLHttpRequest",
                                             "Accept-Language": "pt-br",
                                             "Accept": "text/plain: */*",
-                                            "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0",
+                                            "User-Agent": self.user_browser,
                                             "Host": "www.submarinoviagens.com.br",
                                             "Cache-Control": "no-cache",
                                             "Connection": "Keep-Alive",
