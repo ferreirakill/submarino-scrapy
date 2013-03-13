@@ -138,7 +138,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 dict_preco = {}
                 dict_preco = in_list_preco
                 if dict_preco.has_key('n'):
-                    for k,v dict_preco.iteritems():
+                    for k,v in dict_preco.iteritems():
                         print v
         #print "preco_list: %s" % (preco_list)
         #print response.body
