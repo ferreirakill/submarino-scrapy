@@ -135,7 +135,11 @@ class SubmarinoSpiderSpider(CrawlSpider):
         print type(preco_list)
         for list_preco in preco_list:
             for in_list_preco in list_preco:
-                print in_list_preco
+                dict_preco = {}
+                dict_preco = in_list_preco
+                if dict_preco.has_key('n'):
+                    for k,v dict_preco.iteritems():
+                        print v
         #print "preco_list: %s" % (preco_list)
         #print response.body
     
