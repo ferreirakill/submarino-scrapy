@@ -102,7 +102,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                    callback=self.search_id_post, )]
                         '''
     def get_uuid(self,body):
-        response = Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum" , 
+        return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum" , 
                                     method='POST',                                         
                                     body=body,                             
                                     headers={'Content-Type':'application/json',
@@ -115,20 +115,20 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                              "Host": "www.submarinoviagens.com.br",
                                              "Cache-Control": "no-cache",
                                              "Connection": "Keep-Alive",
-                                             },)
-        
-        print response.body
+                                             },
+                                    callback=self.get_uuid_param, )]
+    def get_uuid_param(self,response):
+        print "response.body: %s" % (response.body)
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         if len(uuids)<2:
             print "Sleep get_uuid"
             time.sleep(random.randint(1, 3)) 
-            print body
-            self.get_uuid(body)
+            self.get_uuid(response.body)
         else:
             self.get_preco(uuids[0])
             
     def get_preco(self,uuid):
-            response = Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
+            return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
                    body=json.dumps({"req":{"SearchId":uuid,"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}), 
                    headers={'Content-Type':'application/json',
                             "Accept-Encoding": "gzip: deflate",
@@ -140,12 +140,14 @@ class SubmarinoSpiderSpider(CrawlSpider):
                             "Host": "www.submarinoviagens.com.br",
                             "Cache-Control": "no-cache",
                             "Connection": "Keep-Alive",
-                            }, )
+                            }, 
+                            callback=self.get_preco_param, )]
+            
+    def get_preco_param(self,response):
             preco_list = json.JSONDecoder().decode(json.loads(response.body))
             if preco_list[0][0]['i'] == -1:
                 print "Sleep preco_list"
                 time.sleep(random.randint(1, 3)) 
-                self.get_preco(uuid)
             else:
                 print preco_list
             
