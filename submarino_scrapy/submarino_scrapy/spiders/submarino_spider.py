@@ -83,6 +83,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                         "DepartureDay":"%s"
                          '''
                         print json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":self.origem,"Destination":self.destino,"DepartureYear":self.ano_saida,"DepartureMonth":self.mes_saida,"DepartureDay":self.dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":self.destino,"Destination":self.origem,"DepartureYear":self.ano_chegada,"DepartureMonth":self.mes_chegada,"DepartureDay":self.dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":self.user_browser}})
+                        get_uuid(self,json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":self.origem,"Destination":self.destino,"DepartureYear":self.ano_saida,"DepartureMonth":self.mes_saida,"DepartureDay":self.dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":self.destino,"Destination":self.origem,"DepartureYear":self.ano_chegada,"DepartureMonth":self.mes_chegada,"DepartureDay":self.dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":self.user_browser}}))
+                        '''
                         return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum" , method='POST',                                         
                                    body=json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":self.origem,"Destination":self.destino,"DepartureYear":self.ano_saida,"DepartureMonth":self.mes_saida,"DepartureDay":self.dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":self.destino,"Destination":self.origem,"DepartureYear":self.ano_chegada,"DepartureMonth":self.mes_chegada,"DepartureDay":self.dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":self.user_browser}}),                                   
                                    headers={'Content-Type':'application/json',
@@ -97,7 +99,49 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                             "Connection": "Keep-Alive",
                                             },
                                    callback=self.search_id_post, )]
-    
+                        '''
+    def get_uuid(self,body):
+        response = Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum" , 
+                                    method='POST',                                         
+                                    body=body,                             
+                                    headers={'Content-Type':'application/json',
+                                             "Accept-Encoding": "gzip: deflate",
+                                             "Content-Type": "application/json",
+                                             "x-requested-with": "XMLHttpRequest",
+                                             "Accept-Language": "pt-br",
+                                             "Accept": "text/plain: */*",
+                                             "User-Agent": self.user_browser,
+                                             "Host": "www.submarinoviagens.com.br",
+                                             "Cache-Control": "no-cache",
+                                             "Connection": "Keep-Alive",
+                                             },)
+        
+        uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
+        if len(uuids)<2:
+            get_uuid(body)
+        else:
+            get_preco(uuids[0])
+            
+    def get_preco(self,uuid):
+            response = Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
+                   body=json.dumps({"req":{"SearchId":uuid,"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}), 
+                   headers={'Content-Type':'application/json',
+                            "Accept-Encoding": "gzip: deflate",
+                            "Content-Type": "application/json",
+                            "x-requested-with": "XMLHttpRequest",
+                            "Accept-Language": "pt-br",
+                            "Accept": "text/plain: */*",
+                            "User-Agent": self.user_browser,
+                            "Host": "www.submarinoviagens.com.br",
+                            "Cache-Control": "no-cache",
+                            "Connection": "Keep-Alive",
+                            }, )
+            preco_list = json.JSONDecoder().decode(json.loads(response.body))
+            if preco_list[0][0]['i'] == -1:
+                get_preco(self,uuid)
+            else:
+                print preco_list
+            
     def search_id_post(self, response):
         # here you would extract links to follow and return Requests for
         # each of them, with another callback
