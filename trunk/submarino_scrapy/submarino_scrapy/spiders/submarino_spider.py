@@ -102,9 +102,14 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                     callback=self.get_uuid_param, )]
         
     def get_uuid_param(self,response):
-        print "response.body: %s" % (response.body)
+        #print "response.body: %s" % (response.body)
         preco_list = json.JSONDecoder().decode(json.loads(response.body))
         print "preco_list_len_uuid: %s" % (len(preco_list[1]))
+        
+        if len(preco_list[1])>2:
+            for preco in preco_list[1]:
+                print preco
+        
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         if len(uuids)<2:
             print "Sleep get_uuid"
@@ -139,60 +144,6 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 time.sleep(random.randint(1, 3)) 
             else:
                 print "else"
-            
-    def search_id_post(self, response):
-        # here you would extract links to follow and return Requests for
-        # each of them, with another callback
-        #jsonResponse = json.loads()
-        print response.headers
-        #print json.JSONDecoder().decode(json.loads(response.body))
-        uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
-        if len(uuids)<2:
-            SubmarinoSpiderSpider(origem=self.origem,destino=self.destino,ano_saida=self.ano_saida,mes_saida=self.mes_saida,dia_saida=self.dia_saida,
-                                   ano_chegada=self.ano_chegada,mes_chegada=self.mes_chegada,dia_chegada=self.dia_chegada,user_browser=self.user_browser)
-        else:
-            print uuids
-        
-        #urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', response.body)        
-        #print urls
-        #"http:\/\/travelengine143.b2w\/TravelEngineWS.svc\"
-        
-        return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
-                   body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}), 
-                   headers={'Content-Type':'application/json',
-                            "Accept-Encoding": "gzip: deflate",
-                            "Content-Type": "application/json",
-                            "x-requested-with": "XMLHttpRequest",
-                            "Accept-Language": "pt-br",
-                            "Accept": "text/plain: */*",
-                            "User-Agent": self.user_browser,
-                            "Host": "www.submarinoviagens.com.br",
-                            "Cache-Control": "no-cache",
-                            "Connection": "Keep-Alive",
-                            },
-                   callback=self.precos_json, )]
-        #pass    
-    def precos_json(self, response):
-        #exec("resposta_parse = " + response.body)
-        preco_list = json.JSONDecoder().decode(json.loads(response.body))
-        print type(preco_list)
-        print preco_list
-        '''
-        for list_preco in preco_list:
-            for in_list_preco in list_preco:
-                try:
-                    if type(in_list_preco)=='dict':
-                        for k,v in in_list_preco.iteritems():
-                            print k,v
-                    else:
-                        "Else: %s" % (in_list_preco)
-                except:
-                    exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
-                    traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
-                                      limit=2, file=sys.stdout)
-        #print "preco_list: %s" % (preco_list)
-        #print response.body
-        '''
         
     def parse_item(self, response):
         hxs = HtmlXPathSelector(response)
