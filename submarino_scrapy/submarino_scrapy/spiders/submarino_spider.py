@@ -129,20 +129,20 @@ class SubmarinoSpiderSpider(CrawlSpider):
             self.get_preco(uuids[0])
             
     def get_preco(self,uuid):
-            return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
-                   body=json.dumps({"req":{"SearchId":uuid,"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}), 
-                   headers={'Content-Type':'application/json',
-                            "Accept-Encoding": "gzip: deflate",
-                            "Content-Type": "application/json",
-                            "x-requested-with": "XMLHttpRequest",
-                            "Accept-Language": "pt-br",
-                            "Accept": "text/plain: */*",
-                            "User-Agent": self.user_browser,
-                            "Host": "www.submarinoviagens.com.br",
-                            "Cache-Control": "no-cache",
-                            "Connection": "Keep-Alive",
-                            }, 
-                            callback=self.get_preco_param, )]
+        return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
+               body=json.dumps({"req":{"SearchId":uuid,"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}), 
+               headers={'Content-Type':'application/json',
+                        "Accept-Encoding": "gzip: deflate",
+                        "Content-Type": "application/json",
+                        "x-requested-with": "XMLHttpRequest",
+                        "Accept-Language": "pt-br",
+                        "Accept": "text/plain: */*",
+                        "User-Agent": self.user_browser,
+                        "Host": "www.submarinoviagens.com.br",
+                        "Cache-Control": "no-cache",
+                        "Connection": "Keep-Alive",
+                        }, 
+                        callback=self.get_preco_param, )]
             
     def get_preco_param(self,response):
             preco_list = json.JSONDecoder().decode(json.loads(response.body))
