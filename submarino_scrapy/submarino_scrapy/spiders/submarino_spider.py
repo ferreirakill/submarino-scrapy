@@ -8,7 +8,8 @@ from scrapy.http import FormRequest, Request
 import json
 import re
 import ast
-
+import traceback
+import sys
 
 class SubmarinoSpiderSpider(CrawlSpider):
     name = 'submarino_spider'
@@ -136,11 +137,14 @@ class SubmarinoSpiderSpider(CrawlSpider):
         for list_preco in preco_list:
             for in_list_preco in list_preco:
                 try:
+                    print type(in_list_preco)
                     dict_preco = ast.literal_eval(in_list_preco)
                     for k,v in dict_preco.iteritems():
                         print k,v
                 except:
-                    print "except"
+                    exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
+                    traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
+                                      limit=2, file=sys.stdout)
         #print "preco_list: %s" % (preco_list)
         #print response.body
     
