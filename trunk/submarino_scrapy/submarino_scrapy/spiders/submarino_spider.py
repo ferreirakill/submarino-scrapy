@@ -109,13 +109,11 @@ class SubmarinoSpiderSpider(CrawlSpider):
         
         try:
             print "preco_list_len_uuid: %s" % (len(preco_list[1]))
-            try:
+
                 for preco in preco_list:
                     for p in range(len(preco[0])):
                         print "%s - preco[0][%s]: %s" % (p,p,preco[0][p])
-            except:
-                time.sleep(random.randint(1, 3))
-                self.start_requests()
+
         except:
             #pass
             time.sleep(random.randint(1, 3))
