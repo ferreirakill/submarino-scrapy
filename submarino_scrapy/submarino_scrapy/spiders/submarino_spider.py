@@ -1,4 +1,3 @@
-import re
 
 from scrapy.selector import HtmlXPathSelector
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
@@ -10,6 +9,8 @@ import re
 import ast
 import traceback
 import sys
+import time
+import random
 
 class SubmarinoSpiderSpider(CrawlSpider):
     name = 'submarino_spider'
@@ -118,6 +119,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         if len(uuids)<2:
+            time.sleep(random.randint(1, 3)) 
             self.get_uuid(body)
         else:
             self.get_preco(uuids[0])
@@ -138,6 +140,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                             }, )
             preco_list = json.JSONDecoder().decode(json.loads(response.body))
             if preco_list[0][0]['i'] == -1:
+                time.sleep(random.randint(1, 3)) 
                 self.get_preco(uuid)
             else:
                 print preco_list
