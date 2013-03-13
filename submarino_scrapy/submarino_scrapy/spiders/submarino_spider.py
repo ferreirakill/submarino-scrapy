@@ -102,7 +102,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                     callback=self.get_uuid_param, )]
         
     def get_uuid_param(self,response):
-        #print "response.body: %s" % (response.body)
+        print "response.body: %s" % (response.body)
         preco_list = json.JSONDecoder().decode(json.loads(response.body))
         #print "preco_list: %s" % (preco_list)
         
