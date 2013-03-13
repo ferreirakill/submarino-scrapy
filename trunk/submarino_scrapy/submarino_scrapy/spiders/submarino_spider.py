@@ -102,10 +102,10 @@ class SubmarinoSpiderSpider(CrawlSpider):
                    callback=self.search_id_post, )]
                         '''
     def get_uuid(self,body):
-        print "body: %s" % (self.body)
+        print "body: %s" % (body)
         return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum" , 
                                     method='POST',                                         
-                                    body=self.body,                             
+                                    body=body,                             
                                     headers={'Content-Type':'application/json',
                                              "Accept-Encoding": "gzip: deflate",
                                              "Content-Type": "application/json",
