@@ -119,6 +119,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         if len(uuids)<2:
+            print "Sleep get_uuid"
             time.sleep(random.randint(1, 3)) 
             self.get_uuid(body)
         else:
@@ -140,6 +141,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                             }, )
             preco_list = json.JSONDecoder().decode(json.loads(response.body))
             if preco_list[0][0]['i'] == -1:
+                print "Sleep preco_list"
                 time.sleep(random.randint(1, 3)) 
                 self.get_preco(uuid)
             else:
