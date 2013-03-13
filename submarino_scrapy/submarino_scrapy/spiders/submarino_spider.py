@@ -130,11 +130,12 @@ class SubmarinoSpiderSpider(CrawlSpider):
             
     def get_preco_param(self,response):
             preco_list = json.JSONDecoder().decode(json.loads(response.body))
+            print "preco_list: %s" % (preco_list)
             if preco_list[0][0]['i'] == -1:
                 print "Sleep preco_list"
                 time.sleep(random.randint(1, 3)) 
             else:
-                print preco_list
+                print "else"
             
     def search_id_post(self, response):
         # here you would extract links to follow and return Requests for
