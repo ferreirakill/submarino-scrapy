@@ -43,7 +43,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         self.user_browser = user_browser
         '''
         self.origem = 'GRU'
-        self.destino = 'LHR'
+        self.destino = 'DTW'
         self.ano_saida = '2013'
         self.mes_saida = '04'
         self.dia_saida = '17'
@@ -134,6 +134,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
         #exec("resposta_parse = " + response.body)
         preco_list = json.JSONDecoder().decode(json.loads(response.body))
         print type(preco_list)
+        print preco_list
+        '''
         for list_preco in preco_list:
             for in_list_preco in list_preco:
                 try:
@@ -148,7 +150,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                       limit=2, file=sys.stdout)
         #print "preco_list: %s" % (preco_list)
         #print response.body
-    
+        '''
+        
     def parse_item(self, response):
         hxs = HtmlXPathSelector(response)
         i = SubmarinoScrapyItem()
