@@ -137,6 +137,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
             for in_list_preco in list_preco:
                 try:
                     dict_preco = ast.literal_eval(in_list_preco)
+                    for k,v in dict_preco.iteritems():
+                        print k,v
                 except:
                     pass
         #print "preco_list: %s" % (preco_list)
