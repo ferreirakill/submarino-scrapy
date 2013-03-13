@@ -140,7 +140,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                     for k,v in dict_preco.iteritems():
                         print k,v
                 except:
-                    pass
+                    print "except"
         #print "preco_list: %s" % (preco_list)
         #print response.body
     
