@@ -117,6 +117,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                              "Connection": "Keep-Alive",
                                              },
                                     callback=self.get_uuid_param, )]
+        
     def get_uuid_param(self,response):
         print "response.body: %s" % (response.body)
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
