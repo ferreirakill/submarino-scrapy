@@ -117,10 +117,12 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                              "Connection": "Keep-Alive",
                                              },)
         
+        print response.body
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         if len(uuids)<2:
             print "Sleep get_uuid"
             time.sleep(random.randint(1, 3)) 
+            print body
             self.get_uuid(body)
         else:
             self.get_preco(uuids[0])
