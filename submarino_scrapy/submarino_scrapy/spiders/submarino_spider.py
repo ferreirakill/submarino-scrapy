@@ -115,7 +115,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                     try:
                         print "%s - preco[0][%s]: %s" % (p,p,preco[0][p])
                     except:
-                        pass
+                        time.sleep(random.randint(1, 3))
+                        self.start_requests()
         except:
             #pass
             time.sleep(random.randint(1, 3))
