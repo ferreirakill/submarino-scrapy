@@ -108,8 +108,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
         print "preco_list_len_uuid: %s" % (len(preco_list[1]))
         
         for preco in preco_list:
-            for p in preco[0]:
-                print p
+            for p in range(preco[0]):
+                print "%s - preco[0][%s]: %s" % (p,p,preco[0][0][p])
                 
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         if len(uuids)<2:
