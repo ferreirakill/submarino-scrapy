@@ -7,7 +7,7 @@ from submarino_scrapy.items import SubmarinoScrapyItem
 from scrapy.http import FormRequest, Request
 import json
 import re
-
+import ast
 
 
 class SubmarinoSpiderSpider(CrawlSpider):
@@ -135,8 +135,10 @@ class SubmarinoSpiderSpider(CrawlSpider):
         print type(preco_list)
         for list_preco in preco_list:
             for in_list_preco in list_preco:
-                for k,v in in_list_preco.iteritems():
-                    print k,v
+                try:
+                    dict_preco = ast.literal_eval(in_list_preco)
+                except:
+                    pass
         #print "preco_list: %s" % (preco_list)
         #print response.body
     
