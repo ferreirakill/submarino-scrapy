@@ -117,10 +117,11 @@ class SubmarinoSpiderSpider(CrawlSpider):
                     except:
                         pass
         except:
-            time.sleep(random.randint(1, 3))
-            self.start_requests()
+            pass
+            #time.sleep(random.randint(1, 3))
+            #self.start_requests()
             
-        '''        
+        #'''        
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         if len(uuids)<2:
             print "Sleep get_uuid"
@@ -128,7 +129,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
             self.start_requests()
         else:
             self.get_preco(uuids[0])
-        '''
+        #'''
              
     def get_preco(self,uuid):
         print 'uuid: %s' % (uuid)
