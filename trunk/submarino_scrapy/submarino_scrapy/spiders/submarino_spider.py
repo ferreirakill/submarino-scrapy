@@ -137,10 +137,11 @@ class SubmarinoSpiderSpider(CrawlSpider):
         for list_preco in preco_list:
             for in_list_preco in list_preco:
                 try:
-                    print type(in_list_preco)
-                    dict_preco = ast.literal_eval(in_list_preco)
-                    for k,v in dict_preco.iteritems():
-                        print k,v
+                    if type(in_list_preco)=='dict':
+                        for k,v in in_list_preco.iteritems():
+                            print k,v
+                    else:
+                        "Else: %s" % (in_list_preco)
                 except:
                     exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
                     traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
