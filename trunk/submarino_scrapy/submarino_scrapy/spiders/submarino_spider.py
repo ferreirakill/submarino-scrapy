@@ -58,7 +58,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         #self.url = url
         #self.allowed_domains = [urlparse(url).hostname.lstrip('www.')]
         #self.link_extractor = SgmlLinkExtractor()
-        #self.cookies_seen = set()
+        self.cookies_seen = set()
         
     # Initialization
     def start_requests(self):
