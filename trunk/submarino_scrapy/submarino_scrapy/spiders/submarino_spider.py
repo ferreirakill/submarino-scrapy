@@ -117,6 +117,9 @@ class SubmarinoSpiderSpider(CrawlSpider):
 
         except:
             #pass
+            exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
+            traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
+                  limit=2, file=sys.stdout)
             dorme = random.randint(1, 3)
             print "Exception, dorme: %s" % (dorme)
             time.sleep(dorme)
