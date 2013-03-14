@@ -44,13 +44,13 @@ class SubmarinoSpiderSpider(CrawlSpider):
         self.user_browser = user_browser
         '''
         self.origem = 'GRU'
-        self.destino = 'LHR'
+        self.destino = 'BCN'
         self.ano_saida = '2013'
         self.mes_saida = '04'
         self.dia_saida = '17'
         self.ano_chegada = '2013'
         self.mes_chegada = '04'
-        self.dia_chegada = '22'
+        self.dia_chegada = '23'
         self.user_browser = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"
                 
         #self.start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
@@ -112,11 +112,14 @@ class SubmarinoSpiderSpider(CrawlSpider):
 
             for preco in preco_list:
                 for p in range(len(preco[0])):
+                    
                     print "%s - preco[0][%s]: %s" % (p,p,preco[0][p])
 
         except:
             #pass
-            time.sleep(random.randint(1, 3))
+            dorme = random.randint(1, 3)
+            print "Exception, dorme: %s" % (dorme)
+            time.sleep(dorme)
             self.start_requests()
             
         '''        
