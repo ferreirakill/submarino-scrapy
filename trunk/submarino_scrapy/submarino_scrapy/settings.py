@@ -7,15 +7,18 @@
 #
 
 BOT_NAME = 'submarino_scrapy'
-BOT_VERSION = '1.0'
+#BOT_VERSION = '1.0'
 
 SPIDER_MODULES = ['submarino_scrapy.spiders']
 NEWSPIDER_MODULE = 'submarino_scrapy.spiders'
 DEFAULT_ITEM_CLASS = 'submarino_scrapy.items.SubmarinoScrapyItem'
-USER_AGENT = '%s/%s' % (BOT_NAME, BOT_VERSION)
+#USER_AGENT = '%s/%s' % (BOT_NAME, BOT_VERSION)
+USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"
 
 RETRY_ENABLED = True
 RETRY_TIMES = 10
+RETRY_HTTP_CODES = [400,]
+COOKIES_DEBUG = True
 
 DOWNLOADER_MIDDLEWARES = {
     #'scrapy.contrib.downloadermiddleware.robotstxt.RobotsTxtMiddleware': 100,
