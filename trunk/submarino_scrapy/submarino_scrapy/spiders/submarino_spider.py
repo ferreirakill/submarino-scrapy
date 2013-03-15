@@ -46,7 +46,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         self.user_browser = user_browser
         '''
         self.origem = 'GRU'
-        self.destino = 'LHR'
+        self.destino = 'ROM'
         self.ano_saida = '2013'
         self.mes_saida = '04'
         self.dia_saida = '17'
