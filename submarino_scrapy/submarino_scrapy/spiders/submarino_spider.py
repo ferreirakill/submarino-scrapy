@@ -4,7 +4,6 @@ from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from submarino_scrapy.items import SubmarinoScrapyItem
 from scrapy.http import FormRequest, Request
-from scrapy.exceptions import IgnoreRequest
 import json
 import re
 import ast
@@ -12,7 +11,7 @@ import traceback
 import sys
 import time
 import random
-#import urllib2
+import urllib2
 
 
 class SubmarinoSpiderSpider(CrawlSpider):
@@ -126,7 +125,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
             dorme = random.randint(1, 3)
             print "Exception, dorme: %s" % (dorme)
             #raise urllib2.HTTPError(response.url, code = 400, msg = "Bad Request", hdrs = response.headers, fp = None)
-            raise HTTPError(response, 'Ignoring non-200 response')
+            raise urllib2.HTTPError(response, 'Ignoring non-200 response')
             time.sleep(dorme)
             #self.start_requests()
             #SubmarinoSpiderSpider(origem='GRU',destino='LHR',ano_saida='2013',mes_saida='04',dia_saida='17',ano_chegada='2013',mes_chegada='04',dia_chegada='22',user_browser="Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0")
