@@ -114,10 +114,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
 
             for preco in preco_list:
                 for p in range(len(preco[0])):
-                    try:
-                        print "%s - preco[0][%s]: %s" % (p,p,preco[0][p])
-                    except:
-                        raise urllib2.HTTPError(response.url, code = 400, msg = "Bad Request", hdrs = response.headers, fp = None)
+                    print "%s - preco[0][%s]: %s" % (p,p,preco[0][p])
 
         except:
             #pass
@@ -126,9 +123,23 @@ class SubmarinoSpiderSpider(CrawlSpider):
                   limit=2, file=sys.stdout)
             dorme = random.randint(1, 3)
             print "Exception, dorme: %s" % (dorme)
-            #raise urllib2.HTTPError(response.url, code = 400, msg = "Bad Request", hdrs = response.headers, fp = None)
             time.sleep(dorme)
-            raise
+            #raise urllib2.HTTPError(response.url, code = 400, msg = "Bad Request", hdrs = response.headers, fp = None)
+            return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum" , 
+                                method='POST',                                         
+                                body=json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":self.origem,"Destination":self.destino,"DepartureYear":self.ano_saida,"DepartureMonth":self.mes_saida,"DepartureDay":self.dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":self.destino,"Destination":self.origem,"DepartureYear":self.ano_chegada,"DepartureMonth":self.mes_chegada,"DepartureDay":self.dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":self.user_browser}}),                             
+                                headers={'Content-Type':'application/json',
+                                         "Accept-Encoding": "gzip: deflate",
+                                         "Content-Type": "application/json",
+                                         "x-requested-with": "XMLHttpRequest",
+                                         "Accept-Language": "pt-br",
+                                         "Accept": "text/plain: */*",
+                                         "User-Agent": self.user_browser,
+                                         "Host": "www.submarinoviagens.com.br",
+                                         "Cache-Control": "no-cache",
+                                         "Connection": "Keep-Alive",
+                                         },
+                                callback=self.get_uuid_param, )]
             #self.start_requests()
             #SubmarinoSpiderSpider(origem='GRU',destino='LHR',ano_saida='2013',mes_saida='04',dia_saida='17',ano_chegada='2013',mes_chegada='04',dia_chegada='22',user_browser="Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0")
             
