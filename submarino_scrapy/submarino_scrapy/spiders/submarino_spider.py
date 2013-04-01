@@ -15,7 +15,14 @@ import sys
 import time
 import random
 
-
+def traverse(o, tree_types=(list, tuple)):
+    if isinstance(o, tree_types):
+        for value in o:
+            for subvalue in traverse(value):
+                yield subvalue
+    else:
+        yield o
+        
 class SubmarinoSpiderSpider(CrawlSpider):
     name = 'submarino_spider'
     allowed_domains = ['submarinoviagens.com.br']
@@ -114,6 +121,10 @@ class SubmarinoSpiderSpider(CrawlSpider):
         #print preco_list[:10]
         #print '...'
         #print preco_list[-10:]
+        
+        for value in traverse(preco_list):
+            print repr(value)
+    
         '''
         try:
             print "preco_list_len_uuid: %s" % (len(preco_list[1]))
