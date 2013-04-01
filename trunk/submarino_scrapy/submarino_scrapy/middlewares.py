@@ -35,6 +35,8 @@ class RetryMiddleware(object):
             print 'dont retry in meta'
             return response
         print "response.status = %s" % (response.status)
+        uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
+        print "uuids: %s" % (uuids)
         if response.status in self.retry_http_codes:
             reason = response_status_message(response.status)
             return self._retry(request, reason, spider) or response
@@ -43,8 +45,10 @@ class RetryMiddleware(object):
         #    preco_list = json.JSONDecoder().decode(json.loads(response.body))
         #    reason = response_status_message(400)
         #    return self._retry(request, reason, spider) or response
-        uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
-        print "uuids: %s" % (uuids)      
+        elif uuids[0]=='00000000-0000-0000-0000-000000000000':
+            print "uuids error!: %s" % (uuids)
+            reason = response_status_message(400)
+            return self._retry(request, reason, spider) or response
         return response
 
     def process_exception(self, request, exception, spider):
