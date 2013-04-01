@@ -132,7 +132,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         try:
             for air in preco_list[1][0][0]:
                 print "Sigla Compania: %s" % (air[0])
-                print "Nome Compania: %s" % (remover_acentos(air[1]))
+                #print "Nome Compania: %s" % (remover_acentos(air[1]))
                 print "Preco Compania: %s" % (air[2])
                 #print "XXX Compania: %s" % (air[3])
                 
