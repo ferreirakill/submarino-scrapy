@@ -15,7 +15,7 @@ import sys
 import time
 import random
 
-'''
+
 def traverse(o, tree_types=(list, tuple)):
     if isinstance(o, tree_types):
         for value in o:
@@ -23,11 +23,8 @@ def traverse(o, tree_types=(list, tuple)):
                 yield subvalue
     else:
         yield o
-'''     
-def traverse(data, level = 1):
-    print ' ' * level + data['text']
-    for kid in data['kids']:
-        traverse(kid, level + 1)        
+     
+  
         
 class SubmarinoSpiderSpider(CrawlSpider):
     name = 'submarino_spider'
@@ -128,9 +125,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
         #print '...'
         #print preco_list[-10:]
         
-        #for value in traverse(preco_list):
-        #    print repr(value)
-        traverse(preco_list)
+        for value in traverse(preco_list):
+            print repr(value)
     
         '''
         try:
