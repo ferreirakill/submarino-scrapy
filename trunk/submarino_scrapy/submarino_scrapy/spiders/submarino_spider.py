@@ -120,13 +120,13 @@ class SubmarinoSpiderSpider(CrawlSpider):
         
         #print "response.body: %s" % (response.body)
         preco_list = json.JSONDecoder().decode(json.loads(response.body))
-        #print "preco_list: %s" % (preco_list)
+        print "preco_list: %s" % (preco_list)
         #print preco_list[:10]
         #print '...'
         #print preco_list[-10:]
         
-        for value in traverse(preco_list):
-            print repr(value)
+        #for value in traverse(preco_list):
+        #    print repr(value)
     
         '''
         try:
