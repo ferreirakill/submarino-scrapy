@@ -45,6 +45,7 @@ class RetryMiddleware(object):
                 for p in range(len(preco[0])):
                     print "DEBUG RETRY: %s - preco[0][%s]: %s" % (p,p,preco[0][p])
         except:
+            reason = response_status_message(400)
             return self._retry(request, reason, spider) or response
                 
         return response
