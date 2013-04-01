@@ -26,6 +26,7 @@ def traverse(o, tree_types=(list, tuple)):
      
   
 def remover_acentos(txt, codif='utf-8'):
+    from unicodedata import normalize
     return normalize('NFKD', txt.decode(codif, "ignore")).encode('ASCII','ignore')
         
 class SubmarinoSpiderSpider(CrawlSpider):
