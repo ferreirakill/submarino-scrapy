@@ -143,7 +143,9 @@ class SubmarinoSpiderSpider(CrawlSpider):
             print "Melhor Preco Voo 1 Escala: %s" % (preco_list[1][0][21][1])
             print "Melhor Preco Voo 2 Escalas: %s" % (preco_list[1][0][21][2])
         except:
-            pass
+            exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
+            traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
+                  limit=2, file=sys.stdout)
 
              
         
