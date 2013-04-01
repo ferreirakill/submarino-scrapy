@@ -7,6 +7,7 @@ from scrapy import log
 from scrapy.exceptions import NotConfigured
 from scrapy.utils.response import response_status_message
 import json
+import re
 
 class RetryMiddleware(object):
 
@@ -42,7 +43,8 @@ class RetryMiddleware(object):
         #    preco_list = json.JSONDecoder().decode(json.loads(response.body))
         #    reason = response_status_message(400)
         #    return self._retry(request, reason, spider) or response
-                
+        uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
+        print "uuids: %s" % (uuids)      
         return response
 
     def process_exception(self, request, exception, spider):
