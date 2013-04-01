@@ -6,6 +6,7 @@ from twisted.internet.defer import TimeoutError as UserTimeoutError
 from scrapy import log
 from scrapy.exceptions import NotConfigured
 from scrapy.utils.response import response_status_message
+import json
 
 class RetryMiddleware(object):
 
@@ -36,6 +37,14 @@ class RetryMiddleware(object):
         if response.status in self.retry_http_codes:
             reason = response_status_message(response.status)
             return self._retry(request, reason, spider) or response
+        
+        ##tenta inserir verificacao aqui
+        preco_list = json.JSONDecoder().decode(json.loads(response.body))
+        try:
+            print "preco_list_len_uuid: %s" % (len(preco_list[1]))
+        except:
+            return self._retry(request, reason, spider) or response
+                
         return response
 
     def process_exception(self, request, exception, spider):
