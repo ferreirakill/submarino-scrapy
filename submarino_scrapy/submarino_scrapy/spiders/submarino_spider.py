@@ -25,6 +25,8 @@ def traverse(o, tree_types=(list, tuple)):
         yield o
      
   
+def remover_acentos(txt, codif='utf-8'):
+    return normalize('NFKD', txt.decode(codif, "ignore")).encode('ASCII','ignore')
         
 class SubmarinoSpiderSpider(CrawlSpider):
     name = 'submarino_spider'
@@ -129,7 +131,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         try:
             for air in preco_list[1][0][0]:
                 print "Sigla Compania: %s" % (air[0])
-                print "Nome Compania: %s" % (air[1])
+                print "Nome Compania: %s" % (remover_acentos(air[1]))
                 print "Preco Compania: %s" % (air[2])
                 #print "XXX Compania: %s" % (air[3])
                 
@@ -148,7 +150,6 @@ class SubmarinoSpiderSpider(CrawlSpider):
                   limit=2, file=sys.stdout)
 
              
-        
         #for value in traverse(preco_list):
         #    print repr(value)
     
