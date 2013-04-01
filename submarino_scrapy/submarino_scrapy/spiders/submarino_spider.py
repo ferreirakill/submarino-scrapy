@@ -127,7 +127,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         
         
         try:
-            for air in preco_list[1][0]:
+            for air in preco_list[1][0][0]:
                 print "Sigla Compania: %s" % (air[0])
                 print "Nome Compania: %s" % (air[1])
                 print "Preco Compania: %s" % (air[2])
