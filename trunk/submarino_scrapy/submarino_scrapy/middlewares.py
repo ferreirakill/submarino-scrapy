@@ -41,6 +41,7 @@ class RetryMiddleware(object):
         ##tenta inserir verificacao aqui
         preco_list = json.JSONDecoder().decode(json.loads(response.body))
         try:
+            print response.body
             for preco in preco_list:
                 for p in range(len(preco[0])):
                     print "DEBUG RETRY: %s - preco[0][%s]: %s" % (p,p,preco[0][p])
