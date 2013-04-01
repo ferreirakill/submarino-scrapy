@@ -127,13 +127,25 @@ class SubmarinoSpiderSpider(CrawlSpider):
         
         
         try:
+            for air in preco_list[1][0]:
+                print "Sigla Compania: %s" % (air[0])
+                print "Nome Compania: %s" % (air[1])
+                print "Preco Compania: %s" % (air[2])
+                #print "XXX Compania: %s" % (air[3])
+                
             #Melhor preco em dollars
             print "Melhor Preco Dollars: %s" % (preco_list[1][0][17])
+            #Melhor preco em reais
+            print "Melhor Preco Reais: %s" % (preco_list[0][1][0][18])
+            
+            #Melhor preco por escalas
+            print "Melhor Preco Voo Direto: %s" % (preco_list[1][0][21][0])
+            print "Melhor Preco Voo 1 Escala: %s" % (preco_list[1][0][21][1])
+            print "Melhor Preco Voo 2 Escalas: %s" % (preco_list[1][0][21][2])
         except:
             pass
 
-        #Melhor preco em reais
-        #print "Melhor Preco Reais: %s" % (preco_list[0][1][0][18])      
+             
         
         #for value in traverse(preco_list):
         #    print repr(value)
