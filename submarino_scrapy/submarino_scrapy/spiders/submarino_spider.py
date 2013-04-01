@@ -120,10 +120,16 @@ class SubmarinoSpiderSpider(CrawlSpider):
         
         #print "response.body: %s" % (response.body)
         preco_list = json.JSONDecoder().decode(json.loads(response.body))
-        print "preco_list: %s" % (preco_list)
+        #print "preco_list: %s" % (preco_list)
         #print preco_list[:10]
         #print '...'
         #print preco_list[-10:]
+        
+        #Melhor preco em dollars
+        print "Melhor Preco Dollars: %s" % (preco_list[0][1][0][17])
+
+        #Melhor preco em reais
+        print "Melhor Preco Reais: %s" % (preco_list[0][1][0][18])      
         
         #for value in traverse(preco_list):
         #    print repr(value)
