@@ -126,9 +126,11 @@ class SubmarinoSpiderSpider(CrawlSpider):
         #print preco_list[-10:]
         
         
-        if preco_list[0][1][0][17]:
+        try:
             #Melhor preco em dollars
             print "Melhor Preco Dollars: %s" % (preco_list[0][1][0][17])
+        except:
+            pass
 
         #Melhor preco em reais
         #print "Melhor Preco Reais: %s" % (preco_list[0][1][0][18])      
