@@ -37,17 +37,11 @@ class RetryMiddleware(object):
         if response.status in self.retry_http_codes:
             reason = response_status_message(response.status)
             return self._retry(request, reason, spider) or response
-
-        ##tenta inserir verificacao aqui
-        preco_list = json.JSONDecoder().decode(json.loads(response.body))
-        try:
-            print response.body
-            for preco in preco_list:
-                for p in range(len(preco[0])):
-                    print "DEBUG RETRY: %s - preco[0][%s]: %s" % (p,p,preco[0][p])
-        except:
-            reason = response_status_message(400)
-            return self._retry(request, reason, spider) or response
+        #elif len((json.JSONDecoder().decode(json.loads(response.body)))[0])>1:
+        #    ##tenta inserir verificacao aqui
+        #    preco_list = json.JSONDecoder().decode(json.loads(response.body))
+        #    reason = response_status_message(400)
+        #    return self._retry(request, reason, spider) or response
                 
         return response
 
