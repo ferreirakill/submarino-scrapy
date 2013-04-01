@@ -14,7 +14,8 @@ class RetryMiddleware(object):
     EXCEPTIONS_TO_RETRY = (ServerTimeoutError, UserTimeoutError, DNSLookupError,
                            ConnectionRefusedError, ConnectionDone, ConnectError,
                            ConnectionLost, TCPTimedOutError,
-                           IOError)
+                           IOError,
+                           KeyError)
 
     def __init__(self, settings):
         if not settings.getbool('RETRY_ENABLED'):
