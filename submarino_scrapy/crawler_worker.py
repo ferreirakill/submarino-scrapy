@@ -237,6 +237,13 @@ class CrawlerWorker(multiprocessing.Process):
         # base class initialization
         multiprocessing.Process.__init__(self)
  
+        # crawler settings
+        self.crawler = CrawlerProcess(Settings())
+        if not hasattr(project, 'crawler'):
+            self.crawler.install()
+            self.crawler.configure()            
+            self.crawler.crawl(self.spider)
+ 
         # job management stuff
         self.work_queue = work_queue
         self.result_queue = result_queue
@@ -264,15 +271,9 @@ class CrawlerWorker(multiprocessing.Process):
             print("Starting " + str(job) + " ...")
             delay = random.randrange(1,3)
             time.sleep(delay)
-            # crawler settings
-            self.crawler = CrawlerProcess(Settings())
-            #if not hasattr(project, 'crawler'):
-            #    self.crawler.install()
-            self.crawler.configure()            
-            self.crawler.crawl(self.spider)
+
             self.crawler.start()
-            log.start()
-            self.crawler.crawl(None)
+            
             #reactor.run()
             #self.crawler.stop()
             #reactor.stop()
@@ -304,6 +305,8 @@ if __name__ == "__main__":
     #for job in range(num_jobs):
     #    work_queue.put(job)
     
+    log.start()
+    
     for origem in origens_array:
         for destino in destinos_array:
             for i in range_saida:
@@ -317,7 +320,7 @@ if __name__ == "__main__":
                 ano_chegada = data_chegada.split("-")[0]
                 mes_chegada = data_chegada.split("-")[1]
                 dia_chegada = data_chegada.split("-")[2] 
-            
+                
                 work_queue.put(origem+"_"+destino+"_"+data_saida+"_"+data_chegada)
 
     # create a queue to pass to workers to store the results
