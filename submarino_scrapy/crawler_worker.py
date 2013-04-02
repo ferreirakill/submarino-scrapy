@@ -272,6 +272,7 @@ class CrawlerWorker(multiprocessing.Process):
             self.crawler.crawl(self.spider)
             self.crawler.start()
             log.start()
+            self.crawler.crawl(None)
             #reactor.run()
             #self.crawler.stop()
             #reactor.stop()
