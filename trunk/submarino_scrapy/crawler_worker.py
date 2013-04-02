@@ -310,9 +310,12 @@ if __name__ == "__main__":
     #for job in range(num_jobs):
     #    work_queue.put(job)
     
-    for origem in origens_array:
-        for destino in destinos_array:
-            for i in range_saida:
+    #for origem in origens_array:
+    for origem in origens_array[0]: ###TESTE###
+        #for destino in destinos_array:
+        for destino in destinos_array[0]: ###TESTE###
+            #for i in range_saida:
+            for i in range_saida[0]: ###TESTE###
                 data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
                 data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
                 
