@@ -14,6 +14,8 @@ from scrapy import project, signals
 from scrapy.xlib.pydispatch import dispatcher
 import multiprocessing
 import Queue
+from twisted.internet import reactor
+from scrapy import log
 
 #WORKERS = 30
 
@@ -268,7 +270,9 @@ class CrawlerWorker(multiprocessing.Process):
             time.sleep(delay)
             self.crawler.crawl(self.spider)
             self.crawler.start()
-            self.crawler.stop()
+            log.start()
+            reactor.run()
+            #self.crawler.stop()
             # store the result
             self.result_queue.put(self.items)
 
