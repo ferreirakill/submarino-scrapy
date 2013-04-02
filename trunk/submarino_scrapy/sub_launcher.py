@@ -10,14 +10,16 @@ os.environ.setdefault('SCRAPY_SETTINGS_MODULE', 'submarino_scrapy.settings') #Mu
 
 from scrapy import log, signals, project
 from scrapy.xlib.pydispatch import dispatcher
-from scrapy.conf import settings
+#from scrapy.conf import settings
+from scrapy.settings import Settings
 from scrapy.crawler import CrawlerProcess
 from multiprocessing import Process, Queue
 
 class CrawlerScript():
 
     def __init__(self):
-        self.crawler = CrawlerProcess(settings)
+        self.crawler = CrawlerProcess(Settings())
+        #self.crawler = CrawlerProcess(settings)
         if not hasattr(project, 'crawler'):
             self.crawler.install()
         self.crawler.configure()
