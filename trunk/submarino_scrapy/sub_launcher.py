@@ -11,11 +11,12 @@ def handleSpiderIdle(spider):
     for url in spider.start_urls: # reschedule start urls
         spider.crawler.engine.crawl(Request(url, dont_filter=True), spider)
 
-mySettings = {'LOG_ENABLED': True} # global settings http://doc.scrapy.org/topics/settings.html
+#mySettings = {'LOG_ENABLED': True} # global settings http://doc.scrapy.org/topics/settings.html
 
-Settings().overrides.update(mySettings)
+#Settings().overrides.update(mySettings)
 
 crawlerProcess = CrawlerProcess(Settings())
+#crawlerProcess.settings = 
 crawlerProcess.install()
 crawlerProcess.configure()
 
