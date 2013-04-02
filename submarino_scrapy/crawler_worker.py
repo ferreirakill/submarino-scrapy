@@ -266,15 +266,14 @@ class CrawlerWorker(multiprocessing.Process):
             time.sleep(delay)
             # crawler settings
             self.crawler = CrawlerProcess(Settings())
-            if not hasattr(project, 'crawler'):
-                self.crawler.install()
+            #if not hasattr(project, 'crawler'):
+            #    self.crawler.install()
             self.crawler.configure()            
             self.crawler.crawl(self.spider)
             self.crawler.start()
-            log.start()
-            #reactor.run()
-            self.crawler.stop()
-            self.crawler.uninstall()
+
+            #self.crawler.stop()
+            #self.crawler.uninstall()
             # store the result
             self.result_queue.put(self.items)
 
@@ -317,7 +316,8 @@ if __name__ == "__main__":
                 dia_chegada = data_chegada.split("-")[2] 
             
                 work_queue.put(origem+"_"+destino+"_"+data_saida+"_"+data_chegada)
- 
+    log.start()
+    reactor.run()
     # create a queue to pass to workers to store the results
     result_queue = multiprocessing.Queue()
  
