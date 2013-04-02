@@ -10,7 +10,7 @@ def handleSpiderIdle(spider):
     print '\nSpider idle: %s. Restarting it... ' % spider.name
     #for url in spider.start_urls: # reschedule start urls
     #    spider.crawler.engine.crawl(Request(url, dont_filter=True), spider)
-    spider.crawler.engine.start()
+    
     spider.crawler.engine.crawl(spider, None)
     
 
@@ -27,7 +27,7 @@ spider = SubmarinoSpiderSpider(origem='GRU',destino='LHR',ano_saida='2013',mes_s
 #crawlerProcess.queue.append_spider(spider) # add it to spiders pool
 crawlerProcess.engine.open_spider(spider)
 
-
+crawlerProcess.start()
 dispatcher.connect(handleSpiderIdle, signals.spider_idle) # use this if you need to handle idle event (restart spider?)
 
 log.start() # depends on LOG_ENABLED
