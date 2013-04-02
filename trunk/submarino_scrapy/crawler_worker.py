@@ -237,13 +237,6 @@ class CrawlerWorker(multiprocessing.Process):
         # base class initialization
         multiprocessing.Process.__init__(self)
  
-        # crawler settings
-        self.crawler = CrawlerProcess(Settings())
-        if not hasattr(project, 'crawler'):
-            self.crawler.install()
-            self.crawler.configure()            
-            self.crawler.crawl(spider)
- 
         # job management stuff
         self.work_queue = work_queue
         self.result_queue = result_queue
@@ -271,8 +264,19 @@ class CrawlerWorker(multiprocessing.Process):
             print("Starting " + str(job) + " ...")
             delay = random.randrange(1,3)
             time.sleep(delay)
-
-            self.crawler.start()
+            
+            # crawler settings
+            self.crawler = CrawlerProcess(Settings())
+            if not hasattr(project, 'crawler'):
+                self.crawler.install()
+            self.crawler.configure()            
+            #self.crawler.crawl(spider)
+            try:
+                self.crawler.start()
+            except:
+                self.crawler.engine.open_spider(self.spider)
+        
+            
             
             #reactor.run()
             #self.crawler.stop()
