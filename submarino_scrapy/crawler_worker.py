@@ -268,7 +268,7 @@ class CrawlerWorker(multiprocessing.Process):
             time.sleep(delay)
             self.crawler.crawl(self.spider)
             self.crawler.start()
-            #self.crawler.stop()
+            self.crawler.stop()
             # store the result
             self.result_queue.put(self.items)
 
