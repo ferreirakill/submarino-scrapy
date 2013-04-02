@@ -242,7 +242,7 @@ class CrawlerWorker(multiprocessing.Process):
         if not hasattr(project, 'crawler'):
             self.crawler.install()
             self.crawler.configure()            
-            self.crawler.crawl(self.spider)
+            self.crawler.crawl(spider)
  
         # job management stuff
         self.work_queue = work_queue
