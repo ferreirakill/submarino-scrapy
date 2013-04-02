@@ -14,6 +14,7 @@ from scrapy.xlib.pydispatch import dispatcher
 from scrapy.settings import Settings
 from scrapy.crawler import CrawlerProcess
 from multiprocessing import Process, Queue
+from submarino_scrapy.spiders.submarino_spider import SubmarinoSpiderSpider
 
 class CrawlerScript():
 
@@ -54,6 +55,7 @@ if __name__ == "__main__":
     items = list()
     crawler = CrawlerScript()
     #items.append(crawler.crawl('SubmarinoSpiderSpider'))
+    spider = SubmarinoSpiderSpider(origem='GRU',destino='LHR',ano_saida='2013',mes_saida='04',dia_saida='17',ano_chegada='2013',mes_chegada='04',dia_chegada='22',user_browser="Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0")
     for i in range(3):
         items.append(crawler.crawl('SubmarinoSpider'))
     print items
