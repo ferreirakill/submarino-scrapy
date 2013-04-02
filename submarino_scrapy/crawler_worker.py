@@ -266,9 +266,9 @@ class CrawlerWorker(multiprocessing.Process):
             print("Starting " + str(job) + " ...")
             delay = random.randrange(1,3)
             time.sleep(delay)
-            #self.crawler.crawl(self.spider)
+            self.crawler.crawl(self.spider)
             self.crawler.start()
-            self.crawler.stop()
+            #self.crawler.stop()
             # store the result
             self.result_queue.put(self.items)
 
