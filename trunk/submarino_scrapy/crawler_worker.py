@@ -271,6 +271,7 @@ class CrawlerWorker(multiprocessing.Process):
                 self.crawler.install()
             self.crawler.configure()            
             #self.crawler.crawl(spider)
+            log.start()
             try:
                 self.crawler.start()
             except:
@@ -279,7 +280,7 @@ class CrawlerWorker(multiprocessing.Process):
             
             
             #reactor.run()
-            #self.crawler.stop()
+            self.crawler.stop()
             #reactor.stop()
             #self.crawler.uninstall()
             # store the result
@@ -308,8 +309,6 @@ if __name__ == "__main__":
     work_queue = multiprocessing.Queue()
     #for job in range(num_jobs):
     #    work_queue.put(job)
-    
-    log.start()
     
     for origem in origens_array:
         for destino in destinos_array:
