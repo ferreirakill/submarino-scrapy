@@ -20,7 +20,8 @@ crawlerProcess.install()
 crawlerProcess.configure()
 
 spider = SubmarinoSpiderSpider(origem='GRU',destino='LHR',ano_saida='2013',mes_saida='04',dia_saida='17',ano_chegada='2013',mes_chegada='04',dia_chegada='22',user_browser="Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0") # create a spider ourselves
-crawlerProcess.queue.append_spider(spider) # add it to spiders pool
+#crawlerProcess.queue.append_spider(spider) # add it to spiders pool
+crawlerProcess.engine.open_spider(spider)
 
 dispatcher.connect(handleSpiderIdle, signals.spider_idle) # use this if you need to handle idle event (restart spider?)
 
