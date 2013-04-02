@@ -269,11 +269,11 @@ class CrawlerWorker(multiprocessing.Process):
             self.crawler = CrawlerProcess(Settings())
             if not hasattr(project, 'crawler'):
                 self.crawler.install()
-            self.crawler.configure()            
-            #self.crawler.crawl(spider)
+            self.crawler.configure()        
             log.start()
             try:
-                self.crawler.start()
+                self.crawler.crawl(self.spider)
+                self.crawler.start()             
             except:
                 self.crawler.engine.open_spider(self.spider)
         
