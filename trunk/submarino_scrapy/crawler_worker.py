@@ -266,7 +266,8 @@ class CrawlerWorker(multiprocessing.Process):
             time.sleep(delay)
             
 
-            self.spider.engine.open_spider(self.spider)
+            #self.spider.engine.open_spider(self.spider)
+            self.spider.engine.crawl(self.spider)
             
             #reactor.run()
             #self.crawler.stop()
@@ -306,7 +307,6 @@ if __name__ == "__main__":
         crawler.install()
     crawler.configure()     
     log.start()
-    #crawler.crawl(spider)
     crawler.start()     
     #for origem in origens_array:
     for origem in origens_array[:1]: ###TESTE###
