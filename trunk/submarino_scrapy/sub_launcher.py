@@ -30,10 +30,11 @@ class CrawlerScript():
     def _item_passed(self, item):
         self.items.append(item)
 
-    def _crawl(self, queue, spider_name):
-        spider = self.crawler.spiders.create(spider_name)
-        if spider:
-            self.crawler.queue.append_spider(spider)
+    def _crawl(self, queue, spider):
+        #spider = self.crawler.spiders.create(spider_name)
+        #if spider:
+        #    self.crawler.queue.append_spider(spider)
+        self.crawler.queue.append_spider(spider)
         self.crawler.start()
         self.crawler.stop()
         queue.put(self.items)
@@ -57,7 +58,7 @@ if __name__ == "__main__":
     #items.append(crawler.crawl('SubmarinoSpiderSpider'))
     spider = SubmarinoSpiderSpider(origem='GRU',destino='LHR',ano_saida='2013',mes_saida='04',dia_saida='17',ano_chegada='2013',mes_chegada='04',dia_chegada='22',user_browser="Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0")
     for i in range(3):
-        items.append(crawler.crawl('SubmarinoSpider'))
+        items.append(crawler.crawl(spider))
     print items
 
 # Snippet imported from snippets.scrapy.org (which no longer works)
