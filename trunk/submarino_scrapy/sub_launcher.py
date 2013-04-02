@@ -5,13 +5,12 @@ from scrapy.settings import Settings
 from scrapy.http import Request
 from submarino_scrapy.spiders.submarino_spider import SubmarinoSpiderSpider
 
-def handleSpiderIdle(crawlerProcess,spider):
+def handleSpiderIdle(spider):
     '''Handle spider idle event.''' # http://doc.scrapy.org/topics/signals.html#spider-idle
     print '\nSpider idle: %s. Restarting it... ' % spider.name
     #for url in spider.start_urls: # reschedule start urls
     #    spider.crawler.engine.crawl(Request(url, dont_filter=True), spider)
-    #spider.crawler.engine.crawl(Request(url, dont_filter=True), spider)
-    crawlerProcess.crawl(spider)
+    spider.crawler.engine.crawl(spider, None)
     
 
 #mySettings = {'LOG_ENABLED': True} # global settings http://doc.scrapy.org/topics/settings.html
