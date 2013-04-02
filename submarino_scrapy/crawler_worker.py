@@ -274,7 +274,7 @@ class CrawlerWorker(multiprocessing.Process):
             log.start()
             #reactor.run()
             #self.crawler.stop()
-            reactor.stop()
+            #reactor.stop()
             #self.crawler.uninstall()
             # store the result
             self.result_queue.put(self.items)
