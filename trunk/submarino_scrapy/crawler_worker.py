@@ -1,4 +1,5 @@
-from scrapy.conf import settings
+#from scrapy.conf import settings
+from scrapy.settings import Settings
 from scrapy.crawler import CrawlerProcess
 
 from submarino_scrapy.spiders.submarino_spider import SubmarinoSpiderSpider
@@ -240,7 +241,7 @@ class CrawlerWorker(multiprocessing.Process):
         self.kill_received = False
         
         # crawler settings
-        self.crawler = CrawlerProcess(settings)
+        self.crawler = CrawlerProcess(Settings())
         if not hasattr(project, 'crawler'):
             self.crawler.install()
         self.crawler.configure()
