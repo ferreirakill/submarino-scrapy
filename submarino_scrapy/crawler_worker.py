@@ -266,8 +266,8 @@ class CrawlerWorker(multiprocessing.Process):
             time.sleep(delay)
             
 
-            #self.spider.engine.open_spider(self.spider)
-            self.spider.engine.crawl(self.spider)
+            self.spider.engine.open_spider(self.spider)
+            #self.spider.engine.crawl(self.spider)
             
             #reactor.run()
             #self.crawler.stop()
@@ -303,11 +303,10 @@ if __name__ == "__main__":
     
     # crawler settings
     crawler = CrawlerProcess(Settings())
-    if not hasattr(project, 'crawler'):
-        crawler.install()
+    #if not hasattr(project, 'crawler'):
+    #    crawler.install()
     crawler.configure()     
-    log.start()
-    crawler.start()     
+    
     #for origem in origens_array:
     for origem in origens_array[:1]: ###TESTE###
         #for destino in destinos_array:
@@ -327,6 +326,9 @@ if __name__ == "__main__":
                 
                 work_queue.put(origem+"_"+destino+"_"+data_saida+"_"+data_chegada)
 
+    log.start()
+    crawler.start() 
+    reactor.run()
     # create a queue to pass to workers to store the results
     result_queue = multiprocessing.Queue()
  
