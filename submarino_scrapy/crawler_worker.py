@@ -265,22 +265,11 @@ class CrawlerWorker(multiprocessing.Process):
             delay = random.randrange(1,3)
             time.sleep(delay)
             
-            # crawler settings
-            self.crawler = CrawlerProcess(Settings())
-            if not hasattr(project, 'crawler'):
-                self.crawler.install()
-            self.crawler.configure()        
-            log.start()
-            try:
-                self.crawler.crawl(self.spider)
-                self.crawler.start()             
-            except:
-                self.crawler.engine.open_spider(self.spider)
-        
-            
+
+            self.spider.engine.open_spider(self.spider)
             
             #reactor.run()
-            self.crawler.stop()
+            #self.crawler.stop()
             #reactor.stop()
             #self.crawler.uninstall()
             # store the result
@@ -310,12 +299,21 @@ if __name__ == "__main__":
     #for job in range(num_jobs):
     #    work_queue.put(job)
     
+    
+    # crawler settings
+    crawler = CrawlerProcess(Settings())
+    if not hasattr(project, 'crawler'):
+        crawler.install()
+    crawler.configure()     
+    log.start()
+    #crawler.crawl(spider)
+    crawler.start()     
     #for origem in origens_array:
     for origem in origens_array[:1]: ###TESTE###
         #for destino in destinos_array:
         for destino in destinos_array[:1]: ###TESTE###
             #for i in range_saida:
-            for i in range_saida[:2]: ###TESTE###
+            for i in range_saida[:1]: ###TESTE###
                 data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
                 data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
                 
