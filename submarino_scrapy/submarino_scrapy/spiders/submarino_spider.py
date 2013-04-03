@@ -351,6 +351,16 @@ class SubmarinoSpiderSpider(CrawlSpider):
             #user_browser = self.viagem_combina[0].get('user_browser')
             self.user_browser =  random_header()
             self.viagem_combina.pop(0)
+            
+            self.origem = 'GRU'
+            self.destino = 'MAD'
+            self.ano_saida = '2013'
+            self.mes_saida = '04'
+            self.dia_saida = '14'
+            self.ano_chegada = '2013'
+            self.mes_chegada = '04'
+            self.dia_chegada = '25'
+            self.user_browser = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"            
                 
         #self.start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
         #self.allowed_domains = ['submarinoviagens.com.br']
