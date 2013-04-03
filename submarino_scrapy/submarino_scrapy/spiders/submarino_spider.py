@@ -415,8 +415,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                     print "Preco Compania: %s" % (air[2])
                     #print "XXX Compania: %s" % (air[3])
                     setResultado(origem,destino,air[1],air[1],air[2],
-                                 (ano_saida + '-' + mes_saida + '-' + dia_saida),
-                                 (ano_chegada + '-' + mes_chegada + '-' + dia_chegada),
+                                 (str(ano_saida) + '-' + str(mes_saida) + '-' + str(dia_saida)),
+                                 (str(ano_chegada) + '-' + str(mes_chegada) + '-' + str(dia_chegada)),
                                 )
 
         except:
