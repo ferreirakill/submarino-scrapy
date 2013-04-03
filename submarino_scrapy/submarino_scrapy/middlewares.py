@@ -51,6 +51,7 @@ class RetryMiddleware(object):
             if retries_uuid <= self.max_retry_wrong_uuid:
                 request.meta['retry_times_uuid'] = retries_uuid
                 print "uuids error!: %s" % (uuids)
+                print "uuids retry count: %s" % (retries_uuid)
                 reason = response_status_message(400)
                 return self._retry(request, reason, spider) or response
                 
