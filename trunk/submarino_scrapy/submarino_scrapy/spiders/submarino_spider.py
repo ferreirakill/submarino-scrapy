@@ -303,6 +303,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                            'data_chegada':data_chegada,
                                            })
 
+        print self.viagem_combina.append
+        
         '''                      
         origem = kw.get('origem')
         destino = kw.get('destino')
@@ -337,6 +339,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         '''
         
         if len(self.viagem_combina)>0:
+            print "viagem_combina: %s" % (self.viagem_combina[0])
             self.origem = self.viagem_combina[0].get('origem')
             self.destino = self.viagem_combina[0].get('destino')
             self.ano_saida = self.viagem_combina[0].get('ano_saida')
@@ -427,6 +430,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
             
             ##NEXT##
             if len(self.viagem_combina)>0:
+                print "viagem_combina: %s" % (self.viagem_combina[0])
                 self.origem = self.viagem_combina[0].get('origem')
                 self.destino = self.viagem_combina[0].get('destino')
                 self.ano_saida = self.viagem_combina[0].get('ano_saida')
