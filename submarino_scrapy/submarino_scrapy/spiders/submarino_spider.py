@@ -431,6 +431,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 print "Melhor Preco Voo 1 Escala: %s" % (preco_list[1][0][21][1])
                 print "Melhor Preco Voo 2 Escalas: %s" % (preco_list[1][0][21][2])
             
+            SubmarinoSpiderSpider()
+            '''
             ##NEXT##
             if len(self.viagem_combina)>0:
                 print "viagem_combina: %s" % (self.viagem_combina[0])
@@ -445,21 +447,23 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 #user_browser = self.viagem_combina[0].get('user_browser')
                 self.user_browser =  random_header()                
                 self.viagem_combina.pop(0)
-                Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum" , 
-                                    method='POST',                                         
-                                    body=json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":self.origem,"Destination":self.destino,"DepartureYear":self.ano_saida,"DepartureMonth":self.mes_saida,"DepartureDay":self.dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":self.destino,"Destination":self.origem,"DepartureYear":self.ano_chegada,"DepartureMonth":self.mes_chegada,"DepartureDay":self.dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":self.user_browser}}),                             
-                                    headers={'Content-Type':'application/json',
-                                             "Accept-Encoding": "gzip: deflate",
-                                             "Content-Type": "application/json",
-                                             "x-requested-with": "XMLHttpRequest",
-                                             "Accept-Language": "pt-br",
-                                             "Accept": "text/plain: */*",
-                                             "User-Agent": self.user_browser,
-                                             "Host": "www.submarinoviagens.com.br",
-                                             "Cache-Control": "no-cache",
-                                             "Connection": "Keep-Alive",
-                                             },
-                                    callback=self.get_uuid_param, )
+                
+                return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum" , 
+                                            method='POST',                                         
+                                            body=json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":self.origem,"Destination":self.destino,"DepartureYear":self.ano_saida,"DepartureMonth":self.mes_saida,"DepartureDay":self.dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":self.destino,"Destination":self.origem,"DepartureYear":self.ano_chegada,"DepartureMonth":self.mes_chegada,"DepartureDay":self.dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":self.user_browser}}),                             
+                                            headers={'Content-Type':'application/json',
+                                                     "Accept-Encoding": "gzip: deflate",
+                                                     "Content-Type": "application/json",
+                                                     "x-requested-with": "XMLHttpRequest",
+                                                     "Accept-Language": "pt-br",
+                                                     "Accept": "text/plain: */*",
+                                                     "User-Agent": self.user_browser,
+                                                     "Host": "www.submarinoviagens.com.br",
+                                                     "Cache-Control": "no-cache",
+                                                     "Connection": "Keep-Alive",
+                                                     },
+                                            callback=self.get_uuid_param, )]
+                '''
         except:
             exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
             traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,

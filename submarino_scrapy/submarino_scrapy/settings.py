@@ -30,6 +30,7 @@ DOWNLOADER_MIDDLEWARES = {
     #'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': 400,
     'scrapy.contrib.downloadermiddleware.retry.RetryMiddleware': None,
     'submarino_scrapy.middlewares.RetryMiddleware': 500,
+    #'submarino_scrapy.middlewares.RepeatMiddleware': 530,
     #'scrapy.contrib.downloadermiddleware.defaultheaders.DefaultHeadersMiddleware': 550,
     #'scrapy.contrib.downloadermiddleware.redirect.MetaRefreshMiddleware': 580,
     #'scrapy.contrib.downloadermiddleware.httpcompression.HttpCompressionMiddleware': 590,
