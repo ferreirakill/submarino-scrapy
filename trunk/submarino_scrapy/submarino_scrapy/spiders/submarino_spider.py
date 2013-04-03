@@ -303,7 +303,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                            'data_chegada':data_chegada,
                                            })
 
-        print self.viagem_combina
+        #print self.viagem_combina
+        print "Quantidade de combinacoes: %s" % len(self.viagem_combina)
         
         '''                      
         origem = kw.get('origem')
