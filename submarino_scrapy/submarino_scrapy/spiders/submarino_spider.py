@@ -429,7 +429,7 @@ class SubmarinoSpiderSpider(BaseSpider):
                             "Cache-Control": "no-cache",
                             "Connection": "Keep-Alive",
                             }, 
-                            callback=self.parse_preco_param, )]
+                            callback=self.parse_preco, )]
 
             
             #SubmarinoSpiderSpider()
@@ -470,7 +470,7 @@ class SubmarinoSpiderSpider(BaseSpider):
             traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
                   limit=2, file=sys.stdout)
 
-    def get_preco_param(self,response):            
+    def parse_preco(self,response):            
         
         preco_list = json.JSONDecoder().decode(json.loads(response.body))
         #print "preco_list: %s" % (preco_list)
