@@ -385,7 +385,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         
         try:
             if not uuids[0]=='00000000-0000-0000-0000-000000000000':
-                    
+
                 #origem_nome = preco_list[1][0][2][0][0] #origem nome
                 #destino_nome = preco_list[1][0][2][0][0] #destino nome
                 i = response.meta['id_viagem']
