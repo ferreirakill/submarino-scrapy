@@ -36,9 +36,9 @@ class RetryMiddleware(object):
         if 'dont_retry' in request.meta:
             print 'dont retry in meta'
             return response
-        print "response.status = %s" % (response.status)
+        #print "response.status = %s" % (response.status)
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
-        print "uuids: %s" % (uuids)
+        #print "uuids: %s" % (uuids)
         if response.status in self.retry_http_codes:
             reason = response_status_message(response.status)
             return self._retry(request, reason, spider) or response
