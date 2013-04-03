@@ -1,7 +1,7 @@
 
 from scrapy.selector import HtmlXPathSelector
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
-from scrapy.spider import BaseSpider
+from scrapy.contrib.spiders import CrawlSpider, Rule
 from submarino_scrapy.items import SubmarinoScrapyItem
 from scrapy.http import FormRequest, Request
 from twisted.internet.error import TimeoutError as ServerTimeoutError, DNSLookupError, \
@@ -245,7 +245,7 @@ def remover_acentos(txt, codif='utf-8'):
     from unicodedata import normalize
     return normalize('NFKD', txt.decode(codif, "ignore")).encode('ASCII','ignore')
         
-class SubmarinoSpiderSpider(BaseSpider):
+class SubmarinoSpiderSpider(CrawlSpider):
     name = 'submarino_spider'
     allowed_domains = ['submarinoviagens.com.br']
     #start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
@@ -410,11 +410,27 @@ class SubmarinoSpiderSpider(BaseSpider):
         
         
         #print "response.body: %s" % (response.body)
-
+        preco_list = json.JSONDecoder().decode(json.loads(response.body))
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         
         try:
             if not uuids[0]=='00000000-0000-0000-0000-000000000000':
+                for air in preco_list[1][0][0]:
+                    print "Sigla Compania: %s" % (air[0])
+                    #print "Nome Compania: %s" % (remover_acentos(air[1]))
+                    print "Preco Compania: %s" % (air[2])
+                    #print "XXX Compania: %s" % (air[3])
+                    
+                    #Melhor preco em dollars
+                    print "Melhor Preco Dollars: %s" % (preco_list[1][0][17])
+                    #Melhor preco em reais
+                    print "Melhor Preco Reais: %s" % (preco_list[1][0][18])
+                    
+                    #Melhor preco por escalas
+                    print "Melhor Preco Voo Direto: %s" % (preco_list[1][0][21][0])
+                    print "Melhor Preco Voo 1 Escala: %s" % (preco_list[1][0][21][1])
+                    print "Melhor Preco Voo 2 Escalas: %s" % (preco_list[1][0][21][2])
+                '''              
                 return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
                    body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}), 
                    headers={'Content-Type':'application/json',
@@ -429,40 +445,6 @@ class SubmarinoSpiderSpider(BaseSpider):
                             "Connection": "Keep-Alive",
                             }, 
                             callback=self.parse_preco, )]
-
-            
-            #SubmarinoSpiderSpider()
-            '''
-            ##NEXT##
-            if len(self.viagem_combina)>0:
-                print "viagem_combina: %s" % (self.viagem_combina[0])
-                self.origem = self.viagem_combina[0].get('origem')
-                self.destino = self.viagem_combina[0].get('destino')
-                self.ano_saida = self.viagem_combina[0].get('ano_saida')
-                self.mes_saida = self.viagem_combina[0].get('mes_saida')
-                self.dia_saida = self.viagem_combina[0].get('ano_saida')
-                self.ano_chegada = self.viagem_combina[0].get('ano_chegada')
-                self.mes_chegada = self.viagem_combina[0].get('mes_chegada')
-                self.dia_chegada = self.viagem_combina[0].get('dia_chegada')  
-                #user_browser = self.viagem_combina[0].get('user_browser')
-                self.user_browser =  random_header()                
-                self.viagem_combina.pop(0)
-                
-                return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum" , 
-                                            method='POST',                                         
-                                            body=json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":self.origem,"Destination":self.destino,"DepartureYear":self.ano_saida,"DepartureMonth":self.mes_saida,"DepartureDay":self.dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":self.destino,"Destination":self.origem,"DepartureYear":self.ano_chegada,"DepartureMonth":self.mes_chegada,"DepartureDay":self.dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":self.user_browser}}),                             
-                                            headers={'Content-Type':'application/json',
-                                                     "Accept-Encoding": "gzip: deflate",
-                                                     "Content-Type": "application/json",
-                                                     "x-requested-with": "XMLHttpRequest",
-                                                     "Accept-Language": "pt-br",
-                                                     "Accept": "text/plain: */*",
-                                                     "User-Agent": self.user_browser,
-                                                     "Host": "www.submarinoviagens.com.br",
-                                                     "Cache-Control": "no-cache",
-                                                     "Connection": "Keep-Alive",
-                                                     },
-                                            callback=self.get_uuid_param, )]
                 '''
         except:
             exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
