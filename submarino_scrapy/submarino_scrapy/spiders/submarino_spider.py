@@ -303,7 +303,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                            'data_chegada':data_chegada,
                                            })
 
-        print self.viagem_combina.append
+        print self.viagem_combina
         
         '''                      
         origem = kw.get('origem')
