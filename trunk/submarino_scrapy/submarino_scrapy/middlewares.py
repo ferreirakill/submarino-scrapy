@@ -9,6 +9,7 @@ from scrapy.utils.response import response_status_message
 import json
 import re
 
+
 class RetryMiddleware(object):
 
     # IOError is raised by the HttpCompression middleware when trying to
