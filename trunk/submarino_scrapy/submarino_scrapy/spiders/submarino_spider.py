@@ -346,7 +346,7 @@ class SubmarinoSpiderSpider(BaseSpider):
             self.destino = self.viagem_combina[0].get('destino')
             self.ano_saida = self.viagem_combina[0].get('ano_saida')
             self.mes_saida = self.viagem_combina[0].get('mes_saida')
-            self.dia_saida = self.viagem_combina[0].get('ano_saida')
+            self.dia_saida = self.viagem_combina[0].get('dia_saida')
             self.ano_chegada = self.viagem_combina[0].get('ano_chegada')
             self.mes_chegada = self.viagem_combina[0].get('mes_chegada')
             self.dia_chegada = self.viagem_combina[0].get('dia_chegada')  
