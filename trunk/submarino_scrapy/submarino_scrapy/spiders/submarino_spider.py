@@ -380,7 +380,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         
     def get_uuid_param(self,response):
         print "..sleeping"
-        time.sleep(random.randint(1, 5)) 
+        #time.sleep(random.randint(1, 5)) 
         
         #print "response.body: %s" % (response.body)
         preco_list = json.JSONDecoder().decode(json.loads(response.body))
