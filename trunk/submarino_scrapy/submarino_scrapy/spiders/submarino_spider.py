@@ -1,7 +1,7 @@
 
 from scrapy.selector import HtmlXPathSelector
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
-from scrapy.contrib.spiders import CrawlSpider, Rule
+from scrapy.spider import BaseSpider
 from submarino_scrapy.items import SubmarinoScrapyItem
 from scrapy.http import FormRequest, Request
 from twisted.internet.error import TimeoutError as ServerTimeoutError, DNSLookupError, \
@@ -245,7 +245,7 @@ def remover_acentos(txt, codif='utf-8'):
     from unicodedata import normalize
     return normalize('NFKD', txt.decode(codif, "ignore")).encode('ASCII','ignore')
         
-class SubmarinoSpiderSpider(CrawlSpider):
+class SubmarinoSpiderSpider(BaseSpider):
     name = 'submarino_spider'
     allowed_domains = ['submarinoviagens.com.br']
     #start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
