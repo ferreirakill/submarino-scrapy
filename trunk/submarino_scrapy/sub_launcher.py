@@ -10,7 +10,6 @@ def handleSpiderIdle(spider):
     print '\nSpider idle: %s. Restarting it... ' % spider.name
     #for url in spider.start_urls: # reschedule start urls
     #    spider.crawler.engine.crawl(Request(url, dont_filter=True), spider)
-    
     spider.crawler.engine.crawl(spider, None)
     
 

@@ -20,6 +20,9 @@ RETRY_TIMES = 50
 RETRY_HTTP_CODES = [400,]
 COOKIES_DEBUG = True
 
+LOG_ENABLED = False
+LOG_LEVEL = 'INFO'
+
 DOWNLOADER_MIDDLEWARES = {
     #'scrapy.contrib.downloadermiddleware.robotstxt.RobotsTxtMiddleware': 100,
     #'scrapy.contrib.downloadermiddleware.httpauth.HttpAuthMiddleware': 300,
