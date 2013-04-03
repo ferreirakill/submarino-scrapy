@@ -342,7 +342,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         requests_arr = []
         if len(self.viagem_combina)>0:
             for i in range(len(self.viagem_combina)):
-                print "viagem_combina: %s" % (self.viagem_combina[0])
+                #print "viagem_combina: %s" % (self.viagem_combina[0])
                 self.origem = self.viagem_combina[i].get('origem')
                 self.destino = self.viagem_combina[i].get('destino')
                 self.ano_saida = self.viagem_combina[i].get('ano_saida')
@@ -354,8 +354,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 #user_browser = self.viagem_combina[i].get('user_browser')
                 self.user_browser =  random_header()
                 #self.viagem_combina.pop(0)      
-                print "%s - %s" % (i,json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":self.origem,"Destination":self.destino,"DepartureYear":self.ano_saida,"DepartureMonth":self.mes_saida,"DepartureDay":self.dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":self.destino,"Destination":self.origem,"DepartureYear":self.ano_chegada,"DepartureMonth":self.mes_chegada,"DepartureDay":self.dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":self.user_browser}}))
-                requests_arr.append(Request('http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum', 
+                #print "%s - %s" % (i,json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":self.origem,"Destination":self.destino,"DepartureYear":self.ano_saida,"DepartureMonth":self.mes_saida,"DepartureDay":self.dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":self.destino,"Destination":self.origem,"DepartureYear":self.ano_chegada,"DepartureMonth":self.mes_chegada,"DepartureDay":self.dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":self.user_browser}}))
+                request_prep = Request('http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum', 
                                         method='POST',                                         
                                         body=json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":self.origem,"Destination":self.destino,"DepartureYear":self.ano_saida,"DepartureMonth":self.mes_saida,"DepartureDay":self.dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":self.destino,"Destination":self.origem,"DepartureYear":self.ano_chegada,"DepartureMonth":self.mes_chegada,"DepartureDay":self.dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":self.user_browser}}),                             
                                         headers={'Content-Type':'application/json',
@@ -369,7 +369,9 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                                  "Cache-Control": "no-cache",
                                                  "Connection": "Keep-Alive",
                                                  },
-                                        callback=self.get_uuid_param, ))  
+                                        callback=self.get_uuid_param, )
+                request_prep.meta['id_viagem'] = i
+                requests_arr.append(request_prep)  
         
         
         return requests_arr
@@ -386,7 +388,19 @@ class SubmarinoSpiderSpider(CrawlSpider):
                     
                 #origem_nome = preco_list[1][0][2][0][0] #origem nome
                 #destino_nome = preco_list[1][0][2][0][0] #destino nome
+                i = response.meta['id_viagem']
+                print "viagem_combina: %s" % (self.viagem_combina[i])
                 
+                origem = self.viagem_combina[i].get('origem')
+                destino = self.viagem_combina[i].get('destino')
+                ano_saida = self.viagem_combina[i].get('ano_saida')
+                mes_saida = self.viagem_combina[i].get('mes_saida')
+                dia_saida = self.viagem_combina[i].get('dia_saida')
+                ano_chegada = self.viagem_combina[i].get('ano_chegada')
+                mes_chegada = self.viagem_combina[i].get('mes_chegada')
+                dia_chegada = self.viagem_combina[i].get('dia_chegada')  
+                
+                '''                
                 origem = preco_list[1][0][2][0][1] #origem IATA
                 destino = preco_list[1][0][1][0][1] #destino IATA
                 
@@ -397,7 +411,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 ano_chegada = preco_list[1][0][6][-1]
                 mes_chegada = preco_list[1][0][6][-2]
                 dia_chegada = preco_list[1][0][6][0]
-                
+                '''
                       
                 #Melhor preco em dollars
                 print "Melhor Preco Dollars: %s" % (preco_list[1][0][17])
