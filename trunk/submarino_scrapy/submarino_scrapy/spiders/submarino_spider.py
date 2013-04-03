@@ -367,22 +367,6 @@ class SubmarinoSpiderSpider(BaseSpider):
     def start_requests(self):
         start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
                       'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
-                      'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
-                      'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
-                      'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
-                      'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
-                      'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
-                      'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
-                      'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
-                      'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
-                      'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
-                      'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
-                      'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
-                      'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
-                      'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
-                      'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
-                      'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
-                      'http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum',
                       ]
         '''
         #destino
@@ -487,74 +471,5 @@ class SubmarinoSpiderSpider(BaseSpider):
             exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
             traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
                   limit=2, file=sys.stdout)
-
-             
-        #for value in traverse(preco_list):
-        #    print repr(value)
-    
-        '''
-        try:
-            print "preco_list_len_uuid: %s" % (len(preco_list[1]))
-
-            for preco in preco_list:
-                for p in range(len(preco[0])):
-                    print "%s - preco[0][%s]: %s" % (p,p,preco[0][p])
-
-        except:
-            #pass
-            exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
-            traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
-                  limit=2, file=sys.stdout)
-            dorme = random.randint(1, 3)
-            print "Exception, dorme: %s" % (dorme)
-            time.sleep(dorme)
-            #raise urllib2.HTTPError(response.url, code = 400, msg = "Bad Request", hdrs = response.headers, fp = None)
-            raise ConnectError()
-            #self.start_requests()
-            #SubmarinoSpiderSpider(origem='GRU',destino='LHR',ano_saida='2013',mes_saida='04',dia_saida='17',ano_chegada='2013',mes_chegada='04',dia_chegada='22',user_browser="Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0")
-        ''' 
-        '''        
-        uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
-        if len(uuids)<2:
-            print "Sleep get_uuid"
-            time.sleep(random.randint(1, 3)) 
-            self.start_requests()
-        else:
-            self.get_preco(uuids[0])
-        '''
-             
-    def get_preco(self,uuid):
-        print 'uuid: %s' % (uuid)
-        return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
-               body=json.dumps({"req":{"SearchId":uuid,"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}), 
-               headers={'Content-Type':'application/json',
-                        "Accept-Encoding": "gzip: deflate",
-                        "Content-Type": "application/json",
-                        "x-requested-with": "XMLHttpRequest",
-                        "Accept-Language": "pt-br",
-                        "Accept": "text/plain: */*",
-                        "User-Agent": self.user_browser,
-                        "Host": "www.submarinoviagens.com.br",
-                        "Cache-Control": "no-cache",
-                        "Connection": "Keep-Alive",
-                        }, 
-                        callback=self.get_preco_param, )]
             
-    def get_preco_param(self,response):
-            preco_list = json.JSONDecoder().decode(json.loads(response.body))
-            #print "preco_list: %s" % (preco_list)
-            print "preco_list_len: %s" % (len(preco_list[1]))
-            if preco_list[0][0]['i'] == -1:
-                print "Sleep preco_list"
-                time.sleep(random.randint(1, 3)) 
-            else:
-                print "else"
-        
-    def parse_item(self, response):
-        hxs = HtmlXPathSelector(response)
-        i = SubmarinoScrapyItem()
-        #i['domain_id'] = hxs.select('//input[@id="sid"]/@value').extract()
-        #i['name'] = hxs.select('//div[@id="name"]').extract()
-        #i['description'] = hxs.select('//div[@id="description"]').extract()
-        return i
     
