@@ -21,7 +21,7 @@ RETRY_HTTP_CODES = [400,]
 COOKIES_DEBUG = True
 
 LOG_ENABLED = False
-LOG_LEVEL = 'DEBUG'
+LOG_LEVEL = 'ERROR'
 
 DOWNLOADER_MIDDLEWARES = {
     #'scrapy.contrib.downloadermiddleware.robotstxt.RobotsTxtMiddleware': 100,
