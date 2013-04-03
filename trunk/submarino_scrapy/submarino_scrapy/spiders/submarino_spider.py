@@ -248,7 +248,8 @@ def remover_acentos(txt, codif='utf-8'):
 class SubmarinoSpiderSpider(CrawlSpider):
     name = 'submarino_spider'
     allowed_domains = ['submarinoviagens.com.br']
-    start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
+    #start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
+    start_urls = ['1','2']
     viagem_combina = []
 
     #rules = (
@@ -431,7 +432,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 print "Melhor Preco Voo 1 Escala: %s" % (preco_list[1][0][21][1])
                 print "Melhor Preco Voo 2 Escalas: %s" % (preco_list[1][0][21][2])
             
-            SubmarinoSpiderSpider()
+            #SubmarinoSpiderSpider()
             '''
             ##NEXT##
             if len(self.viagem_combina)>0:
