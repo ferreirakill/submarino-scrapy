@@ -23,6 +23,7 @@ class RetryMiddleware(object):
         if not settings.getbool('RETRY_ENABLED'):
             raise NotConfigured
         self.max_retry_times = settings.getint('RETRY_TIMES')
+        self.max_retry_wrong_uuid = 20
         self.retry_http_codes = set(int(x) for x in settings.getlist('RETRY_HTTP_CODES'))
         self.priority_adjust = settings.getint('RETRY_PRIORITY_ADJUST')
 
@@ -46,9 +47,13 @@ class RetryMiddleware(object):
         #    reason = response_status_message(400)
         #    return self._retry(request, reason, spider) or response
         elif uuids[0]=='00000000-0000-0000-0000-000000000000':
-            print "uuids error!: %s" % (uuids)
-            reason = response_status_message(400)
-            return self._retry(request, reason, spider) or response
+            retries_uuid = request.meta.get('retry_times_uuid', 0) + 1
+            if retries_uuid <= self.max_retry_wrong_uuid:
+                request.meta['retry_times_uuid'] = retries_uuid
+                print "uuids error!: %s" % (uuids)
+                reason = response_status_message(400)
+                return self._retry(request, reason, spider) or response
+                
         return response
 
     def process_exception(self, request, exception, spider):
