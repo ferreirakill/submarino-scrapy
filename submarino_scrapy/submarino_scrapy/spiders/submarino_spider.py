@@ -249,7 +249,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
     name = 'submarino_spider'
     allowed_domains = ['submarinoviagens.com.br']
     #start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
-    start_urls = ['1','2']
+    start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum','http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
     viagem_combina = []
 
     #rules = (
@@ -275,12 +275,12 @@ class SubmarinoSpiderSpider(CrawlSpider):
         else:
             range_saida = range(int(viagem[4]))
         
-        for origem in origens_array:
-        #for origem in origens_array[:1]: ###TESTE###
-            for destino in destinos_array:
-            #for destino in destinos_array[:1]: ###TESTE###
-                for i in range_saida:
-                #for i in range_saida[:1]: ###TESTE###
+        #for origem in origens_array:
+        for origem in origens_array[:1]: ###TESTE###
+            #for destino in destinos_array:
+            for destino in destinos_array[:1]: ###TESTE###
+                #for i in range_saida:
+                for i in range_saida[:1]: ###TESTE###
                     data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
                     data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
                     
