@@ -199,38 +199,6 @@ def setResultado(origem_iata,destino_iata,cia_aerea,sigla_aerea,preco,data_parti
     cursor.execute(insert_resultado)
     db_disconnect(cursor,conn)
 
-
-    '''   
-    for row in range(len(origens_array)):
-
-        for j in range(len(destinos_array)):
-            
-            for i in range_saida:
-                
-                data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
-                data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
-                
-                ano_saida = data_saida.split("-")[0]
-                mes_saida = data_saida.split("-")[1]
-                dia_saida = data_saida.split("-")[2]
-            
-                ano_chegada = data_chegada.split("-")[0]
-                mes_chegada = data_chegada.split("-")[1]
-                dia_chegada = data_chegada.split("-")[2]  
-                   
-                queue.put([
-                            origens_array[row], #origem
-                            destinos_array[j], #destino
-                            ano_saida,
-                            mes_saida,
-                            dia_saida,
-                            ano_chegada,
-                            mes_chegada,
-                            dia_chegada,                            
-                           ])
-    '''
-            
-    
     
 def traverse(o, tree_types=(list, tuple)):
     if isinstance(o, tree_types):
@@ -275,12 +243,12 @@ class SubmarinoSpiderSpider(CrawlSpider):
         else:
             range_saida = range(int(viagem[4]))
         
-        #for origem in origens_array:
-        for origem in origens_array[:1]: ###TESTE###
-            #for destino in destinos_array:
-            for destino in destinos_array[:1]: ###TESTE###
-                #for i in range_saida:
-                for i in range_saida[:3]: ###TESTE###
+        for origem in origens_array:
+        #for origem in origens_array[:1]: ###TESTE###
+            for destino in destinos_array:
+            #for destino in destinos_array[:1]: ###TESTE###
+                for i in range_saida:
+                #for i in range_saida[:3]: ###TESTE###
                     data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
                     data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
                     
@@ -415,65 +383,47 @@ class SubmarinoSpiderSpider(CrawlSpider):
         
         try:
             if not uuids[0]=='00000000-0000-0000-0000-000000000000':
+                    
+                origem_nome = preco_list[1][0][2][0][0] #origem nome
+                destino_nome = preco_list[1][0][2][0][0] #destino nome
+                
+                origem = preco_list[1][0][2][0][1] #origem IATA
+                destino = preco_list[1][0][1][0][1] #destino IATA
+                
+                ano_saida = preco_list[1][0][7][-1]
+                mes_saida = preco_list[1][0][7][-2]
+                dia_saida = preco_list[1][0][7][0]
+                
+                ano_chegada = preco_list[1][0][6][-1]
+                mes_chegada = preco_list[1][0][6][-2]
+                dia_chegada = preco_list[1][0][6][0]
+                
+                      
+                #Melhor preco em dollars
+                print "Melhor Preco Dollars: %s" % (preco_list[1][0][17])
+                #Melhor preco em reais
+                print "Melhor Preco Reais: %s" % (preco_list[1][0][18])
+                
+                #Melhor preco por escalas
+                print "Melhor Preco Voo Direto: %s" % (preco_list[1][0][21][0])
+                print "Melhor Preco Voo 1 Escala: %s" % (preco_list[1][0][21][1])
+                print "Melhor Preco Voo 2 Escalas: %s" % (preco_list[1][0][21][2])
+                
                 for air in preco_list[1][0][0]:
                     print "Sigla Compania: %s" % (air[0])
                     #print "Nome Compania: %s" % (remover_acentos(air[1]))
                     print "Preco Compania: %s" % (air[2])
                     #print "XXX Compania: %s" % (air[3])
-                    
-                    #Melhor preco em dollars
-                    print "Melhor Preco Dollars: %s" % (preco_list[1][0][17])
-                    #Melhor preco em reais
-                    print "Melhor Preco Reais: %s" % (preco_list[1][0][18])
-                    
-                    #Melhor preco por escalas
-                    print "Melhor Preco Voo Direto: %s" % (preco_list[1][0][21][0])
-                    print "Melhor Preco Voo 1 Escala: %s" % (preco_list[1][0][21][1])
-                    print "Melhor Preco Voo 2 Escalas: %s" % (preco_list[1][0][21][2])
-                '''              
-                return [Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
-                   body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}), 
-                   headers={'Content-Type':'application/json',
-                            "Accept-Encoding": "gzip: deflate",
-                            "Content-Type": "application/json",
-                            "x-requested-with": "XMLHttpRequest",
-                            "Accept-Language": "pt-br",
-                            "Accept": "text/plain: */*",
-                            "User-Agent": self.user_browser,
-                            "Host": "www.submarinoviagens.com.br",
-                            "Cache-Control": "no-cache",
-                            "Connection": "Keep-Alive",
-                            }, 
-                            callback=self.parse_preco, )]
-                '''
+                    setResultado(origem,destino,air[1],air[1],air[2],
+                                 (ano_saida + '-' + mes_saida + '-' + dia_saida),
+                                 (ano_chegada + '-' + mes_chegada + '-' + dia_chegada),
+                                )
+
         except:
             exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
             traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
                   limit=2, file=sys.stdout)
 
-    def parse_preco(self,response):            
-        
-        preco_list = json.JSONDecoder().decode(json.loads(response.body))
-        uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
-        #print "preco_list: %s" % (preco_list)
-        #print preco_list[:10]
-        #print '...'
-        #print preco_list[-10:]
-        
-        if not uuids[0]=='00000000-0000-0000-0000-000000000000':
-            for air in preco_list[1][0][0]:
-                print "Sigla Compania: %s" % (air[0])
-                #print "Nome Compania: %s" % (remover_acentos(air[1]))
-                print "Preco Compania: %s" % (air[2])
-                #print "XXX Compania: %s" % (air[3])
-                
-            #Melhor preco em dollars
-            print "Melhor Preco Dollars: %s" % (preco_list[1][0][17])
-            #Melhor preco em reais
-            print "Melhor Preco Reais: %s" % (preco_list[1][0][18])
+           
             
-            #Melhor preco por escalas
-            print "Melhor Preco Voo Direto: %s" % (preco_list[1][0][21][0])
-            print "Melhor Preco Voo 1 Escala: %s" % (preco_list[1][0][21][1])
-            print "Melhor Preco Voo 2 Escalas: %s" % (preco_list[1][0][21][2])
         
