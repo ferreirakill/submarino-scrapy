@@ -414,14 +414,14 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 '''
                       
                 #Melhor preco em dollars
-                print "Melhor Preco Dollars: %s" % (preco_list[1][0][17])
+                #print "Melhor Preco Dollars: %s" % (preco_list[1][0][17])
                 #Melhor preco em reais
-                print "Melhor Preco Reais: %s" % (preco_list[1][0][18])
+                #print "Melhor Preco Reais: %s" % (preco_list[1][0][18])
                 
                 #Melhor preco por escalas
-                print "Melhor Preco Voo Direto: %s" % (preco_list[1][0][21][0])
-                print "Melhor Preco Voo 1 Escala: %s" % (preco_list[1][0][21][1])
-                print "Melhor Preco Voo 2 Escalas: %s" % (preco_list[1][0][21][2])
+                #print "Melhor Preco Voo Direto: %s" % (preco_list[1][0][21][0])
+                #print "Melhor Preco Voo 1 Escala: %s" % (preco_list[1][0][21][1])
+                #print "Melhor Preco Voo 2 Escalas: %s" % (preco_list[1][0][21][2])
                 
                 for air in preco_list[1][0][0]:
                     print "Sigla Compania: %s" % (air[0])
