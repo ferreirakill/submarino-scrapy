@@ -410,24 +410,25 @@ class SubmarinoSpiderSpider(CrawlSpider):
         #print preco_list[:10]
         #print '...'
         #print preco_list[-10:]
-        
+        uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         
         try:
-            for air in preco_list[1][0][0]:
-                print "Sigla Compania: %s" % (air[0])
-                #print "Nome Compania: %s" % (remover_acentos(air[1]))
-                print "Preco Compania: %s" % (air[2])
-                #print "XXX Compania: %s" % (air[3])
+            if not uuids[0]=='00000000-0000-0000-0000-000000000000':
+                for air in preco_list[1][0][0]:
+                    print "Sigla Compania: %s" % (air[0])
+                    #print "Nome Compania: %s" % (remover_acentos(air[1]))
+                    print "Preco Compania: %s" % (air[2])
+                    #print "XXX Compania: %s" % (air[3])
+                    
+                #Melhor preco em dollars
+                print "Melhor Preco Dollars: %s" % (preco_list[1][0][17])
+                #Melhor preco em reais
+                print "Melhor Preco Reais: %s" % (preco_list[1][0][18])
                 
-            #Melhor preco em dollars
-            print "Melhor Preco Dollars: %s" % (preco_list[1][0][17])
-            #Melhor preco em reais
-            print "Melhor Preco Reais: %s" % (preco_list[1][0][18])
-            
-            #Melhor preco por escalas
-            print "Melhor Preco Voo Direto: %s" % (preco_list[1][0][21][0])
-            print "Melhor Preco Voo 1 Escala: %s" % (preco_list[1][0][21][1])
-            print "Melhor Preco Voo 2 Escalas: %s" % (preco_list[1][0][21][2])
+                #Melhor preco por escalas
+                print "Melhor Preco Voo Direto: %s" % (preco_list[1][0][21][0])
+                print "Melhor Preco Voo 1 Escala: %s" % (preco_list[1][0][21][1])
+                print "Melhor Preco Voo 2 Escalas: %s" % (preco_list[1][0][21][2])
             
             ##NEXT##
             if len(self.viagem_combina)>0:
