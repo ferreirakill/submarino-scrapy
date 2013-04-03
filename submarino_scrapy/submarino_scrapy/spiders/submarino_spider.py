@@ -280,7 +280,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
             #for destino in destinos_array:
             for destino in destinos_array[:1]: ###TESTE###
                 #for i in range_saida:
-                for i in range_saida[:1]: ###TESTE###
+                for i in range_saida[:2]: ###TESTE###
                     data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
                     data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
                     
