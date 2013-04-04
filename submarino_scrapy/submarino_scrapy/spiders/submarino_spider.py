@@ -473,7 +473,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                 }, 
                                 callback=self.get_uuid_param, )
                     #request_b.meta['proxy'] = response.meta['proxy']
-                    return [request_b]
+                    return request_b
                             
 
         except:
