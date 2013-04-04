@@ -38,7 +38,7 @@ class RetryMiddleware(object):
             return response
         print "response.status = %s" % (response.status)
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
-
+        price = re.findall('[0-9]*\.[0-9]{2}RoundTrip', response.body)
         print "uuids: %s" % (uuids)
         if response.status in self.retry_http_codes:
             reason = response_status_message(response.status)
@@ -51,7 +51,10 @@ class RetryMiddleware(object):
                 print "uuids retry count: %s" % (retries_uuid)
                 reason = response_status_message(400)
                 return self._retry(request, reason, spider) or response
- 
+        print "price: %s" % (price)
+        if not price:
+            reason = response_status_message(400)
+            return self._retry(request, reason, spider) or response
                         
         return response
 
