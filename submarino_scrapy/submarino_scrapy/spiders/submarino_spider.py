@@ -265,8 +265,6 @@ class SubmarinoSpiderSpider(CrawlSpider):
                     data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
                     data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
                     
-                    print "%s-%s (%s)-(%s)" % (origem,destino,data_saida,data_chegada)
-                    
                     ano_saida = data_saida.split("-")[0]
                     mes_saida = data_saida.split("-")[1]
                     dia_saida = data_saida.split("-")[2]
@@ -419,6 +417,11 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 ano_chegada = self.viagem_combina[i].get('ano_chegada')
                 mes_chegada = self.viagem_combina[i].get('mes_chegada')
                 dia_chegada = self.viagem_combina[i].get('dia_chegada')  
+                
+                data_saida = self.viagem_combina[i].get('data_saida')
+                data_chegada = self.viagem_combina[i].get('data_chegada')
+                
+                print "ID:%s  %s-%s (%s)-(%s)" % (i,origem,destino,data_saida,data_chegada)
                 
                 '''                
                 origem = preco_list[1][0][2][0][1] #origem IATA
