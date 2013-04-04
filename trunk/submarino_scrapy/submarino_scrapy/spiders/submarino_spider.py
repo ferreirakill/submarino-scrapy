@@ -398,12 +398,13 @@ class SubmarinoSpiderSpider(CrawlSpider):
         #print "..waking"
         
         #print "response.body: %s" % (response.body)
-        preco_list = json.JSONDecoder().decode(json.loads(response.body))
+        
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         
         try:
             if not uuids[0]=='00000000-0000-0000-0000-000000000000':
-
+                
+                
                 #origem_nome = preco_list[1][0][2][0][0] #origem nome
                 #destino_nome = preco_list[1][0][2][0][0] #destino nome
                 i = response.meta['id_viagem']
@@ -447,6 +448,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 #print "Melhor Preco Voo 1 Escala: %s" % (preco_list[1][0][21][1])
                 #print "Melhor Preco Voo 2 Escalas: %s" % (preco_list[1][0][21][2])
                 try:
+                    preco_list = json.JSONDecoder().decode(json.loads(response.body))
                     for air in preco_list[1][0][0]:
                         print "Sigla Compania: %s" % (air[0])
                         #print "Nome Compania: %s" % (remover_acentos(air[1]))
@@ -458,6 +460,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                     )
                 except:
                     print "Exception KeyError!"
+                    
                     request_b = Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
                        body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}), 
                        headers={'Content-Type':'application/json',
