@@ -202,7 +202,7 @@ def setResultado(origem_iata,destino_iata,cia_aerea,sigla_aerea,preco,data_parti
 def get_proxy_random():
     cursor,conn = db_connect()
     select_trade = """
-    select INET_NTOA(IP) as ip_conv,Port from stocks_db.proxies_list where ativo = 'Y' and response < 3 and response is not NULL ORDER BY RAND() LIMIT 1;
+    select INET_NTOA(IP) as ip_conv,Port from stocks_db.proxies_list where ativo = 'Y' and response < 20 and response is not NULL ORDER BY RAND() LIMIT 1;
     """
     cursor.execute(select_trade)
     response = cursor.fetchall()
@@ -383,8 +383,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                                  },
                                         callback=self.get_uuid_param, )
                 request_prep.meta['id_viagem'] = i
-                #request_prep.meta['proxy'] = get_proxy_random()
-                #print "Proxy: %s" % (request_prep.meta['proxy']) 
+                request_prep.meta['proxy'] = get_proxy_random()
+                print "Proxy: %s" % (request_prep.meta['proxy']) 
                 requests_arr.append(request_prep)  
         
         
