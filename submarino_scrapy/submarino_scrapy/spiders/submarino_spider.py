@@ -407,6 +407,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 #origem_nome = preco_list[1][0][2][0][0] #origem nome
                 #destino_nome = preco_list[1][0][2][0][0] #destino nome
                 i = response.meta['id_viagem']
+                print "Proxy Response: %s" % (response.meta['proxy'])
                 print "viagem_combina: %s" % (self.viagem_combina[i])
                 
                 origem = self.viagem_combina[i].get('origem')
