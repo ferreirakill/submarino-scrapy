@@ -248,9 +248,17 @@ class SubmarinoSpiderSpider(CrawlSpider):
         destinos_array=dict_destinos[str(viagem[0])+'_id_viagem']
         
         if viagem[5].lower().strip().find("weeks")>-1:
+            range_saida = range(int(viagem[4])*(-7),int(viagem[4])*7,7)
+        elif viagem[5].lower().strip().find("weeksfw")>-1:
             range_saida = range(0,int(viagem[4])*7,7)
+        elif viagem[5].lower().strip().find("weeksbehind")>-1:
+            range_saida = range(int(viagem[4])*(-7),7,0)
         elif viagem[5].lower().strip().find("days")>-1:
             range_saida = range(((-1)*int(viagem[4])),int(viagem[4]))
+        elif viagem[5].lower().strip().find("daysfw")>-1:
+            range_saida = range(0,int(viagem[4]))
+        elif viagem[5].lower().strip().find("daysbehind")>-1:
+            range_saida = range(((-1)*int(viagem[4])),0)
         else:
             range_saida = range(int(viagem[4]))
         
@@ -267,6 +275,12 @@ class SubmarinoSpiderSpider(CrawlSpider):
                     #fixedgo - Dia fixo de saida.
                     #fixedback - Dia fixo da volta
                     #fixed perm - Tempo de Permanencia fixo
+                    #daysfw - Range dias pra frente
+                    #daysbehind - Range dias pra tras
+                    #days - Dias Ambos os lados
+                    #weeksfw - Range semanas pra frente
+                    #weeksbehind - Range semanas pra tras
+                    #weeks - Semanas Ambos os lados                    
                     
                     if viagem[5].lower().strip().find("fixedgo")>-1:
                         data_saida=(viagem[1]).strftime("%Y-%m-%d")
