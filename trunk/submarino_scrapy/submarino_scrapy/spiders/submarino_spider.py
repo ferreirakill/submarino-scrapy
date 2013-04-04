@@ -250,9 +250,11 @@ class SubmarinoSpiderSpider(CrawlSpider):
         if viagem[5].lower().strip().find("weeks")>-1:
             range_saida = range(0,int(viagem[4])*7,7)
         elif viagem[5].lower().strip().find("days")>-1:
-            range_saida = range((-1*int(viagem[4])),int(viagem[4]))
+            range_saida = range(((-1)*int(viagem[4])),int(viagem[4]))
         else:
             range_saida = range(int(viagem[4]))
+        
+        print "range_saida= %s" % (range_saida)
         
         for origem in origens_array:
         #for origem in origens_array[:1]: ###TESTE###
@@ -262,6 +264,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 #for i in range_saida[:5]: ###TESTE###
                     data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
                     data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
+                    
+                    print "%s-%s (%s)-(%s)" % (origem,destino,data_saida,data_chegada)
                     
                     ano_saida = data_saida.split("-")[0]
                     mes_saida = data_saida.split("-")[1]
