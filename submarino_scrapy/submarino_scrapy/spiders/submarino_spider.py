@@ -384,8 +384,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                                  "Connection": "Keep-Alive",
                                                  },
                                         callback=self.get_uuid_param, )
-                request_prep.meta['id_viagem'] = i
-                request_prep.meta['proxy'] = 'http://' + get_proxy_random()
+                #request_prep.meta['id_viagem'] = i
+                #request_prep.meta['proxy'] = 'http://' + get_proxy_random()
                 print "Proxy: %s" % (request_prep.meta['proxy']) 
                 requests_arr.append(request_prep)  
         
@@ -407,7 +407,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 #origem_nome = preco_list[1][0][2][0][0] #origem nome
                 #destino_nome = preco_list[1][0][2][0][0] #destino nome
                 i = response.meta['id_viagem']
-                print "Proxy Response: %s" % (response.meta['proxy'])
+                #print "Proxy Response: %s" % (response.meta['proxy'])
                 print "viagem_combina: %s" % (self.viagem_combina[i])
                 
                 origem = self.viagem_combina[i].get('origem')
@@ -472,8 +472,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                 "Connection": "Keep-Alive",
                                 }, 
                                 callback=self.get_uuid_param, )
-                    request_b.meta['proxy'] = response.meta['proxy']
-                    return request_b
+                    #request_b.meta['proxy'] = response.meta['proxy']
+                    return [request_b]
                             
 
         except:
