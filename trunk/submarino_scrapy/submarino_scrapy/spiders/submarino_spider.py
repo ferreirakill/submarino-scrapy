@@ -385,8 +385,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                                  },
                                         callback=self.get_uuid_param, )
                 request_prep.meta['id_viagem'] = i
-                #request_prep.meta['proxy'] = 'http://' + get_proxy_random()
-                #print "Proxy: %s" % (request_prep.meta['proxy']) 
+                request_prep.meta['proxy'] = 'http://' + get_proxy_random()
+                print "Proxy: %s" % (request_prep.meta['proxy']) 
                 requests_arr.append(request_prep)  
         
         
@@ -456,7 +456,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                      (str(ano_chegada) + '-' + str(mes_chegada) + '-' + str(dia_chegada)),
                                     )
                 except:
-                    Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
+                    print "Exception KeyError!"
+                    request_b = Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
                        body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}), 
                        headers={'Content-Type':'application/json',
                                 "Accept-Encoding": "gzip: deflate",
@@ -470,6 +471,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                 "Connection": "Keep-Alive",
                                 }, 
                                 callback=self.get_uuid_param, )
+                    request_b.meta['proxy'] = response.meta['proxy']
+                    return request_b
                             
 
         except:
