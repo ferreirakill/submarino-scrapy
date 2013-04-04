@@ -51,14 +51,7 @@ class RetryMiddleware(object):
                 print "uuids retry count: %s" % (retries_uuid)
                 reason = response_status_message(400)
                 return self._retry(request, reason, spider) or response
-        
-        if not uuids[0]=='00000000-0000-0000-0000-000000000000':
-            try:
-                json.JSONDecoder().decode(json.loads(response.body))
-            except:
-                print "preco not here!"
-                reason = response_status_message(400)
-                return self._retry(request, reason, spider) or response
+ 
                         
         return response
 
