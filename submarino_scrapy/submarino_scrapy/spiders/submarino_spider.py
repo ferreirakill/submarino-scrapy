@@ -442,16 +442,32 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 #print "Melhor Preco Voo Direto: %s" % (preco_list[1][0][21][0])
                 #print "Melhor Preco Voo 1 Escala: %s" % (preco_list[1][0][21][1])
                 #print "Melhor Preco Voo 2 Escalas: %s" % (preco_list[1][0][21][2])
-                
-                for air in preco_list[1][0][0]:
-                    print "Sigla Compania: %s" % (air[0])
-                    #print "Nome Compania: %s" % (remover_acentos(air[1]))
-                    print "Preco Compania: %s" % (air[2])
-                    #print "XXX Compania: %s" % (air[3])
-                    setResultado(origem,destino,air[1],air[1],air[2],
-                                 (str(ano_saida) + '-' + str(mes_saida) + '-' + str(dia_saida)),
-                                 (str(ano_chegada) + '-' + str(mes_chegada) + '-' + str(dia_chegada)),
-                                )
+                try:
+                    for air in preco_list[1][0][0]:
+                        print "Sigla Compania: %s" % (air[0])
+                        #print "Nome Compania: %s" % (remover_acentos(air[1]))
+                        print "Preco Compania: %s" % (air[2])
+                        #print "XXX Compania: %s" % (air[3])
+                        setResultado(origem,destino,air[1],air[1],air[2],
+                                     (str(ano_saida) + '-' + str(mes_saida) + '-' + str(dia_saida)),
+                                     (str(ano_chegada) + '-' + str(mes_chegada) + '-' + str(dia_chegada)),
+                                    )
+                except:
+                    Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
+                       body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}), 
+                       headers={'Content-Type':'application/json',
+                                "Accept-Encoding": "gzip: deflate",
+                                "Content-Type": "application/json",
+                                "x-requested-with": "XMLHttpRequest",
+                                "Accept-Language": "pt-br",
+                                "Accept": "text/plain: */*",
+                                "User-Agent": self.user_browser,
+                                "Host": "www.submarinoviagens.com.br",
+                                "Cache-Control": "no-cache",
+                                "Connection": "Keep-Alive",
+                                }, 
+                                callback=self.get_uuid_param, )
+                            
 
         except:
             exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
