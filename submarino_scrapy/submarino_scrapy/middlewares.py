@@ -54,7 +54,7 @@ class RetryMiddleware(object):
                 print "uuids retry count: %s" % (retries_uuid)
                 reason = response_status_message(400)
                 return self._retry(request, reason, spider) or response
-        elif not len(preco_list[1][0][0])>0:
+        elif not len(preco_list)>0:
                 print "preco not here!"
                 reason = response_status_message(400)
                 return self._retry(request, reason, spider) or response
