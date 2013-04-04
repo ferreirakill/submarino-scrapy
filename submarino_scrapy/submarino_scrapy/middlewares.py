@@ -38,15 +38,11 @@ class RetryMiddleware(object):
             return response
         #print "response.status = %s" % (response.status)
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
+        preco_list = json.JSONDecoder().decode(json.loads(response.body))
         #print "uuids: %s" % (uuids)
         if response.status in self.retry_http_codes:
             reason = response_status_message(response.status)
             return self._retry(request, reason, spider) or response
-        #elif len((json.JSONDecoder().decode(json.loads(response.body)))[0])>1:
-        #    ##tenta inserir verificacao aqui
-        #    preco_list = json.JSONDecoder().decode(json.loads(response.body))
-        #    reason = response_status_message(400)
-        #    return self._retry(request, reason, spider) or response
         elif uuids[0]=='00000000-0000-0000-0000-000000000000':
             retries_uuid = request.meta.get('retry_times_uuid', 0) + 1
             if retries_uuid <= self.max_retry_wrong_uuid:
@@ -55,7 +51,11 @@ class RetryMiddleware(object):
                 print "uuids retry count: %s" % (retries_uuid)
                 reason = response_status_message(400)
                 return self._retry(request, reason, spider) or response
-                
+        elif not len(preco_list[1][0][0])>0:
+                print "preco not here!"
+                reason = response_status_message(400)
+                return self._retry(request, reason, spider) or response
+            
         return response
 
     def process_exception(self, request, exception, spider):
