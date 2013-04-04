@@ -254,12 +254,12 @@ class SubmarinoSpiderSpider(CrawlSpider):
         else:
             range_saida = range(int(viagem[4]))
         
-        for origem in origens_array:
-        #for origem in origens_array[:1]: ###TESTE###
-            for destino in destinos_array:
-            #for destino in destinos_array[:1]: ###TESTE###
-                for i in range_saida:
-                #for i in range_saida[:3]: ###TESTE###
+        #for origem in origens_array:
+        for origem in origens_array[:1]: ###TESTE###
+            #for destino in destinos_array:
+            for destino in destinos_array[:1]: ###TESTE###
+                #for i in range_saida:
+                for i in range_saida[:3]: ###TESTE###
                     data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
                     data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
                     
@@ -367,7 +367,6 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 #self.viagem_combina.pop(0)      
                 #print "%s - %s" % (i,json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":self.origem,"Destination":self.destino,"DepartureYear":self.ano_saida,"DepartureMonth":self.mes_saida,"DepartureDay":self.dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":self.destino,"Destination":self.origem,"DepartureYear":self.ano_chegada,"DepartureMonth":self.mes_chegada,"DepartureDay":self.dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":self.user_browser}}))
                 
-                time.sleep(random.randint(1, 3)) 
                 request_prep = Request('http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum', 
                                         method='POST',                                         
                                         body=json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":self.origem,"Destination":self.destino,"DepartureYear":self.ano_saida,"DepartureMonth":self.mes_saida,"DepartureDay":self.dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":self.destino,"Destination":self.origem,"DepartureYear":self.ano_chegada,"DepartureMonth":self.mes_chegada,"DepartureDay":self.dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":self.user_browser}}),                             
