@@ -52,7 +52,8 @@ class RetryMiddleware(object):
                 reason = response_status_message(400)
                 return self._retry(request, reason, spider) or response
         print "price: %s" % (price)
-        if not price:
+        if not len(price)>0:
+            print "raise price!"
             reason = response_status_message(400)
             return self._retry(request, reason, spider) or response
                         
