@@ -263,7 +263,10 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 for i in range_saida:
                 #for i in range_saida[:5]: ###TESTE###
                     data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
-                    data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
+                    if viagem[5].lower().strip().find("fixedback")>-1:
+                        data_chegada=((viagem[1] + timedelta(days=i))).strftime("%Y-%m-%d")
+                    else:
+                        data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
                     
                     ano_saida = data_saida.split("-")[0]
                     mes_saida = data_saida.split("-")[1]
