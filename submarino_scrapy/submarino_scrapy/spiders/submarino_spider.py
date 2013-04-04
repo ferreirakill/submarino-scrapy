@@ -254,12 +254,12 @@ class SubmarinoSpiderSpider(CrawlSpider):
         else:
             range_saida = range(int(viagem[4]))
         
-        #for origem in origens_array:
-        for origem in origens_array[:1]: ###TESTE###
-            #for destino in destinos_array:
-            for destino in destinos_array[:1]: ###TESTE###
-                #for i in range_saida:
-                for i in range_saida[:3]: ###TESTE###
+        for origem in origens_array:
+        #for origem in origens_array[:1]: ###TESTE###
+            for destino in destinos_array:
+            #for destino in destinos_array[:1]: ###TESTE###
+                for i in range_saida:
+                #for i in range_saida[:3]: ###TESTE###
                     data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
                     data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
                     
@@ -391,9 +391,9 @@ class SubmarinoSpiderSpider(CrawlSpider):
         return requests_arr
         
     def get_uuid_param(self,response):
-        print "..sleeping"
-        time.sleep(random.randint(1, 5))
-        print "..waking"
+        #print "..sleeping"
+        #time.sleep(random.randint(1, 5))
+        #print "..waking"
         
         #print "response.body: %s" % (response.body)
         preco_list = json.JSONDecoder().decode(json.loads(response.body))
