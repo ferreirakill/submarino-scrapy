@@ -23,7 +23,7 @@ COOKIES_DEBUG = True
 LOG_ENABLED = True
 LOG_LEVEL = 'DEBUG'
 
-DOWNLOAD_DELAY = 1
+DOWNLOAD_DELAY = 5
 
 DOWNLOADER_MIDDLEWARES = {
     #'scrapy.contrib.downloadermiddleware.robotstxt.RobotsTxtMiddleware': 100,
