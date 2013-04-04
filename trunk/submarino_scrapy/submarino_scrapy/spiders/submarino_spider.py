@@ -264,9 +264,9 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 #for i in range_saida[:5]: ###TESTE###
                 
                     ##tipos de range###
-                    #fixedgo - Dia fixo de saída.
+                    #fixedgo - Dia fixo de saida.
                     #fixedback - Dia fixo da volta
-                    #fixed perm - Tempo de Permanência fixo
+                    #fixed perm - Tempo de Permanencia fixo
                     
                     if viagem[5].lower().strip().find("fixedgo")>-1:
                         data_saida=(viagem[1]).strftime("%Y-%m-%d")
