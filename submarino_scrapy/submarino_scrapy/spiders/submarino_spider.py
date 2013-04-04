@@ -383,7 +383,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                                  },
                                         callback=self.get_uuid_param, )
                 request_prep.meta['id_viagem'] = i
-                request_prep.meta['proxy'] = get_proxy_random()
+                request_prep.meta['proxy'] = 'http://' + get_proxy_random()
                 print "Proxy: %s" % (request_prep.meta['proxy']) 
                 requests_arr.append(request_prep)  
         
