@@ -38,7 +38,10 @@ class RetryMiddleware(object):
             return response
         #print "response.status = %s" % (response.status)
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
-        preco_list = json.JSONDecoder().decode(json.loads(response.body))
+        try:
+            preco_list = json.JSONDecoder().decode(json.loads(response.body))
+        except:
+            preco_list = []
         #print "uuids: %s" % (uuids)
         if response.status in self.retry_http_codes:
             reason = response_status_message(response.status)
