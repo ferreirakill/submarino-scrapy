@@ -262,8 +262,20 @@ class SubmarinoSpiderSpider(CrawlSpider):
             #for destino in destinos_array[:1]: ###TESTE###
                 for i in range_saida:
                 #for i in range_saida[:5]: ###TESTE###
-                    data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
+                
+                    ##tipos de range###
+                    #fixedgo - Dia fixo de saída.
+                    #fixedback - Dia fixo da volta
+                    #fixed perm - Tempo de Permanência fixo
+                    
+                    if viagem[5].lower().strip().find("fixedgo")>-1:
+                        data_saida=(viagem[1]).strftime("%Y-%m-%d")
+                    else:
+                        data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
+                        
                     if viagem[5].lower().strip().find("fixedback")>-1:
+                        data_chegada=(viagem[1]).strftime("%Y-%m-%d")
+                    elif viagem[5].lower().strip().find("fixedperm")>-1:
                         data_chegada=((viagem[1] + timedelta(days=i))).strftime("%Y-%m-%d")
                     else:
                         data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
