@@ -288,9 +288,11 @@ class SubmarinoSpiderSpider(CrawlSpider):
                         data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
                         
                     if viagem[5].lower().strip().find("fixedback")>-1:
-                        data_chegada=(viagem[1]).strftime("%Y-%m-%d")
-                    elif viagem[5].lower().strip().find("fixedperm")>-1:
-                        data_chegada=((viagem[1] + timedelta(days=i))).strftime("%Y-%m-%d")
+                        if ((viagem[1] + timedelta(days=i)) > (viagem[2])):
+                            print "Ida depois da volta! Break!"
+                            break
+                        else:
+                            data_chegada=(viagem[2]).strftime("%Y-%m-%d")
                     else:
                         data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
                     
