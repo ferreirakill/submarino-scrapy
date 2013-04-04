@@ -384,8 +384,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                                  },
                                         callback=self.get_uuid_param, )
                 request_prep.meta['id_viagem'] = i
-                request_prep.meta['proxy'] = get_proxy_random()
-                print "Proxy: %s" % (request_prep.meta['proxy']) 
+                #request_prep.meta['proxy'] = get_proxy_random()
+                #print "Proxy: %s" % (request_prep.meta['proxy']) 
                 requests_arr.append(request_prep)  
         
         
@@ -393,7 +393,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
         
     def get_uuid_param(self,response):
         print "..sleeping"
-        #time.sleep(random.randint(1, 5)) 
+        time.sleep(random.randint(1, 5))
+        print "..waking"
         
         #print "response.body: %s" % (response.body)
         preco_list = json.JSONDecoder().decode(json.loads(response.body))
