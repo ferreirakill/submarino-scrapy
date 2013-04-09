@@ -462,7 +462,20 @@ class SubmarinoSpiderSpider(CrawlSpider):
         self.link_extractor = SgmlLinkExtractor()
         self.cookies_seen = set()
         
-    
+        print "...enviando email...."
+        title = 'RESULTADOS DA BUSCA DE HOJE'
+        sql = '''
+            select C.origem_iata as Origem_Iata, C.airport as Origem, C.destino_iata as Destino_Iata, D.airport as Destino, C.cia_aerea, MIN(C.preco) ,C.data_partida,C.data_volta,C.updated from (select * from resultado A
+            inner join iata_airport_codes B
+            on A.origem_iata = B.code) C inner join iata_airport_codes D 
+            on C.destino_iata = D.code
+            WHERE DATE(C.updated) = DATE(NOW())
+            GROUP BY C.origem_iata, C.destino_iata
+            order by preco ASC
+            '''
+        message = emailHtmlSet(title, sql)
+        sendMail('wchaves@gmail.com', 'Robo de passagens - Ultimos Resultados', message)
+        print "Email enviado!"                    
         
     # Initialization
     def start_requests(self):
@@ -617,19 +630,3 @@ class SubmarinoSpiderSpider(CrawlSpider):
             exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
             traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
                   limit=2, file=sys.stdout)
-            
-    
-    print "...enviando email...."
-    title = 'RESULTADOS DA BUSCA DE HOJE'
-    sql = '''
-        select C.origem_iata as Origem_Iata, C.airport as Origem, C.destino_iata as Destino_Iata, D.airport as Destino, C.cia_aerea, MIN(C.preco) ,C.data_partida,C.data_volta,C.updated from (select * from resultado A
-        inner join iata_airport_codes B
-        on A.origem_iata = B.code) C inner join iata_airport_codes D 
-        on C.destino_iata = D.code
-        WHERE DATE(C.updated) = DATE(NOW())
-        GROUP BY C.origem_iata, C.destino_iata
-        order by preco ASC
-        '''
-    message = emailHtmlSet(title, sql)
-    sendMail('wchaves@gmail.com', 'Robo de passagens - Ultimos Resultados', message)
-    print "Email enviado!"                
