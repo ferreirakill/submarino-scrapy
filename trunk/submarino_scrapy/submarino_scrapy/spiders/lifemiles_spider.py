@@ -2,7 +2,7 @@
 from scrapy.selector import HtmlXPathSelector
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
-from submarino_scrapy.items import SubmarinoScrapyItem
+#from submarino_scrapy.items import SubmarinoScrapyItem
 from scrapy.http import FormRequest, Request
 from twisted.internet.error import TimeoutError as ServerTimeoutError, DNSLookupError, \
                                    ConnectionRefusedError, ConnectionDone, ConnectError, \
@@ -350,9 +350,9 @@ def remover_acentos(txt, codif='utf-8'):
     from unicodedata import normalize
     return normalize('NFKD', txt.decode(codif, "ignore")).encode('ASCII','ignore')
         
-class SubmarinoSpiderSpider(CrawlSpider):
-    name = 'submarino_spider'
-    allowed_domains = ['submarinoviagens.com.br']
+class LifemilesSpiderSpider(CrawlSpider):
+    name = 'lifemiles_spider'
+    allowed_domains = ['lifemiles.com']
     #start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
     start_urls = []
     viagem_combina = []
@@ -361,285 +361,115 @@ class SubmarinoSpiderSpider(CrawlSpider):
     #    Rule(SgmlLinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
     #)
     def __init__(self, **kw):
-        super(SubmarinoSpiderSpider, self).__init__(**kw)
+        super(LifemilesSpiderSpider, self).__init__(**kw)
         
-        #####################################################
-        #####################################################
-        ####GETTING ALL POSSIBLE TRAVEL DESTINATIONS    #####
-        #####################################################
-        #####################################################
-        viagens,dict_origens,dict_destinos = getViagem()
-        viagem = viagens[0]
-        origens_array=dict_origens[str(viagem[0])+'_id_viagem']
-        destinos_array=dict_destinos[str(viagem[0])+'_id_viagem']
-        
-
-        if viagem[5].lower().strip().find("weeksfw")>-1:
-            range_saida = range(0,int(viagem[4])*7,7)
-        elif viagem[5].lower().strip().find("weeksbehind")>-1:
-            range_saida = range(int(viagem[4])*(-7),7,0)
-        elif viagem[5].lower().strip().find("weeks")>-1:
-            range_saida = range(int(viagem[4])*(-7),int(viagem[4])*7,7)            
-        elif viagem[5].lower().strip().find("daysfw")>-1:
-            range_saida = range(0,int(viagem[4]))
-        elif viagem[5].lower().strip().find("daysbehind")>-1:
-            range_saida = range(((-1)*int(viagem[4])),0)
-        elif viagem[5].lower().strip().find("days")>-1:
-            range_saida = range(((-1)*int(viagem[4])),int(viagem[4]))            
-        else:
-            range_saida = range(int(viagem[4]))
-        
-        print "range_saida= %s" % (range_saida)
-        
-        for origem in origens_array:
-        #for origem in origens_array[:1]: ###TESTE###
-            for destino in destinos_array:
-            #for destino in destinos_array[:1]: ###TESTE###
-                for i in range_saida:
-                #for i in range_saida[:5]: ###TESTE###
-                
-                    ##tipos de range###
-                    #fixedgo - Dia fixo de saida.
-                    #fixedback - Dia fixo da volta
-                    #fixed perm - Tempo de Permanencia fixo
-                    #daysfw - Range dias pra frente
-                    #daysbehind - Range dias pra tras
-                    #days - Dias Ambos os lados
-                    #weeksfw - Range semanas pra frente
-                    #weeksbehind - Range semanas pra tras
-                    #weeks - Semanas Ambos os lados                    
-                    
-                    if viagem[5].lower().strip().find("fixedgo")>-1:
-                        data_saida=(viagem[1]).strftime("%Y-%m-%d")
-                    else:
-                        data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
-                        
-                    if viagem[5].lower().strip().find("fixedback")>-1:
-                        if ((viagem[1] + timedelta(days=i)) > (viagem[2])):
-                            print "Ida depois da volta! Break!"
-                            break
-                        else:
-                            data_chegada=(viagem[2]).strftime("%Y-%m-%d")
-                    else:
-                        data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
-                    
-                    ano_saida = data_saida.split("-")[0]
-                    mes_saida = data_saida.split("-")[1]
-                    dia_saida = data_saida.split("-")[2]
-                
-                    ano_chegada = data_chegada.split("-")[0]
-                    mes_chegada = data_chegada.split("-")[1]
-                    dia_chegada = data_chegada.split("-")[2] 
-                    
-                    self.viagem_combina.append({'ano_saida':ano_saida,
-                                           'mes_saida':mes_saida,
-                                           'dia_saida':dia_saida,
-                                           'ano_chegada':ano_chegada,
-                                           'mes_chegada':mes_chegada,
-                                           'dia_chegada':dia_chegada,
-                                           'origem':origem,
-                                           'destino':destino,
-                                           'data_saida':data_saida,
-                                           'data_chegada':data_chegada,
-                                           })
-
-        #print self.viagem_combina
-        print "Quantidade de combinacoes: %s" % len(self.viagem_combina)
-        
-        '''                      
-        origem = kw.get('origem')
-        destino = kw.get('destino')
-        ano_saida = kw.get('ano_saida')
-        mes_saida = kw.get('mes_saida')
-        dia_saida = kw.get('ano_saida')
-        ano_chegada = kw.get('ano_chegada')
-        mes_chegada = kw.get('mes_chegada')
-        dia_chegada = kw.get('dia_chegada')  
-        user_browser = kw.get('user_browser')  
-        
-        
-        self.origem = origem
-        self.destino = destino
-        self.ano_saida = ano_saida
-        self.mes_saida = mes_saida
-        self.dia_saida = dia_saida
-        self.ano_chegada = ano_chegada
-        self.mes_chegada = mes_chegada
-        self.dia_chegada = dia_chegada
-        self.user_browser = user_browser
-        
-        self.origem = 'GRU'
-        self.destino = 'MAD'
-        self.ano_saida = '2013'
-        self.mes_saida = '04'
-        self.dia_saida = '14'
-        self.ano_chegada = '2013'
-        self.mes_chegada = '04'
-        self.dia_chegada = '25'
-        self.user_browser = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"
-        '''
-
         self.link_extractor = SgmlLinkExtractor()
         self.cookies_seen = set()
         
     # Initialization
     def start_requests(self):
         
-        '''
-        #destino
-        "CiaCodeList":[]
-        "NonStop":"false"
-        "Origin":"%s"
-        "Destination":"%s"
-        "DepartureYear":"%s"
-        "DepartureMonth":"%s"
-        "DepartureDay":"%s"
+        return [Request('http://www.lifemiles.com/lib/ajax/ENG/getSession.aspx?user=wchaves@gmail.com&pass=Wymwtb24', 
+                                method='GET',           
+                                headers={'Content-Type':'text/html; charset=utf-8',
+                                         "Accept-Encoding": "gzip: deflate",
+                                         "Accept-Language": "en-US,en;q=0.5",
+                                         "Accept": "text/html, */*",
+                                         "User-Agent": self.user_browser,
+                                         "Host": "www.lifemiles.com",
+                                         "Connection": "Keep-Alive",
+                                         "Referer": "https://www.lifemiles.com/eng/use/red/dynrederr.aspx?&ls=76676653&rr=4",
+                                         },
+                                callback=self.after_signin, )]
         
-        #origem
-        "CiaCodeList":[]
-        "NonStop":"false"
-        "Origin":"%s"
-        "Destination":"%s"
-        "DepartureYear":"%"
-        "DepartureMonth":"%s"
-        "DepartureDay":"%s"
-         '''
-        requests_arr = []
-        if len(self.viagem_combina)>0:
-            for i in range(len(self.viagem_combina)):
-                #print "viagem_combina: %s" % (self.viagem_combina[0])
-                self.origem = self.viagem_combina[i].get('origem')
-                self.destino = self.viagem_combina[i].get('destino')
-                self.ano_saida = self.viagem_combina[i].get('ano_saida')
-                self.mes_saida = self.viagem_combina[i].get('mes_saida')
-                self.dia_saida = self.viagem_combina[i].get('dia_saida')
-                self.ano_chegada = self.viagem_combina[i].get('ano_chegada')
-                self.mes_chegada = self.viagem_combina[i].get('mes_chegada')
-                self.dia_chegada = self.viagem_combina[i].get('dia_chegada')  
-                #user_browser = self.viagem_combina[i].get('user_browser')
-                self.user_browser =  random_header()
-                #self.viagem_combina.pop(0)      
-                #print "%s - %s" % (i,json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":self.origem,"Destination":self.destino,"DepartureYear":self.ano_saida,"DepartureMonth":self.mes_saida,"DepartureDay":self.dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":self.destino,"Destination":self.origem,"DepartureYear":self.ano_chegada,"DepartureMonth":self.mes_chegada,"DepartureDay":self.dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":self.user_browser}}))
-                
-                request_prep = Request('http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum', 
-                                        method='POST',                                         
-                                        body=json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop":"false","Origin":self.origem,"Destination":self.destino,"DepartureYear":self.ano_saida,"DepartureMonth":self.mes_saida,"DepartureDay":self.dia_saida},{"CiaCodeList":[],"NonStop":"false","Origin":self.destino,"Destination":self.origem,"DepartureYear":self.ano_chegada,"DepartureMonth":self.mes_chegada,"DepartureDay":self.dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":self.user_browser}}),                             
-                                        headers={'Content-Type':'application/json',
-                                                 "Accept-Encoding": "gzip: deflate",
-                                                 "x-requested-with": "XMLHttpRequest",
-                                                 "Accept-Language": "pt-br",
-                                                 "Accept": "text/plain: */*",
-                                                 "User-Agent": self.user_browser,
-                                                 "Host": "www.submarinoviagens.com.br",
-                                                 "Cache-Control": "no-cache",
-                                                 "Connection": "Keep-Alive",
-                                                 },
-                                        callback=self.get_uuid_param, )
-                request_prep.meta['id_viagem'] = i
-                #request_prep.meta['proxy'] = 'http://' + get_proxy_random()
-                #print "Proxy: %s" % (request_prep.meta['proxy']) 
-                requests_arr.append(request_prep)  
+    def after_signin(self,response):
         
+        print response.body
         
-        return requests_arr
+        #return [FormRequest.from_response(response,
+        #            formdata={'username': 'john', 'password': 'secret'},
+        #            callback=self.after_login)]
+        return [Request('https://www.lifemiles.com/eng/use/red/dynredcal.aspx', 
+                                method='POST',
+                                body={
+                                    'CmbPaxNum':'1',
+                                    'cabin':'Y',
+                                    'cmbDestino':'JFK',
+                                    'cmbDestino1':'-1',
+                                    'cmbDestino2':'-1',
+                                    'cmbDestino3':'-1',
+                                    'cmbDestino4':'-1',
+                                    'cmbDestino5':'-1',
+                                    'cmbDestino6':'-1',
+                                    'cmbDestino7':'-1',
+                                    'cmbDestino8':'-1',
+                                    'cmbOrigen':'GRU',
+                                    'cmbOrigen1':'-1',
+                                    'cmbOrigen2':'-1',
+                                    'cmbOrigen3':'-1',
+                                    'cmbOrigen4':'-1',
+                                    'cmbOrigen5':'-1',
+                                    'cmbOrigen6':'-1',
+                                    'cmbOrigen7':'-1',
+                                    'cmbOrigen8':'-1',
+                                    'cmbSocAe':'TA',
+                                    'fechaRegreso':'06/08/2013',
+                                    'fechaSalida':'06/01/2013',
+                                    'fechaSalida1':'',
+                                    'fechaSalida2':'',
+                                    'fechaSalida3':'',
+                                    'fechaSalida4':'',
+                                    'fechaSalida5':'',
+                                    'fechaSalida6':'',
+                                    'fechaSalida7':'',
+                                    'fechaSalida8':'',
+                                    'hidCSocio':'TA',
+                                    'hidItineraryType':'2',
+                                    'hidRedemptionType':'1',
+                                    'hidinput':'textDestino',
+                                    'hidlength':'',
+                                    'horaRegreso':'0000',
+                                    'horaSalida':'0000',
+                                    'horaSalida1':'0000',
+                                    'horaSalida2':'0000',
+                                    'horaSalida3':'0000',
+                                    'horaSalida4':'0000',
+                                    'horaSalida5':'0000',
+                                    'horaSalida6':'0000',
+                                    'horaSalida7':'0000',
+                                    'horaSalida8':'0000',
+                                    'promoCode':'',
+                                    'text':'Sao Paulo (GRU), Brazil',
+                                    'text':'New York (JFK), United States',
+                                    'text':'Origin',
+                                    'text':'Destination',
+                                    'text':'Origin',
+                                    'text':'Destination',
+                                    'text':'Origin',
+                                    'text':'Destination',
+                                    'text':'Origin',
+                                    'text':'Destination',
+                                    'text':'Origin',
+                                    'text':'Destination',
+                                    'text':'Origin',
+                                    'text':'Destination',
+                                    'text':'Origin',
+                                    'text':'Destination',
+                                    'text':'Origin',
+                                    'text':'Destination',                                        
+                                      },                                    
+                                headers={'Content-Type':'text/html; charset=utf-8',
+                                         "Accept-Encoding": "gzip: deflate",
+                                         "Accept-Language": "en-US,en;q=0.5",
+                                         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                                         "User-Agent": self.user_browser,
+                                         "Host": "www.lifemiles.com",
+                                         "Connection": "Keep-Alive",
+                                         "Referer": "    https://www.lifemiles.com/eng/use/red/dynredpar.aspx",
+                                         },
+                                callback=self.after_search, )]
+    def after_search(self,response):
+          
+        x = HtmlXPathSelector(response)
         
-    def get_uuid_param(self,response):
-        #print "..sleeping"
-        #time.sleep(random.randint(1, 5))
-        #print "..waking"
-        
-        #print "response.body: %s" % (response.body)
-        
-        uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
-        
-        try:
-            if not uuids[0]=='00000000-0000-0000-0000-000000000000':
-                
-                
-                #origem_nome = preco_list[1][0][2][0][0] #origem nome
-                #destino_nome = preco_list[1][0][2][0][0] #destino nome
-                i = response.meta['id_viagem']
-                #print "Proxy Response: %s" % (response.meta['proxy'])
-                print "viagem_combina: %s" % (self.viagem_combina[i])
-                
-                origem = self.viagem_combina[i].get('origem')
-                destino = self.viagem_combina[i].get('destino')
-                ano_saida = self.viagem_combina[i].get('ano_saida')
-                mes_saida = self.viagem_combina[i].get('mes_saida')
-                dia_saida = self.viagem_combina[i].get('dia_saida')
-                ano_chegada = self.viagem_combina[i].get('ano_chegada')
-                mes_chegada = self.viagem_combina[i].get('mes_chegada')
-                dia_chegada = self.viagem_combina[i].get('dia_chegada')  
-                
-                data_saida = self.viagem_combina[i].get('data_saida')
-                data_chegada = self.viagem_combina[i].get('data_chegada')
-                
-                print "ID:%s  %s-%s (%s)-(%s)" % (i,origem,destino,data_saida,data_chegada)
-                
-                '''                
-                origem = preco_list[1][0][2][0][1] #origem IATA
-                destino = preco_list[1][0][1][0][1] #destino IATA
-                
-                ano_saida = preco_list[1][0][7][-1]
-                mes_saida = preco_list[1][0][7][-2]
-                dia_saida = preco_list[1][0][7][0]
-                
-                ano_chegada = preco_list[1][0][6][-1]
-                mes_chegada = preco_list[1][0][6][-2]
-                dia_chegada = preco_list[1][0][6][0]
-                '''
-                      
-                #Melhor preco em dollars
-                #print "Melhor Preco Dollars: %s" % (preco_list[1][0][17])
-                #Melhor preco em reais
-                #print "Melhor Preco Reais: %s" % (preco_list[1][0][18])
-                
-                #Melhor preco por escalas
-                #print "Melhor Preco Voo Direto: %s" % (preco_list[1][0][21][0])
-                #print "Melhor Preco Voo 1 Escala: %s" % (preco_list[1][0][21][1])
-                #print "Melhor Preco Voo 2 Escalas: %s" % (preco_list[1][0][21][2])
-                try:
-                    preco_list = json.JSONDecoder().decode(json.loads(response.body))
-                    for air in preco_list[1][0][0]:
-                        print "Sigla Compania: %s" % (air[0])
-                        #print "Nome Compania: %s" % (remover_acentos(air[1]))
-                        print "Preco Compania: %s" % (air[2])
-                        #print "XXX Compania: %s" % (air[3])
-                        try:
-                            setResultado(origem,destino,air[1],air[0],air[2],
-                                         (str(ano_saida) + '-' + str(mes_saida) + '-' + str(dia_saida)),
-                                         (str(ano_chegada) + '-' + str(mes_chegada) + '-' + str(dia_chegada)),
-                                        )
-                        except MySQLdb.IntegrityError as err:
-                            print "Resultado Jah existe no Banco, passa!"
-                            print err
-                            pass
-                except:
-                    print "Exception KeyError!"
-                    
-                    exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
-                    traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
-                          limit=2, file=sys.stdout)
-                                   
-                    request_b = Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
-                       body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}), 
-                       headers={'Content-Type':'application/json',
-                                "Accept-Encoding": "gzip: deflate",
-                                "x-requested-with": "XMLHttpRequest",
-                                "Accept-Language": "pt-br",
-                                "Accept": "text/plain: */*",
-                                "User-Agent": self.user_browser,
-                                "Host": "www.submarinoviagens.com.br",
-                                "Cache-Control": "no-cache",
-                                "Connection": "Keep-Alive",
-                                }, 
-                                callback=self.get_uuid_param, )
-                    #request_b.meta['proxy'] = response.meta['proxy']
-                    return request_b
-                            
-
-        except:
-            exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
-            traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
-                  limit=2, file=sys.stdout)
-    
+        print x.select('//form[@name="formularioreden"]')
