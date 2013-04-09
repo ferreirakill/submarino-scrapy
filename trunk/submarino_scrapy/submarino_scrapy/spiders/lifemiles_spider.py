@@ -303,9 +303,13 @@ class LifemilesSpiderSpider(CrawlSpider):
     # Initialization
     def start_requests(self):
         self.user_browser =  random_header()
-        return [Request('http://www.lifemiles.com/lib/ajax/ENG/getSession.aspx?user=wchaves@gmail.com&pass=Wymwtb24', 
-                                method='GET',           
+        return [Request('http://www.lifemiles.com/lib/ajax/ENG/getSession.aspx', 
+                                method='GET',
+                                body={'user':'wchaves@gmail.com',
+                                      'pass':'Wymwtb24',
+                                      },   
                                 headers={'Content-Type':'text/html; charset=utf-8',
+                                         "x-requested-with": "XMLHttpRequest",
                                          "Accept-Encoding": "gzip: deflate",
                                          "Accept-Language": "en-US,en;q=0.5",
                                          "Accept": "text/html, */*",
