@@ -601,13 +601,17 @@ class SubmarinoSpiderSpider(CrawlSpider):
                         #print "Nome Compania: %s" % (remover_acentos(air[1]))
                         print "Preco Compania: %s" % (air[2])
                         #print "XXX Compania: %s" % (air[3])
-                        setResultado(origem,destino,air[1],air[1],air[2],
+                        setResultado(origem,destino,air[1],air[0],air[2],
                                      (str(ano_saida) + '-' + str(mes_saida) + '-' + str(dia_saida)),
                                      (str(ano_chegada) + '-' + str(mes_chegada) + '-' + str(dia_chegada)),
                                     )
                 except:
                     print "Exception KeyError!"
                     
+                    exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
+                    traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
+                          limit=2, file=sys.stdout)
+                                   
                     request_b = Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
                        body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}), 
                        headers={'Content-Type':'application/json',
