@@ -317,7 +317,7 @@ class LifemilesSpiderSpider(CrawlSpider):
                                          "User-Agent": self.user_browser,
                                          "Host": "www.lifemiles.com",
                                          "Connection": "Keep-Alive",
-                                         #"Referer": "https://www.lifemiles.com/eng/use/red/dynrederr.aspx?&ls=76676653&rr=4",
+                                         "Referer": "http://www.lifemiles.com/lib/ajax/ENG/getSession.aspx",
                                          },
                                 callback=self.after_signin, )]
         
