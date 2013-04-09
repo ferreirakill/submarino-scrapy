@@ -219,7 +219,113 @@ def traverse(o, tree_types=(list, tuple)):
     else:
         yield o
      
-  
+
+def emailHtmlSet(title, sql):
+    
+    #date_now = datetime.now() - timedelta(minutes=(gmt_offset_brazil)) #gmtoffset (brazil time)
+    date_now = datetime.now()
+    #now_report = datetime.now().strftime("%H:%M") 
+    #str_now_report = strftime("%H:%M", strptime(now_report, "%H:%M"))
+    
+    # Prepare report
+    output = []
+    
+    output.append("<html>")
+    output.append('<head><style type="text/css">')
+    output.append('body,tr{font-family:Verdana,Tahoma,Arial;font-size:10pt}')
+    output.append('.cmp{background-color:#FF9933;font-weight:bold;font-size:11pt;text-align:center}')
+    output.append('th{background-color:#FFCC33;font-weight:bold;text-align:center}')
+    output.append('td{background-color:#FFFF99;text-align:center}</style></head><body><center>')    
+    
+    output.append("<h2>%s</h2>" % (title))
+    output.append("<h3>Data: %s</h3><br>" % date_now)
+               
+    try:
+        cursor,conn = db_connect()
+        cursor.execute(sql)
+        sql_response = cursor.fetchall()        
+        output.append('<table border="0" cellspacing="1" bgcolor="#666666">')                         
+        if(len(sql_response)>0):
+            output.append('<tr>')                
+            field_names  = cursor.description
+            for field_names_item in field_names:
+                output.append('<th width="100px">%s</th>' % field_names_item[0])            
+            output.append('</tr>')                
+            for sql_response_row in sql_response:
+                output.append('<tr>')
+                for sql_response_row_field in sql_response_row:
+                    output.append('<td>%s</td>' % sql_response_row_field)
+                output.append('</tr>')
+        else:
+            output.append('<tr>')
+            output.append('<td width="100%">')
+            output.append('0 rows returned!')
+            output.append('</td>')
+            output.append('</tr>')
+        output.append("</table><br>")
+        
+    except:
+        #Query error response!                
+        output.append("<h4>SQL EXECUTER</h4><br>")
+        output.append('<table width="100%" border="0" cellspacing="1" bgcolor="#666666">')                
+        output.append('<tr width="100%">')
+        output.append('<td style="text-align:left;" width="100%">')
+        output.append('Query error response!<br><br>')
+        output.append("Unexpected error: %s" % sys.exc_info()[0])                 
+        output.append("<br><br>SQL: %s" % sql)                                        
+        output.append('</td>')
+        output.append('</tr>')
+        output.append("</table><br>")
+        #Print the traceback for a detailed error description!
+        #print "An unhandled exception occured, here's the traceback!" 
+        traceback.print_exc()
+    finally:
+        db_disconnect(cursor,conn)
+    
+       
+        
+    output.append("</html>")
+    html_mail = "".join(output)
+    return(html_mail)  
+        
+def sendMail(you, subject, message):    
+    import smtplib
+    
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+    
+    # me == my email address
+    # you == recipient's email address
+    me = "wchaves@gmail.com"
+    #you = "your@email.com"
+    
+    # Create message container - the correct MIME type is multipart/alternative.
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = subject
+    msg['From'] = me
+    msg['To'] = you
+    
+    # Create the body of the message (a plain-text and an HTML version).
+    text = "Se nao consegue visualizar, favor habilitar o recebimento de emails HTML!"
+    html = message
+    
+    # Record the MIME types of both parts - text/plain and text/html.
+    part1 = MIMEText(text, 'plain')
+    part2 = MIMEText(html, 'html')
+    
+    # Attach parts into message container.
+    # According to RFC 2046, the last part of a multipart message, in this case
+    # the HTML message, is best and preferred.
+    msg.attach(part1)
+    msg.attach(part2)
+    
+    # Send the message via local SMTP server.
+    s = smtplib.SMTP('localhost')
+    # sendmail function takes 3 arguments: sender's address, recipient's address
+    # and message to send - here it is sent as one string.
+    s.sendmail(me, you, msg.as_string())
+    s.quit()    
+    
 def remover_acentos(txt, codif='utf-8'):
     from unicodedata import normalize
     return normalize('NFKD', txt.decode(codif, "ignore")).encode('ASCII','ignore')
@@ -515,6 +621,21 @@ class SubmarinoSpiderSpider(CrawlSpider):
             exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
             traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
                   limit=2, file=sys.stdout)
+    
+    print "...enviando email...."
+    title = 'RESULTADOS DA BUSCA DE HOJE'
+    sql = '''
+        select C.origem_iata as Origem_Iata, C.airport as Origem, C.destino_iata as Destino_Iata, D.airport as Destino, C.cia_aerea, MIN(C.preco) ,C.data_partida,C.data_volta,C.updated from (select * from resultado A
+        inner join iata_airport_codes B
+        on A.origem_iata = B.code) C inner join iata_airport_codes D 
+        on C.destino_iata = D.code
+        WHERE DATE(C.updated) = DATE(NOW())
+        GROUP BY C.origem_iata, C.destino_iata
+        order by preco ASC
+        '''
+    message = emailHtmlSet(title, sql)
+    sendMail('wchaves@gmail.com', 'Robo de passagens - Ultimos Resultados', message)
+    print "Email enviado!"
 
            
             
