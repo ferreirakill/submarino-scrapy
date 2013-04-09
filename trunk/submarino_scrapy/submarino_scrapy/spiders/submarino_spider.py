@@ -22,6 +22,8 @@ import random, time
 from time import localtime, strptime, strftime, mktime
 from random import choice
 
+import atexit
+
 def random_header():
     browser_headers = ['Opera/9.51 (Macintosh; Intel Mac OS X; U; en)',
                         'Opera/9.70 (Linux i686 ; U; en) Presto/2.2.1',
@@ -325,7 +327,9 @@ def sendMail(you, subject, message):
     # and message to send - here it is sent as one string.
     s.sendmail(me, you, msg.as_string())
     s.quit()    
-    
+
+
+@atexit.register
 def reportBeforeExit():
     print "...enviando email...."
     title = 'RESULTADOS DA BUSCA DE HOJE'
@@ -641,5 +645,3 @@ class SubmarinoSpiderSpider(CrawlSpider):
             traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
                   limit=2, file=sys.stdout)
     
-    import atexit
-    atexit.register(reportBeforeExit())
