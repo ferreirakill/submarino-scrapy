@@ -23,6 +23,7 @@ from time import localtime, strptime, strftime, mktime
 from random import choice
 
 import atexit
+import urllib
 
 def random_header():
     browser_headers = ['Opera/9.51 (Macintosh; Intel Mac OS X; U; en)',
@@ -305,9 +306,9 @@ class LifemilesSpiderSpider(CrawlSpider):
         self.user_browser =  random_header()
         return [Request('http://www.lifemiles.com/lib/ajax/ENG/getSession.aspx', 
                                 method='GET',
-                                body={'user':'wchaves@gmail.com',
+                                body=urllib.urlencode({'user':'wchaves@gmail.com',
                                       'pass':'Wymwtb24',
-                                      },   
+                                      }),   
                                 headers={'Content-Type':'text/html; charset=utf-8',
                                          "x-requested-with": "XMLHttpRequest",
                                          "Accept-Encoding": "gzip: deflate",
