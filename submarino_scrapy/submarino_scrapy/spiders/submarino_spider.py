@@ -325,6 +325,7 @@ def sendMail(you, subject, message):
     # and message to send - here it is sent as one string.
     s.sendmail(me, you, msg.as_string())
     s.quit()    
+    
 def reportBeforeExit():
     print "...enviando email...."
     title = 'RESULTADOS DA BUSCA DE HOJE'
@@ -638,5 +639,6 @@ class SubmarinoSpiderSpider(CrawlSpider):
             exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
             traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
                   limit=2, file=sys.stdout)
-            
+    
+    import atexit
     atexit.register(reportBeforeExit())
