@@ -458,15 +458,11 @@ class SubmarinoSpiderSpider(CrawlSpider):
         self.dia_chegada = '25'
         self.user_browser = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"
         '''
-        
-                
-        #self.start_urls = ['http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum']
-        #self.allowed_domains = ['submarinoviagens.com.br']
-        
-        #self.url = url
-        #self.allowed_domains = [urlparse(url).hostname.lstrip('www.')]
+
         self.link_extractor = SgmlLinkExtractor()
         self.cookies_seen = set()
+        
+    
         
     # Initialization
     def start_requests(self):
@@ -621,6 +617,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
             exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
             traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
                   limit=2, file=sys.stdout)
+            
     
     print "...enviando email...."
     title = 'RESULTADOS DA BUSCA DE HOJE'
@@ -635,8 +632,4 @@ class SubmarinoSpiderSpider(CrawlSpider):
         '''
     message = emailHtmlSet(title, sql)
     sendMail('wchaves@gmail.com', 'Robo de passagens - Ultimos Resultados', message)
-    print "Email enviado!"
-
-           
-            
-        
+    print "Email enviado!"                
