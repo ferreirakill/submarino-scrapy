@@ -602,14 +602,15 @@ class SubmarinoSpiderSpider(CrawlSpider):
                         #print "Nome Compania: %s" % (remover_acentos(air[1]))
                         print "Preco Compania: %s" % (air[2])
                         #print "XXX Compania: %s" % (air[3])
-                        setResultado(origem,destino,air[1],air[0],air[2],
-                                     (str(ano_saida) + '-' + str(mes_saida) + '-' + str(dia_saida)),
-                                     (str(ano_chegada) + '-' + str(mes_chegada) + '-' + str(dia_chegada)),
-                                    )
-                except MySQLdb.IntegrityError as err:
-                    print "Resultado Jah existe no Banco, passa!"
-                    print err
-                    pass
+                        try:
+                            setResultado(origem,destino,air[1],air[0],air[2],
+                                         (str(ano_saida) + '-' + str(mes_saida) + '-' + str(dia_saida)),
+                                         (str(ano_chegada) + '-' + str(mes_chegada) + '-' + str(dia_chegada)),
+                                        )
+                        except MySQLdb.IntegrityError as err:
+                            print "Resultado Jah existe no Banco, passa!"
+                            print err
+                            pass
                 except:
                     print "Exception KeyError!"
                     
