@@ -153,53 +153,7 @@ def db_disconnect(cursor,conn):
     except MySQLdb.Error, e:
         print "Error Disconnect %d: %s" % (e.args[0], e.args[1])
         sys.exit (1)
-        
-def getViagem():
-    cursor,conn = db_connect()
-    select_viagem = """
-    SELECT  `id_viagem`,  `data_partida`,  `data_volta`,  `dias_permanecia`,  `range_saida_valor`,  `range_saida_tipo` FROM `submarino`.`viagem` WHERE `ativo` = 'Y';
-    """
-    cursor.execute(select_viagem)
-    response = cursor.fetchall()
-    dict_origens = {}
-    dict_destinos = {}
-    for row in response:
-        select_origens = """
-        SELECT  `id_origem`,  `id_viagem`,  `sigla_iata` FROM `submarino`.`origem` WHERE `id_viagem` = %s;
-        """ % (str(row[0]))
-        cursor.execute(select_origens)
-        response_origens = cursor.fetchall()
-        array_origens = []
 
-        for origem in response_origens:
-            array_origens.append(origem[2])
-        dict_origens[str(row[0])+'_id_viagem'] = array_origens
-        
-        select_destinos = """
-        SELECT  `id_destino`,  `id_viagem`,  `sigla_iata` FROM `submarino`.`destino` WHERE `id_viagem` = %s;
-        """ % (str(row[0]))
-        cursor.execute(select_destinos)
-        response_destinos = cursor.fetchall()
-        array_destinos = []
-        for destino in response_destinos:
-            array_destinos.append(destino[2])
-        dict_destinos[str(row[0])+'_id_viagem'] = array_destinos        
-    
-    
-    print response
-    print dict_origens
-    print dict_destinos
-    
-    return response,dict_origens,dict_destinos
-
-
-def setResultado(origem_iata,destino_iata,cia_aerea,sigla_aerea,preco,data_partida,data_volta):
-    cursor,conn = db_connect()
-    insert_resultado = """
-    INSERT INTO `resultado` (`origem_iata`, `destino_iata`, `cia_aerea`, `sigla_aerea`, `preco`, `data_partida`, `data_volta`) VALUES ('%s', '%s', '%s', '%s', %s, '%s', '%s');
-    """ % (origem_iata,destino_iata,cia_aerea,sigla_aerea,preco,data_partida,data_volta)
-    cursor.execute(insert_resultado)
-    db_disconnect(cursor,conn)
 
 def get_proxy_random():
     cursor,conn = db_connect()
@@ -329,26 +283,6 @@ def sendMail(you, subject, message):
     s.quit()    
 
 
-@atexit.register
-def reportBeforeExit():
-    print "...enviando email...."
-    title = 'RESULTADOS DA BUSCA DE HOJE'
-    sql = '''
-        select C.origem_iata as Origem_Iata, C.airport as Origem, C.destino_iata as Destino_Iata, D.airport as Destino, C.cia_aerea, MIN(C.preco) ,C.data_partida,C.data_volta,C.updated from (select * from resultado A
-        inner join iata_airport_codes B
-        on A.origem_iata = B.code) C inner join iata_airport_codes D 
-        on C.destino_iata = D.code
-        WHERE DATE(C.updated) = DATE(NOW())
-        GROUP BY C.origem_iata, C.destino_iata
-        order by preco ASC
-        '''
-    message = emailHtmlSet(title, sql)
-    sendMail('wchaves@gmail.com', 'Robo de passagens - Ultimos Resultados', message)
-    print "Email enviado!"       
-        
-def remover_acentos(txt, codif='utf-8'):
-    from unicodedata import normalize
-    return normalize('NFKD', txt.decode(codif, "ignore")).encode('ASCII','ignore')
         
 class LifemilesSpiderSpider(CrawlSpider):
     name = 'lifemiles_spider'
@@ -368,7 +302,7 @@ class LifemilesSpiderSpider(CrawlSpider):
         
     # Initialization
     def start_requests(self):
-        
+        self.user_browser =  random_header()
         return [Request('http://www.lifemiles.com/lib/ajax/ENG/getSession.aspx?user=wchaves@gmail.com&pass=Wymwtb24', 
                                 method='GET',           
                                 headers={'Content-Type':'text/html; charset=utf-8',
