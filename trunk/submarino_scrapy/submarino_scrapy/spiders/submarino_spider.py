@@ -373,75 +373,85 @@ class SubmarinoSpiderSpider(CrawlSpider):
         origens_array=dict_origens[str(viagem[0])+'_id_viagem']
         destinos_array=dict_destinos[str(viagem[0])+'_id_viagem']
         
-
-        if viagem[5].lower().strip().find("weeksfw")>-1:
-            range_saida = range(0,int(viagem[4])*7,7)
-        elif viagem[5].lower().strip().find("weeksbehind")>-1:
-            range_saida = range(int(viagem[4])*(-7),7,0)
-        elif viagem[5].lower().strip().find("weeks")>-1:
-            range_saida = range(int(viagem[4])*(-7),int(viagem[4])*7,7)            
-        elif viagem[5].lower().strip().find("daysfw")>-1:
-            range_saida = range(0,int(viagem[4]))
-        elif viagem[5].lower().strip().find("daysbehind")>-1:
-            range_saida = range(((-1)*int(viagem[4])),0)
-        elif viagem[5].lower().strip().find("days")>-1:
-            range_saida = range(((-1)*int(viagem[4])),int(viagem[4]))            
+        #para viagens com range de dias ou semanas diferentes.
+        if viagem[4].find("-")>-1:
+            range_maior = int(viagem[4].split("-")[-1])
+            range_menor = int(viagem[4].split("-")[0])
+            range_diff = range(range_menor,(range_maior+1))
         else:
-            range_saida = range(int(viagem[4]))
+            range_maior = int(viagem[4])
+            range_diff = range(range_maior,(range_maior+1))
         
-        print "range_saida= %s" % (range_saida)
-        
-        for origem in origens_array:
-        #for origem in origens_array[:1]: ###TESTE###
-            for destino in destinos_array:
-            #for destino in destinos_array[:1]: ###TESTE###
-                for i in range_saida:
-                #for i in range_saida[:5]: ###TESTE###
-                
-                    ##tipos de range###
-                    #fixedgo - Dia fixo de saida.
-                    #fixedback - Dia fixo da volta
-                    #fixed perm - Tempo de Permanencia fixo
-                    #daysfw - Range dias pra frente
-                    #daysbehind - Range dias pra tras
-                    #days - Dias Ambos os lados
-                    #weeksfw - Range semanas pra frente
-                    #weeksbehind - Range semanas pra tras
-                    #weeks - Semanas Ambos os lados                    
+        for range_atual in range_diff:
+            
+            if viagem[5].lower().strip().find("weeksfw")>-1:
+                range_saida = range(0,range_atual*7,7)
+            elif viagem[5].lower().strip().find("weeksbehind")>-1:
+                range_saida = range(range_atual*(-7),7,0)
+            elif viagem[5].lower().strip().find("weeks")>-1:
+                range_saida = range(range_atual*(-7),range_atual*7,7)            
+            elif viagem[5].lower().strip().find("daysfw")>-1:
+                range_saida = range(0,range_atual)
+            elif viagem[5].lower().strip().find("daysbehind")>-1:
+                range_saida = range(((-1)*range_atual),0)
+            elif viagem[5].lower().strip().find("days")>-1:
+                range_saida = range(((-1)*range_atual),range_atual)            
+            else:
+                range_saida = range(range_atual)
+            
+            print "range_saida= %s" % (range_saida)
+            
+            for origem in origens_array:
+            #for origem in origens_array[:1]: ###TESTE###
+                for destino in destinos_array:
+                #for destino in destinos_array[:1]: ###TESTE###
+                    for i in range_saida:
+                    #for i in range_saida[:5]: ###TESTE###
                     
-                    if viagem[5].lower().strip().find("fixedgo")>-1:
-                        data_saida=(viagem[1]).strftime("%Y-%m-%d")
-                    else:
-                        data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
+                        ##tipos de range###
+                        #fixedgo - Dia fixo de saida.
+                        #fixedback - Dia fixo da volta
+                        #fixed perm - Tempo de Permanencia fixo
+                        #daysfw - Range dias pra frente
+                        #daysbehind - Range dias pra tras
+                        #days - Dias Ambos os lados
+                        #weeksfw - Range semanas pra frente
+                        #weeksbehind - Range semanas pra tras
+                        #weeks - Semanas Ambos os lados                    
                         
-                    if viagem[5].lower().strip().find("fixedback")>-1:
-                        if ((viagem[1] + timedelta(days=i)) > (viagem[2])):
-                            print "Ida depois da volta! Break!"
-                            break
+                        if viagem[5].lower().strip().find("fixedgo")>-1:
+                            data_saida=(viagem[1]).strftime("%Y-%m-%d")
                         else:
-                            data_chegada=(viagem[2]).strftime("%Y-%m-%d")
-                    else:
-                        data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
+                            data_saida=(viagem[1] + timedelta(days=i)).strftime("%Y-%m-%d")
+                            
+                        if viagem[5].lower().strip().find("fixedback")>-1:
+                            if ((viagem[1] + timedelta(days=i)) > (viagem[2])):
+                                print "Ida depois da volta! Break!"
+                                break
+                            else:
+                                data_chegada=(viagem[2]).strftime("%Y-%m-%d")
+                        else:
+                            data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
+                        
+                        ano_saida = data_saida.split("-")[0]
+                        mes_saida = data_saida.split("-")[1]
+                        dia_saida = data_saida.split("-")[2]
                     
-                    ano_saida = data_saida.split("-")[0]
-                    mes_saida = data_saida.split("-")[1]
-                    dia_saida = data_saida.split("-")[2]
-                
-                    ano_chegada = data_chegada.split("-")[0]
-                    mes_chegada = data_chegada.split("-")[1]
-                    dia_chegada = data_chegada.split("-")[2] 
-                    
-                    self.viagem_combina.append({'ano_saida':ano_saida,
-                                           'mes_saida':mes_saida,
-                                           'dia_saida':dia_saida,
-                                           'ano_chegada':ano_chegada,
-                                           'mes_chegada':mes_chegada,
-                                           'dia_chegada':dia_chegada,
-                                           'origem':origem,
-                                           'destino':destino,
-                                           'data_saida':data_saida,
-                                           'data_chegada':data_chegada,
-                                           })
+                        ano_chegada = data_chegada.split("-")[0]
+                        mes_chegada = data_chegada.split("-")[1]
+                        dia_chegada = data_chegada.split("-")[2] 
+                        
+                        self.viagem_combina.append({'ano_saida':ano_saida,
+                                               'mes_saida':mes_saida,
+                                               'dia_saida':dia_saida,
+                                               'ano_chegada':ano_chegada,
+                                               'mes_chegada':mes_chegada,
+                                               'dia_chegada':dia_chegada,
+                                               'origem':origem,
+                                               'destino':destino,
+                                               'data_saida':data_saida,
+                                               'data_chegada':data_chegada,
+                                               })
 
         #print self.viagem_combina
         print "Quantidade de combinacoes: %s" % len(self.viagem_combina)
