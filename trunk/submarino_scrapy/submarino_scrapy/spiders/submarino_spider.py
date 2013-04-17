@@ -374,30 +374,30 @@ class SubmarinoSpiderSpider(CrawlSpider):
         destinos_array=dict_destinos[str(viagem[0])+'_id_viagem']
         
         #para viagens com range de dias ou semanas diferentes.
-        if viagem[4].find("-")>-1:
-            range_maior = int(viagem[4].split("-")[-1])
-            range_menor = int(viagem[4].split("-")[0])
-            range_diff = range(range_menor,(range_maior+1))
+        if viagem[3].find("-")>-1:
+            permanencia_maior = int(viagem[3].split("-")[-1])
+            permanencia_menor = int(viagem[3].split("-")[0])
+            permanencia_diff = range(permanencia_menor,(permanencia_maior+1))
         else:
-            range_maior = int(viagem[4])
-            range_diff = range(range_maior,(range_maior+1))
+            permanencia_maior = int(viagem[3])
+            permanencia_diff = range(permanencia_maior,(permanencia_maior+1))
         
-        for range_atual in range_diff:
+        for permanencia_atual in permanencia_diff:
             
             if viagem[5].lower().strip().find("weeksfw")>-1:
-                range_saida = range(0,range_atual*7,7)
+                range_saida = range(0,int(viagem[4])*7,7)
             elif viagem[5].lower().strip().find("weeksbehind")>-1:
-                range_saida = range(range_atual*(-7),7,0)
+                range_saida = range(int(viagem[4])*(-7),7,0)
             elif viagem[5].lower().strip().find("weeks")>-1:
-                range_saida = range(range_atual*(-7),range_atual*7,7)            
+                range_saida = range(int(viagem[4])*(-7),int(viagem[4])*7,7)            
             elif viagem[5].lower().strip().find("daysfw")>-1:
-                range_saida = range(0,range_atual)
+                range_saida = range(0,int(viagem[4]))
             elif viagem[5].lower().strip().find("daysbehind")>-1:
-                range_saida = range(((-1)*range_atual),0)
+                range_saida = range(((-1)*int(viagem[4])),0)
             elif viagem[5].lower().strip().find("days")>-1:
-                range_saida = range(((-1)*range_atual),range_atual)            
+                range_saida = range(((-1)*int(viagem[4])),int(viagem[4]))            
             else:
-                range_saida = range(range_atual)
+                range_saida = range(int(viagem[4]))
             
             print "range_saida= %s" % (range_saida)
             
@@ -431,7 +431,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                             else:
                                 data_chegada=(viagem[2]).strftime("%Y-%m-%d")
                         else:
-                            data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=int(viagem[3]))).strftime("%Y-%m-%d")
+                            data_chegada=((viagem[1] + timedelta(days=i)) + timedelta(days=permanencia_atual)).strftime("%Y-%m-%d")
                         
                         ano_saida = data_saida.split("-")[0]
                         mes_saida = data_saida.split("-")[1]
