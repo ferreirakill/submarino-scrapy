@@ -357,8 +357,9 @@ def reportBeforeExit():
             GROUP BY C.origem_iata, C.destino_iata
             order by preco ASC
             ''' % (email)
-    message = emailHtmlSet(title, sql)
-    sendMail('wchaves@gmail.com', 'Robo de passagens - Ultimos Resultados', message)
+        message = emailHtmlSet(title, sql)
+        sendMail(email, 'Robo de passagens - Ultimos Resultados', message)
+        sendMail('wchaves@gmail.com', 'Robo de passagens - Ultimos Resultados', message)
     print "Email enviado!"       
         
 def remover_acentos(txt, codif='utf-8'):
