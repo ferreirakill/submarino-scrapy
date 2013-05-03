@@ -193,11 +193,11 @@ def getViagem():
     return response,dict_origens,dict_destinos
 
 
-def setResultado(origem_iata,destino_iata,cia_aerea,sigla_aerea,preco,data_partida,data_volta):
+def setResultado(origem_iata,destino_iata,cia_aerea,sigla_aerea,preco,data_partida,data_volta,id_viagem=1):
     cursor,conn = db_connect()
     insert_resultado = """
-    INSERT INTO `resultado` (`origem_iata`, `destino_iata`, `cia_aerea`, `sigla_aerea`, `preco`, `data_partida`, `data_volta`) VALUES ('%s', '%s', '%s', '%s', %s, '%s', '%s');
-    """ % (origem_iata,destino_iata,cia_aerea,sigla_aerea,preco,data_partida,data_volta)
+    INSERT INTO `resultado` (`origem_iata`, `destino_iata`, `cia_aerea`, `sigla_aerea`, `preco`, `data_partida`, `data_volta`, `id_viagem`) VALUES ('%s', '%s', '%s', '%s', %s, '%s', '%s', %s);
+    """ % (origem_iata,destino_iata,cia_aerea,sigla_aerea,preco,data_partida,data_volta,id_viagem)
     cursor.execute(insert_resultado)
     db_disconnect(cursor,conn)
 
@@ -328,20 +328,35 @@ def sendMail(you, subject, message):
     s.sendmail(me, you, msg.as_string())
     s.quit()    
 
+def get_emails_viagem():
+    cursor,conn = db_connect()
+    select_emails = """
+    select distinct(email) from submarino.viagem where ativo = 'Y';
+    """
+    cursor.execute(select_emails)
+    response = cursor.fetchall()
+        
+    return response
 
 @atexit.register
 def reportBeforeExit():
     print "...enviando email...."
     title = 'RESULTADOS DA BUSCA DE HOJE'
-    sql = '''
-        select C.origem_iata as Origem_Iata, C.airport as Origem, C.destino_iata as Destino_Iata, D.airport as Destino, C.cia_aerea, MIN(C.preco) ,C.data_partida,C.data_volta,C.updated from (select * from resultado A
-        inner join iata_airport_codes B
-        on A.origem_iata = B.code) C inner join iata_airport_codes D 
-        on C.destino_iata = D.code
-        WHERE DATE(C.updated) = DATE(NOW())
-        GROUP BY C.origem_iata, C.destino_iata
-        order by preco ASC
-        '''
+    emails_addresses = get_emails_viagem()
+    for email in emails_addresses:
+        sql = '''
+            select C.origem_iata as Origem_Iata, C.airport as Origem, C.destino_iata as Destino_Iata, D.airport as Destino, C.cia_aerea, MIN(C.preco) ,C.data_partida,C.data_volta,C.updated, C.email from 
+            (select A.id_viagem as id_vi,A.origem_iata, A.destino_iata, A.cia_aerea, A.preco,A.data_partida,A.data_volta,A.updated, B.airport, E.email from resultado A
+                inner join iata_airport_codes B
+                on A.origem_iata = B.code
+                inner join viagem E
+                on E.id_viagem = A.id_viagem
+                    WHERE E.email = '%s'
+                    AND DATE(A.updated) = DATE(NOW())) C inner join iata_airport_codes D 
+            on C.destino_iata = D.code
+            GROUP BY C.origem_iata, C.destino_iata
+            order by preco ASC
+            ''' % (email)
     message = emailHtmlSet(title, sql)
     sendMail('wchaves@gmail.com', 'Robo de passagens - Ultimos Resultados', message)
     print "Email enviado!"       
@@ -620,7 +635,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                         try:
                             setResultado(origem,destino,air[1],air[0],air[2],
                                          (str(ano_saida) + '-' + str(mes_saida) + '-' + str(dia_saida)),
-                                         (str(ano_chegada) + '-' + str(mes_chegada) + '-' + str(dia_chegada)),
+                                         (str(ano_chegada) + '-' + str(mes_chegada) + '-' + str(dia_chegada)),i#id_viagem
                                         )
                         except MySQLdb.IntegrityError as err:
                             print "Resultado Jah existe no Banco, passa!"
