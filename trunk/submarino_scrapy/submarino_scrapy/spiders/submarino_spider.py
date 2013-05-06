@@ -459,7 +459,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                             mes_chegada = data_chegada.split("-")[1]
                             dia_chegada = data_chegada.split("-")[2] 
                             
-                            self.viagem_combina.append({'ano_saida':ano_saida,
+                            self.viagem_combina.append({'id_viagem':viagem[0],
+                                                    'ano_saida':ano_saida,
                                                    'mes_saida':mes_saida,
                                                    'dia_saida':dia_saida,
                                                    'ano_chegada':ano_chegada,
@@ -563,7 +564,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                                  "Connection": "Keep-Alive",
                                                  },
                                         callback=self.get_uuid_param, )
-                request_prep.meta['id_viagem'] = i
+                request_prep.meta['id_viagem_array'] = i
                 #request_prep.meta['proxy'] = 'http://' + get_proxy_random()
                 #print "Proxy: %s" % (request_prep.meta['proxy']) 
                 requests_arr.append(request_prep)  
@@ -586,10 +587,11 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 
                 #origem_nome = preco_list[1][0][2][0][0] #origem nome
                 #destino_nome = preco_list[1][0][2][0][0] #destino nome
-                i = response.meta['id_viagem']
+                i = response.meta['id_viagem_array']
                 #print "Proxy Response: %s" % (response.meta['proxy'])
                 print "viagem_combina: %s" % (self.viagem_combina[i])
                 
+                id_viagem = self.viagem_combina[i].get('id_viagem')
                 origem = self.viagem_combina[i].get('origem')
                 destino = self.viagem_combina[i].get('destino')
                 ano_saida = self.viagem_combina[i].get('ano_saida')
@@ -636,7 +638,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                         try:
                             setResultado(origem,destino,air[1],air[0],air[2],
                                          (str(ano_saida) + '-' + str(mes_saida) + '-' + str(dia_saida)),
-                                         (str(ano_chegada) + '-' + str(mes_chegada) + '-' + str(dia_chegada)),i#id_viagem
+                                         (str(ano_chegada) + '-' + str(mes_chegada) + '-' + str(dia_chegada)),id_viagem
                                         )
                         except MySQLdb.IntegrityError as err:
                             print "Resultado Jah existe no Banco, passa!"
