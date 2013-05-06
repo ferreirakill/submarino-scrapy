@@ -459,7 +459,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                             mes_chegada = data_chegada.split("-")[1]
                             dia_chegada = data_chegada.split("-")[2] 
                             
-                            self.viagem_combina.append({'id_viagem':viagem[0],
+                            self.viagem_combina.append({'id_viagem':int(viagem[0]),
                                                     'ano_saida':ano_saida,
                                                    'mes_saida':mes_saida,
                                                    'dia_saida':dia_saida,
@@ -639,7 +639,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                         try:
                             setResultado(origem,destino,air[1],air[0],air[2],
                                          (str(ano_saida) + '-' + str(mes_saida) + '-' + str(dia_saida)),
-                                         (str(ano_chegada) + '-' + str(mes_chegada) + '-' + str(dia_chegada)),id_viagem
+                                         (str(ano_chegada) + '-' + str(mes_chegada) + '-' + str(dia_chegada)),int(id_viagem)
                                         )
                         except MySQLdb.IntegrityError as err:
                             print "Resultado Jah existe no Banco, passa!"
