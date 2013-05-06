@@ -356,9 +356,9 @@ def reportBeforeExit():
             on C.destino_iata = D.code
             GROUP BY C.origem_iata, C.destino_iata
             order by preco ASC
-            ''' % (email)
+            ''' % (email[0])
         message = emailHtmlSet(title, sql)
-        sendMail(email, 'Robo de passagens - Ultimos Resultados', message)
+        sendMail(email[0], 'Robo de passagens - Ultimos Resultados', message)
         sendMail('wchaves@gmail.com', 'Robo de passagens - Ultimos Resultados', message)
     print "Email enviado!"       
         
