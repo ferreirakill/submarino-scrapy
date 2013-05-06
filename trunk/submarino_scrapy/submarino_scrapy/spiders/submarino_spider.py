@@ -536,7 +536,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
         requests_arr = []
         if len(self.viagem_combina)>0:
             for i in range(len(self.viagem_combina)):
-                #print "viagem_combina: %s" % (self.viagem_combina[0])
+                print "viagem_combina: %s" % (self.viagem_combina[i])
                 self.id_viagem = self.viagem_combina[i].get('id_viagem')
                 self.origem = self.viagem_combina[i].get('origem')
                 self.destino = self.viagem_combina[i].get('destino')
