@@ -651,7 +651,8 @@ class SubmarinoSpiderSpider(CrawlSpider):
                     exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
                     traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
                           limit=2, file=sys.stdout)
-                                   
+
+                    print "%s, %s" % (i, json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}))                                   
                     request_b = Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
                        body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}), 
                        headers={'Content-Type':'application/json',
