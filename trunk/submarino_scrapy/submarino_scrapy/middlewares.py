@@ -51,6 +51,7 @@ class RetryMiddleware(object):
                 print "uuids retry count: %s" % (retries_uuid)
                 reason = response_status_message(400)
                 return self._retry(request, reason, spider) or response
+        print request.url
         print "price: %s" % (price)
         if not len(price)>0:
             print "raise price!"
