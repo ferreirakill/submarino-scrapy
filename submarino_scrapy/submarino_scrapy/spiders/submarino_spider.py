@@ -664,7 +664,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                 "Host": "www.submarinoviagens.com.br",
                                 "Cache-Control": "no-cache",
                                 "Connection": "Keep-Alive",
-                                }, 
+                                },
                                 callback=self.get_uuid_param, )
                     #request_b.meta['proxy'] = response.meta['proxy']
                     return request_b
