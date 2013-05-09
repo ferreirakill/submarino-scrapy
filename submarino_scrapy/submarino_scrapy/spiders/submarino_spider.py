@@ -358,7 +358,7 @@ def reportBeforeExit():
             order by preco ASC
             ''' % (email[0])
         message = emailHtmlSet(title, sql)
-        sendMail(email[0], 'Robo de passagens (%s) - Ultimos Resultados' % (email[0]), message)
+        #sendMail(email[0], 'Robo de passagens (%s) - Ultimos Resultados' % (email[0]), message)
         sendMail('wchaves@gmail.com', 'Robo de passagens (%s) - Ultimos Resultados' % (email[0]), message)
     print "Email enviado!"       
         
