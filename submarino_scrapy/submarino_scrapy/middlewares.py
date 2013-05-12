@@ -38,7 +38,8 @@ class RetryMiddleware(object):
             return response
         print "response.status = %s" % (response.status)
         print "request.url = %s" % (request.url)
-        print "response.body = %s" % (response.body)
+        if not (str(request.url).find("SearchGroupedFlightsJSONMinimum")>-1):
+            print "response.body = %s" % (response.body)
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         price = re.findall('[0-9]*\.[0-9]{2}RoundTrip', response.body)
         print "uuids: %s" % (uuids)
