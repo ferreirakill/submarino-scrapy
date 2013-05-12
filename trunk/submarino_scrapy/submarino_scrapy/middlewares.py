@@ -37,6 +37,8 @@ class RetryMiddleware(object):
             print 'dont retry in meta'
             return response
         print "response.status = %s" % (response.status)
+        print "request.url = %s" % (request.url)
+        print "response.body = %s" % (response.body)
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         price = re.findall('[0-9]*\.[0-9]{2}RoundTrip', response.body)
         print "uuids: %s" % (uuids)
@@ -50,9 +52,8 @@ class RetryMiddleware(object):
                 print "uuids error!: %s" % (uuids)
                 print "uuids retry count: %s" % (retries_uuid)
                 reason = response_status_message(400)
-                return self._retry(request, reason, spider) or response
-        print request.url
-        if not str(request.url).find("SearchGroupedFlightsJSONMinimum")>-1:
+                return self._retry(request, reason, spider) or response        
+        if not (str(request.url).find("SearchGroupedFlightsJSONMinimum")>-1):
             print "price: %s" % (price)
             if not len(price)>0:
                 print "raise price!"
