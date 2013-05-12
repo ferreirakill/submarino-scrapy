@@ -259,6 +259,7 @@ def emailHtmlSet(title, sql):
                     output.append('<td>%s</td>' % sql_response_row_field)
                 output.append('</tr>')
         else:
+            return(False)#NOVO!! Retorna false se tiver 0 rows
             output.append('<tr>')
             output.append('<td width="100%">')
             output.append('0 rows returned!')
@@ -358,8 +359,9 @@ def reportBeforeExit():
             order by preco ASC
             ''' % (email[0])
         message = emailHtmlSet(title, sql)
-        #sendMail(email[0], 'Robo de passagens (%s) - Ultimos Resultados' % (email[0]), message)
-        sendMail('wchaves@gmail.com', 'Robo de passagens (%s) - Ultimos Resultados' % (email[0]), message)
+        if message:#message vai ser falso caso tenha 0 rows.
+            #sendMail(email[0], 'Robo de passagens (%s) - Ultimos Resultados' % (email[0]), message)
+            sendMail('wchaves@gmail.com', 'Robo de passagens (%s) - Ultimos Resultados' % (email[0]), message)
     print "Email enviado!"       
         
 def remover_acentos(txt, codif='utf-8'):
