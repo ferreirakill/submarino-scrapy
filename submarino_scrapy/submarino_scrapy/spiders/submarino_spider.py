@@ -583,7 +583,10 @@ class SubmarinoSpiderSpider(CrawlSpider):
         #print "response.body: %s" % (response.body)
         
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
-        
+        pullStatusFrom = str(response.body)[str(response.body).find("travel"):str(response.body).find(".svc")+4]            
+        pullStatusFrom = pullStatusFrom.replace('\\', '')
+        print "pullStatusFrom: %s" % (pullStatusFrom)
+                    
         try:
             if not uuids[0]=='00000000-0000-0000-0000-000000000000':
                 
@@ -654,7 +657,9 @@ class SubmarinoSpiderSpider(CrawlSpider):
                     #traceback.print_exception(exceptionType, exceptionValue, exceptionTraceback,
                     #      limit=2, file=sys.stdout)
                     
-                    print exceptionType, exceptionTraceback
+                    #print exceptionType, exceptionTraceback
+                    
+                    
                     
                     print "%s, %s" % (i, json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"pullStatusFrom":"http://travelengine143.b2w/TravelEngineWS.svc"}))                                   
                     request_b = Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
