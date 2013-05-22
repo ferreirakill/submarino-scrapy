@@ -16,7 +16,7 @@ DEFAULT_ITEM_CLASS = 'submarino_scrapy.items.SubmarinoScrapyItem'
 USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"
 
 RETRY_ENABLED = True
-RETRY_TIMES = 50
+RETRY_TIMES = 15
 RETRY_HTTP_CODES = [400,]
 COOKIES_DEBUG = True
 
