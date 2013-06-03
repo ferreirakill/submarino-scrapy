@@ -553,7 +553,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 #self.viagem_combina.pop(0)      
                 print "%s - %s" % (i,json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop": False,"Origin":self.origem,"Destination":self.destino,"DepartureYear":self.ano_saida,"DepartureMonth":self.mes_saida,"DepartureDay":self.dia_saida},{"CiaCodeList":[],"NonStop": False,"Origin":self.destino,"Destination":self.origem,"DepartureYear":self.ano_chegada,"DepartureMonth":self.mes_chegada,"DepartureDay":self.dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser":self.user_browser}}))
                 
-                request_prep = Request('http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum', 
+                request_prep = Request('http://www.submarinoviagens.com.br/passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum', 
                                         method='POST',                                         
                                         body=json.dumps({"req":{"PointOfSale":"SUBMARINO","SearchData":{"SearchMode":1,"AirSearchData":{"CityPairsRequest":[{"CiaCodeList":[],"NonStop": False,"Origin":self.origem,"Destination":self.destino,"DepartureYear":self.ano_saida,"DepartureMonth":self.mes_saida,"DepartureDay":self.dia_saida},{"CiaCodeList":[],"NonStop": False,"Origin":self.destino,"Destination":self.origem,"DepartureYear":self.ano_chegada,"DepartureMonth":self.mes_chegada,"DepartureDay":self.dia_chegada}],"NumberADTs":1,"NumberCHDs":0,"NumberINFs":0,"SearchType":1,"CabinFilter":None},"HotelSearchData":None,"AttractionSearchData":None},"UserSessionId":"","UserBrowser": self.user_browser}}),                             
                                         headers={'Content-Type':'application/json; charset=UTF-8',
@@ -662,7 +662,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                     
                     
                     print "%s, %s" % (i, json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"UserSessionId":"","pullStatusFrom":pullStatusFrom}))                                   
-                    request_b = Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
+                    request_b = Request("http://www.submarinoviagens.com.br/passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
                        body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"UserSessionId":"","pullStatusFrom":pullStatusFrom}), 
                        headers={'Content-Type':'application/json; charset=UTF-8',
                                 "Accept-Encoding": "gzip, deflate",
