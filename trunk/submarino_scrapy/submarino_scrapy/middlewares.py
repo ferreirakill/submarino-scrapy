@@ -8,6 +8,7 @@ from scrapy.exceptions import NotConfigured
 from scrapy.utils.response import response_status_message
 import json
 import re
+import time,random
 
 
 class RetryMiddleware(object):
@@ -62,7 +63,9 @@ class RetryMiddleware(object):
         if not (str(request.url).find("SearchGroupedFlightsJSONMinimum")>-1):
             print "price: %s" % (price)
             if not len(price)>0:
-                print "raise price!"
+                print "dorme e espera preco!"
+                #dorme um pouco
+                time.sleep(random.randint(2, 7))
                 reason = response_status_message(400)
                 return self._retry(request, reason, spider) or response
                         
