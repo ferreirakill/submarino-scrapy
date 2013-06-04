@@ -25,6 +25,8 @@ LOG_LEVEL = 'DEBUG'
 
 DOWNLOAD_DELAY = 1.5
 
+DOWNLOADER_HTTPCLIENTFACTORY = 'submarino_scrapy.downloader.HTTPClientFactory'
+
 DOWNLOADER_MIDDLEWARES = {
     #'scrapy.contrib.downloadermiddleware.robotstxt.RobotsTxtMiddleware': 100,
     #'scrapy.contrib.downloadermiddleware.httpauth.HttpAuthMiddleware': 300,
