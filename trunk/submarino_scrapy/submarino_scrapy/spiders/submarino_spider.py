@@ -662,7 +662,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                     
                     
                     print "%s, %s" % (i, json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"UserSessionId":"","pullStatusFrom":pullStatusFrom}))                                   
-                    request_b = Request("http://www.submarinoviagens.com.br/passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
+                    request_b = Request("http://www.submarinoviagens.com.br/Passagens/UIService/Service.svc/GetSearchStatusJSONMinimum" , method='POST', 
                        body=json.dumps({"req":{"SearchId":uuids[0],"PointOfSale":"SUBMARINO","UserBrowser":self.user_browser},"UserSessionId":"","pullStatusFrom":pullStatusFrom}), 
                        headers={'Content-Type':'application/json; charset=UTF-8',
                                 "Accept-Encoding": "gzip, deflate",
@@ -676,7 +676,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                 },
                                 callback=self.get_uuid_param, )
                     #request_b.meta['proxy'] = response.meta['proxy']
-                    return [request_b]
+                    return request_b
                             
 
         except:
