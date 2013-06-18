@@ -52,7 +52,16 @@ class RetryMiddleware(object):
         if response.status in self.retry_http_codes:
             reason = response_status_message(response.status)
             return self._retry(request, reason, spider) or response
-        elif uuids[0]=='00000000-0000-0000-0000-000000000000':
+        
+        if response.status == '200' and (str(request.url).find("SearchGroupedFlightsJSONMinimum")>-1) and int(request.meta.get('dormiu_bool', 0))<1:
+            reason = response_status_message(response.status)
+            print "Dormindo 15s..."
+            time.sleep(15)
+            retryreq = request.copy()
+            retryreq.meta['dormiu_bool'] = 1
+            return self._retry(retryreq, reason, spider) or response        
+        
+        if uuids[0]=='00000000-0000-0000-0000-000000000000':
             retries_uuid = request.meta.get('retry_times_uuid', 0) + 1
             if retries_uuid <= self.max_retry_wrong_uuid:
                 request.meta['retry_times_uuid'] = retries_uuid
@@ -60,6 +69,7 @@ class RetryMiddleware(object):
                 print "uuids retry count: %s" % (retries_uuid)
                 reason = response_status_message(400)
                 return self._retry(request, reason, spider) or response        
+        
         if not (str(request.url).find("SearchGroupedFlightsJSONMinimum")>-1):
             print "price: %s" % (price)
             if not len(price)>0:
