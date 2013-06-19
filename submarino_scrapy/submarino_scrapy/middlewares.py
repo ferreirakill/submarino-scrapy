@@ -50,7 +50,7 @@ class RetryMiddleware(object):
         price = re.findall('[0-9]*\.[0-9]{2}RoundTrip', response.body)
         print "uuids: %s" % (uuids)
 
-        if response.status == '200' and (str(request.url).find("SearchGroupedFlightsJSONMinimum")>-1) and int(request.meta.get('dormiu_bool', 0))<1:
+        if (str(request.url).find("SearchGroupedFlightsJSONMinimum")>-1) and int(request.meta.get('dormiu_bool', 0))<1:
             reason = response_status_message(response.status)
             print "Dormindo 15s..."
             time.sleep(15)
