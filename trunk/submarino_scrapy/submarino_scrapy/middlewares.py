@@ -56,10 +56,10 @@ class RetryMiddleware(object):
             print "Dormindo %ss..." % (segundos)
             #time.sleep(15)
             time.sleep(segundos)
-            retryreq = request.copy()
-            retryreq.meta['dormiu_bool'] = 1
-            #request.meta['dormiu_bool'] = 1
-            return self._retry(retryreq, reason, spider) or response    
+            #retryreq = request.copy()
+            #retryreq.meta['dormiu_bool'] = 1
+            request.meta['dormiu_bool'] = 1
+            #return self._retry(retryreq, reason, spider) or response    
 
         if response.status in self.retry_http_codes:
             reason = response_status_message(response.status)
