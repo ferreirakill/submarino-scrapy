@@ -570,6 +570,9 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                  },
                          callback=self.get_localidade_response,)
                 
+                request_loc.meta['id_viagem_array'] = i
+                request_loc.meta['dormiu_bool'] = 0  
+                                
                 return [request_loc]
                 
                 request_prep = Request('http://www.submarinoviagens.com.br/passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum', 
