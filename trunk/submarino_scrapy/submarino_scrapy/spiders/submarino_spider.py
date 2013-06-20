@@ -568,7 +568,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                  },
                          callback=self.get_localidade_response,)
                 
-                return request_loc
+                return [request_loc]
                 
                 request_prep = Request('http://www.submarinoviagens.com.br/passagens/UIService/Service.svc/SearchGroupedFlightsJSONMinimum', 
                                         method='POST',                                         
