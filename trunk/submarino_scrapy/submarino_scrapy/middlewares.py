@@ -52,12 +52,14 @@ class RetryMiddleware(object):
 
         if (str(request.url).find("SearchGroupedFlightsJSONMinimum")>-1) and int(request.meta.get('dormiu_bool', 0))<1:
             reason = response_status_message(response.status)
-            print "Dormindo 15s..."
+            segundos = random.randint(10, 15)
+            print "Dormindo %ss..." % (segundos)
             #time.sleep(15)
-            time.sleep(random.randint(10, 15))
-            #retryreq = request.copy()
-            request.meta['dormiu_bool'] = 1
-            #return self._retry(retryreq, reason, spider) or response    
+            time.sleep(segundos)
+            retryreq = request.copy()
+            retryreq.meta['dormiu_bool'] = 1
+            #request.meta['dormiu_bool'] = 1
+            return self._retry(retryreq, reason, spider) or response    
 
         if response.status in self.retry_http_codes:
             reason = response_status_message(response.status)
