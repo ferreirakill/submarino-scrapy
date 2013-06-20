@@ -50,9 +50,10 @@ class RetryMiddleware(object):
         price = re.findall('[0-9]*\.[0-9]{2}RoundTrip', response.body)
         print "uuids: %s" % (uuids)
 
-        if (str(request.url).find("SearchGroupedFlightsJSONMinimum")>-1) and int(request.meta.get('dormiu_bool', 0))<1:
+        if response.status in [200] and (str(request.url).find("SearchGroupedFlightsJSONMinimum")>-1) and int(request.meta.get('dormiu_bool', 0))<1:
             reason = response_status_message(response.status)
             segundos = random.randint(10, 15)
+            print "Espera a resposta:"
             print "Dormindo %ss..." % (segundos)
             #time.sleep(15)
             time.sleep(segundos)
@@ -62,10 +63,12 @@ class RetryMiddleware(object):
             #return self._retry(retryreq, reason, spider) or response    
 
         if response.status in self.retry_http_codes:
+            print "Voltou erro 400, tenta de novo!"
             reason = response_status_message(response.status)
             return self._retry(request, reason, spider) or response
         
         if uuids[0]=='00000000-0000-0000-0000-000000000000':
+            print "Uid 000, tenta de novo!"
             retries_uuid = request.meta.get('retry_times_uuid', 0) + 1
             if retries_uuid <= self.max_retry_wrong_uuid:
                 request.meta['retry_times_uuid'] = retries_uuid
@@ -75,6 +78,7 @@ class RetryMiddleware(object):
                 return self._retry(request, reason, spider) or response        
         
         if not (str(request.url).find("SearchGroupedFlightsJSONMinimum")>-1):
+            print "Nao tem preco ainda, tenta de novo"
             print "price: %s" % (price)
             if not len(price)>0:
                 print "dorme e espera preco!"
