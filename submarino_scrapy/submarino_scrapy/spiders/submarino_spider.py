@@ -568,7 +568,11 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                                  },
                                         callback=self.get_uuid_param, )
                 request_prep.meta['id_viagem_array'] = i
-                request_prep.meta['dormiu_bool'] = 0
+                if int(request_prep.meta.get('dormiu_bool', 0))>0:
+                    request_prep.meta['dormiu_bool'] = 1
+                else:
+                    request_prep.meta['dormiu_bool'] = 0        
+                
                 #request_prep.meta['proxy'] = 'http://' + get_proxy_random()
                 #print "Proxy: %s" % (request_prep.meta['proxy']) 
                 requests_arr.append(request_prep)  
