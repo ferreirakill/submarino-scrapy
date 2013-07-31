@@ -110,5 +110,7 @@ class RetryMiddleware(object):
             log.msg(format="Gave up retrying %(request)s (failed %(retries)d times): %(reason)s",
                     level=log.DEBUG, spider=spider, request=request, retries=retries, reason=reason)
             print "tentando mandar o primeiro request novamente: "
-            retry_bkp = request.meta.get('first_request')
+            retry_bkp = request.meta.get('first_request', 0).copy()
+            print "URL First Request: %s" % (str(request.url))
+            retry_bkp.priority = request.priority + self.priority_adjust
             return retry_bkp
