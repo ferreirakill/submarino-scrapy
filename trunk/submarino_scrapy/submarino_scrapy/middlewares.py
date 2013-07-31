@@ -114,5 +114,6 @@ class RetryMiddleware(object):
             print "tentando mandar o primeiro request novamente: "
             retry_bkp = request.meta.get('first_request', 0).copy()
             print "URL First Request: %s" % (str(retry_bkp.url))
+            retryreq.meta['retry_times'] = 0
             retry_bkp.priority = request.priority + self.priority_adjust
             return retry_bkp
