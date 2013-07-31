@@ -37,8 +37,8 @@ class RetryMiddleware(object):
         if 'dont_retry' in request.meta:
             print 'dont retry in meta'
             return response
-        print "response.status = %s" % (response.status)
-        print "request.url = %s" % (request.url)
+        #print "response.status = %s" % (response.status)
+        #print "request.url = %s" % (request.url)
         
         #if not (str(request.url).find("SearchGroupedFlightsJSONMinimum")>-1):            
         #    if str(response.body).find("[null,null]")>-1:
