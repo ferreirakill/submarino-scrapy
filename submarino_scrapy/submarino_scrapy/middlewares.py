@@ -48,7 +48,9 @@ class RetryMiddleware(object):
             
         uuids = re.findall('\w{8}-\w{4}-\w{4}-\w{4}-\w{12}', response.body)
         price = re.findall('[0-9]*\.[0-9]{2}RoundTrip', response.body)
-        print "uuids: %s" % (uuids)
+        
+        if(len(uuids)>0):
+            print "uuids: %s" % (uuids)
 
         if response.status in [200] and (str(request.url).find("SearchGroupedFlightsJSONMinimum")>-1) and int(request.meta.get('dormiu_bool', 0))<1:
             reason = response_status_message(response.status)
