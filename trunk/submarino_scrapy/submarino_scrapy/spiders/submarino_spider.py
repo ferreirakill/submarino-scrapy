@@ -594,7 +594,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 request_prep.meta['id_viagem_array'] = i
                 request_prep.meta['dormiu_bool'] = 0        
                 
-                request_prep.meta['first_request'] = request_prep #a copia dele mesmo dentro de meta
+                request_prep.meta['first_request'] = request_prep.copy() #a copia dele mesmo dentro de meta
                 print "start_requests: URL First Request: %s" % (str(request_prep.url))
                 #request_prep.meta['proxy'] = 'http://' + get_proxy_random()
                 #print "Proxy: %s" % (request_prep.meta['proxy']) 
@@ -618,6 +618,9 @@ class SubmarinoSpiderSpider(CrawlSpider):
         pullStatusFrom = str(response.body)[str(response.body).find("travel"):str(response.body).find(".svc")+4]            
         pullStatusFrom = pullStatusFrom.replace('\\', '')
         print "pullStatusFrom: %s" % (pullStatusFrom)
+
+        request_bkp = response.meta['first_request'] #a copia do primeiro request
+        print "get_uuid_param: URL First Request: %s" % (str(request_bkp.url))
                     
         try:
             if not uuids[0]=='00000000-0000-0000-0000-000000000000':
@@ -626,9 +629,6 @@ class SubmarinoSpiderSpider(CrawlSpider):
                 #origem_nome = preco_list[1][0][2][0][0] #origem nome
                 #destino_nome = preco_list[1][0][2][0][0] #destino nome
                 i = response.meta['id_viagem_array']
-                
-                request_bkp = response.meta['first_request'] #a copia do primeiro request
-                print "get_uuid_param: URL First Request: %s" % (str(request_bkp.url))
                 
                 #print "Proxy Response: %s" % (response.meta['proxy'])
                 print "viagem_combina: %s" % (self.viagem_combina[i])
@@ -713,7 +713,7 @@ class SubmarinoSpiderSpider(CrawlSpider):
                                 callback=self.get_uuid_param, )
                     #request_b.meta['proxy'] = response.meta['proxy']
                     request_b.meta['first_request'] = request_bkp
-                    request_b.meta['retry_first_request'] = 0
+                    #request_b.meta['retry_first_request'] = 0
                     return request_b
                             
 
